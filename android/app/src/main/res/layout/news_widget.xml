@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_container"
     style="@style/Widget.Android.AppWidget.Container"
     android:layout_width="wrap_content"
@@ -31,4 +32,21 @@
         android:text="@string/title"
         android:textSize="16sp" />
 
+    <ImageView
+        android:id="@+id/widget_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/headline_description"
+        android:layout_alignBottom="@+id/headline_title"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="-134dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/background_dark"
+        android:contentDescription="@string/image"
+        android:scaleType="fitCenter"
+        android:src="@android:drawable/star_big_on"
+        android:visibility="visible"
+        tools:visibility="visible" />
 </RelativeLayout>

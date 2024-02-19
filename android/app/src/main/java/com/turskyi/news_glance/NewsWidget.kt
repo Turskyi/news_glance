@@ -3,8 +3,11 @@ package com.turskyi.news_glance
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetPlugin
+import java.io.File
 
 /**
  * Implementation of App Widget functionality.
@@ -44,6 +47,16 @@ internal fun updateAppWidget(
 
         val description = widgetData.getString("headline_description", null)
         setTextViewText(R.id.headline_description, description ?: "No description set")
+        // Get chart image and put it in the widget, if it exists
+        val imageName = widgetData.getString("filename", null)
+        val imageFile = imageName?.let { File(it) }
+        val imageExists = imageFile?.exists()
+        if (imageExists == true) {
+            val myBitmap: Bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+            setImageViewBitmap(R.id.widget_image, myBitmap)
+        } else {
+            println("image not found!, looked @: $imageName")
+        }
     }
 
     appWidgetManager.updateAppWidget(appWidgetId, views)
