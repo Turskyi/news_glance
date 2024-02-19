@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_glance/article_screen.dart';
 import 'package:news_glance/news_article.dart';
+import 'package:home_widget/home_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,6 +11,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Set the group ID
+    HomeWidget.setAppGroupId(appGroupId);
+
+    // Mock read in some data and update the headline
+    final newHeadline = getNewsStories()[0];
+    updateHeadline(newHeadline);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,4 +86,20 @@ class _HomePageState extends State<HomePage> {
       ),
     ];
   }
+}
+
+// TO DO: Replace with your App Group ID https://codelabs.developers.google.com/flutter-home-screen-widgets#3
+const String appGroupId = '<YOUR APP GROUP>';
+const String iOSWidgetName = 'NewsWidgets';
+const String androidWidgetName = 'NewsWidget';
+
+void updateHeadline(NewsArticle newHeadline) {
+  // Save the headline data to the widget
+  HomeWidget.saveWidgetData<String>('headline_title', newHeadline.title);
+  HomeWidget.saveWidgetData<String>(
+      'headline_description', newHeadline.description);
+  HomeWidget.updateWidget(
+    iOSName: iOSWidgetName,
+    androidName: androidWidgetName,
+  );
 }

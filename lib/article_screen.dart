@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_glance/home_page.dart';
 import 'package:news_glance/line_chart.dart';
 import 'package:news_glance/news_article.dart';
 
@@ -33,6 +34,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
               content: Text('Updating home screen widget...'),
             ),
           );
+          updateHeadline(widget.article);
         },
         label: const Text('Update Home-screen'),
       ),
