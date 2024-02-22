@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:news_glance/line_chart_painter.dart';
-import 'package:home_widget/home_widget.dart';
+import 'package:news_glance/user_interface/line_chart_painter.dart';
 
 class LineChart extends StatelessWidget {
   const LineChart({super.key});

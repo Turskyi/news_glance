@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:home_widget/home_widget.dart';
-import 'package:news_glance/home_page.dart';
-import 'package:news_glance/line_chart.dart';
-import 'package:news_glance/news_article.dart';
+import 'package:news_glance/domain_models/news_article.dart';
+import 'package:news_glance/user_interface/line_chart.dart';
 
 class ArticleScreen extends StatefulWidget {
   const ArticleScreen({
@@ -17,8 +15,8 @@ class ArticleScreen extends StatefulWidget {
 }
 
 class _ArticleScreenState extends State<ArticleScreen> {
-  final _globalKey = GlobalKey();
-  String? imagePath;
+  final GlobalKey<State<StatefulWidget>> _globalKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,24 +28,6 @@ class _ArticleScreenState extends State<ArticleScreen> {
           color: Colors.black,
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          if (_globalKey.currentContext != null) {
-            dynamic path = await HomeWidget.renderFlutterWidget(
-              const LineChart(),
-              key: 'filename',
-              logicalSize: _globalKey.currentContext?.size ?? Size.zero,
-              pixelRatio:
-              MediaQuery.of(_globalKey.currentContext!).devicePixelRatio,
-            );
-            setState(() {
-              imagePath = path as String?;
-            });
-          }
-          updateHeadline(widget.article);
-        },
-        label: const Text('Update Home-screen'),
-      ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
@@ -56,14 +36,14 @@ class _ArticleScreenState extends State<ArticleScreen> {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 20.0),
-          Text(widget.article.articleText!),
+          Text(widget.article.articleText),
           const SizedBox(height: 20.0),
           Center(
             key: _globalKey,
             child: const LineChart(),
           ),
           const SizedBox(height: 20.0),
-          Text(widget.article.articleText!),
+          Text(widget.article.articleText),
         ],
       ),
     );

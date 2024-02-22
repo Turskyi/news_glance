@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:news_glance/article_screen.dart';
-import 'package:news_glance/news_article.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:news_glance/domain_models/news_article.dart';
+import 'package:news_glance/res/constants.dart';
+import 'package:news_glance/user_interface/article_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     super.initState();
@@ -20,9 +20,10 @@ class _HomePageState extends State<HomePage> {
     HomeWidget.setAppGroupId(appGroupId);
 
     // Mock read in some data and update the headline
-    final newHeadline = getNewsStories()[0];
-    updateHeadline(newHeadline);
+    final NewsArticle newHeadline = _getNewsStories()[0];
+    _updateHeadline(newHeadline);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +40,9 @@ class _HomePageState extends State<HomePage> {
         separatorBuilder: (BuildContext context, int idx) {
           return const Divider();
         },
-        itemCount: getNewsStories().length,
+        itemCount: _getNewsStories().length,
         itemBuilder: (BuildContext context, int idx) {
-          final NewsArticle article = getNewsStories()[idx];
+          final NewsArticle article = _getNewsStories()[idx];
           return ListTile(
             key: Key('$idx ${article.hashCode}'),
             title: Text(article.title),
@@ -61,45 +62,46 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<NewsArticle> getNewsStories() {
+  List<NewsArticle> _getNewsStories() {
     return <NewsArticle>[
       const NewsArticle(
         title: 'Flutter DAU surpasses 10 billion',
         description:
             'There are more Flutter users than there are human beings. What '
             'gives?',
+        imageUrl: '',
       ),
       const NewsArticle(
         title: 'Remembering Flutter Forward',
         description:
             'Flutter Forward took place in Nairobi, Kenya in January 2023',
+        imageUrl: '',
       ),
       const NewsArticle(
         title: 'Flutter Community saves world',
         description: "They're just that nice",
+        imageUrl: '',
       ),
       const NewsArticle(
         title: 'Flutter DAU surpasses 10 billion',
         description:
             'There are more Flutter users than there are human beings. What '
             'gives?',
+        imageUrl: '',
       ),
     ];
   }
-}
 
-// TO DO: Replace with your App Group ID https://codelabs.developers.google.com/flutter-home-screen-widgets#3
-const String appGroupId = '<YOUR APP GROUP>';
-const String iOSWidgetName = 'NewsWidgets';
-const String androidWidgetName = 'NewsWidget';
-
-void updateHeadline(NewsArticle newHeadline) {
-  // Save the headline data to the widget
-  HomeWidget.saveWidgetData<String>('headline_title', newHeadline.title);
-  HomeWidget.saveWidgetData<String>(
-      'headline_description', newHeadline.description);
-  HomeWidget.updateWidget(
-    iOSName: iOSWidgetName,
-    androidName: androidWidgetName,
-  );
+  void _updateHeadline(NewsArticle newHeadline) {
+    // Save the headline data to the widget
+    HomeWidget.saveWidgetData<String>('headline_title', newHeadline.title);
+    HomeWidget.saveWidgetData<String>(
+      'headline_description',
+      newHeadline.description,
+    );
+    HomeWidget.updateWidget(
+      iOSName: iOSWidgetName,
+      androidName: androidWidgetName,
+    );
+  }
 }

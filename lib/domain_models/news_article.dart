@@ -2,14 +2,14 @@ class NewsArticle {
   const NewsArticle({
     required this.title,
     required this.description,
+    required this.imageUrl,
     this.articleText = loremIpsum,
-    this.image,
   });
 
   final String title;
   final String description;
-  final String? articleText;
-  final String? image;
+  final String articleText;
+  final String imageUrl;
 }
 
 const String loremIpsum =
