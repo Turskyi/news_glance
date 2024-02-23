@@ -10,10 +10,11 @@ class NewsArticleResponse {
   const NewsArticleResponse({
     required this.title,
     this.description = '',
-    this.urlToImage = '',
+    this.urlToImage =
+        'https://news.turskyi.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnews_article_placeholder.0b951b56.jpeg&w=1080&q=75',
     required this.url,
     required this.source,
-    required this.author,
+    this.author = '',
     required this.publishedAt,
     this.content = '',
   });

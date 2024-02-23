@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_glance/router/app_route.dart';
-import 'package:news_glance/user_interface/article_screen.dart';
-import 'package:news_glance/user_interface/home_page.dart';
+import 'package:news_glance/router/routes.dart' as routes;
 
 class NewsGlanceApp extends StatelessWidget {
   const NewsGlanceApp({super.key});
@@ -12,10 +11,7 @@ class NewsGlanceApp extends StatelessWidget {
     return MaterialApp(
       title: 'News Glance',
       initialRoute: AppRoute.home.path,
-      routes: <String, WidgetBuilder>{
-        AppRoute.home.path: (_) => const HomePage(),
-        AppRoute.article.path: (_) => const ArticleScreen(),
-      },
+      routes: routes.routeMap,
       theme: ThemeData(
         // This is the theme of the application.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

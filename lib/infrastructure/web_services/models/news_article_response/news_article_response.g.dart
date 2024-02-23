@@ -10,10 +10,11 @@ NewsArticleResponse _$NewsArticleResponseFromJson(Map<String, dynamic> json) =>
     NewsArticleResponse(
       title: json['title'] as String,
       description: json['description'] as String? ?? '',
-      urlToImage: json['urlToImage'] as String? ?? '',
+      urlToImage: json['urlToImage'] as String? ??
+          'https://news.turskyi.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnews_article_placeholder.0b951b56.jpeg&w=1080&q=75',
       url: json['url'] as String,
       source: Source.fromJson(json['source'] as Map<String, dynamic>),
-      author: json['author'] as String,
+      author: json['author'] as String? ?? '',
       publishedAt: json['publishedAt'] as String,
       content: json['content'] as String? ?? '',
     );

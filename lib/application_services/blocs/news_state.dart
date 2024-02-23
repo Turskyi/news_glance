@@ -10,5 +10,7 @@ class LoadingNewsState extends NewsState {
 }
 
 class LoadedNewsState extends NewsState {
-  const LoadedNewsState({required List<NewsArticle> news});
+  const LoadedNewsState({required this.news});
+
+  final List<NewsArticle> news;
 }

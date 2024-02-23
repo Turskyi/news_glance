@@ -20,6 +20,8 @@ class NewsRepositoryImpl implements NewsRepository {
           title: article.title,
           description: article.description,
           imageUrl: article.urlToImage,
+          articleText: article.content,
+          urlSource: article.url,
         ),
       );
     }

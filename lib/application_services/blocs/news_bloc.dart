@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
@@ -6,6 +7,7 @@ import 'package:news_glance/domain_services/news_repository.dart';
 part 'news_event.dart';
 part 'news_state.dart';
 
+@injectable
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   NewsBloc(this._newsRepository) : super(const LoadingNewsState()) {
     on<LoadNewsEvent>((LoadNewsEvent event, Emitter<NewsState> emit) async {
