@@ -5,10 +5,7 @@ import 'package:news_glance/user_interface/line_chart.dart';
 class ArticleScreen extends StatefulWidget {
   const ArticleScreen({
     super.key,
-    required this.article,
   });
-
-  final NewsArticle article;
 
   @override
   State<ArticleScreen> createState() => _ArticleScreenState();
@@ -19,9 +16,13 @@ class _ArticleScreenState extends State<ArticleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Extract the arguments from the current ModalRoute
+    // settings and cast them as ScreenArguments.
+    final Object? args = ModalRoute.of(context)?.settings.arguments;
+    if (args is NewsArticle) {}
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.article.title),
+        title: Text(args is NewsArticle ? args.title : ''),
         titleTextStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -32,18 +33,18 @@ class _ArticleScreenState extends State<ArticleScreen> {
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
           Text(
-            widget.article.description,
+            args is NewsArticle ? args.description : '',
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 20.0),
-          Text(widget.article.articleText),
+          Text(args is NewsArticle ? args.articleText : ''),
           const SizedBox(height: 20.0),
           Center(
             key: _globalKey,
             child: const LineChart(),
           ),
           const SizedBox(height: 20.0),
-          Text(widget.article.articleText),
+          Text(args is NewsArticle ? args.articleText : ''),
         ],
       ),
     );

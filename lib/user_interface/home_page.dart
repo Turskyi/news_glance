@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/res/constants.dart';
-import 'package:news_glance/user_interface/article_screen.dart';
+import 'package:news_glance/router/app_route.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -48,12 +48,14 @@ class _HomePageState extends State<HomePage> {
             title: Text(article.title),
             subtitle: Text(article.description),
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute<ArticleScreen>(
-                  builder: (BuildContext context) {
-                    return ArticleScreen(article: article);
-                  },
-                ),
+              // When the user taps the button,
+              // navigate to a named route and
+              // provide the arguments as an optional
+              // parameter.
+              Navigator.pushNamed(
+                context,
+                AppRoute.article.path,
+                arguments: article,
               );
             },
           );
