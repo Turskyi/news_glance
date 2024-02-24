@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:news_glance/domain_models/country_code.dart';
 import 'package:news_glance/infrastructure/web_services/models/news_article_response/news_article_response.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -9,5 +10,7 @@ abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
   @GET('news')
-  Future<List<NewsArticleResponse>> getNews();
+  Future<List<NewsArticleResponse>> getNews({
+    @Query('country') CountryCode country = CountryCode.ca,
+  });
 }

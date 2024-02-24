@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_glance/domain_models/news_article.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleScreen extends StatefulWidget {
@@ -51,7 +52,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
     // Extract the arguments from the current ModalRoute
     // settings and cast them as ScreenArguments.
     final Object? args = ModalRoute.of(context)?.settings.arguments;
-
+    String link = args is NewsArticle ? args.urlSource : '';
     return Scaffold(
       appBar: AppBar(
         title: Text(args is NewsArticle ? args.title : ''),
@@ -80,6 +81,22 @@ class _ArticleScreenState extends State<ArticleScreen> {
                   ),
                 if (args is NewsArticle) const SizedBox(height: 20.0),
                 Text(args is NewsArticle ? args.articleText : ''),
+                const SizedBox(height: 20.0),
+                GestureDetector(
+                  onTap: link.isEmpty
+                      ? null
+                      : () async {
+                          final Uri url = Uri.parse(link);
+                          await launchUrl(url);
+                        },
+                  child: Text(
+                    args is NewsArticle ? args.urlSource : '',
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
               ],
             ),
     );
