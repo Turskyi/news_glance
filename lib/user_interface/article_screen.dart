@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:news_glance/domain_models/news_article.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:news_glance/router/app_route.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleScreen extends StatefulWidget {
-  const ArticleScreen({
-    super.key,
-  });
+  const ArticleScreen({super.key});
 
   @override
   State<ArticleScreen> createState() => _ArticleScreenState();
@@ -14,11 +12,6 @@ class ArticleScreen extends StatefulWidget {
 
 class _ArticleScreenState extends State<ArticleScreen> {
   WebViewController? _controller;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() {
@@ -49,8 +42,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Extract the arguments from the current ModalRoute
-    // settings and cast them as ScreenArguments.
+    // Extract the arguments from the current ModalRoute settings.
     final Object? args = ModalRoute.of(context)?.settings.arguments;
     String link = args is NewsArticle ? args.urlSource : '';
     return Scaffold(
@@ -75,7 +67,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 20.0),
-                if (args is NewsArticle)
+                if (args is NewsArticle && args.imageUrl.isNotEmpty)
                   Center(
                     child: Image.network(args.imageUrl),
                   ),
@@ -86,8 +78,11 @@ class _ArticleScreenState extends State<ArticleScreen> {
                   onTap: link.isEmpty
                       ? null
                       : () async {
-                          final Uri url = Uri.parse(link);
-                          await launchUrl(url);
+                          Navigator.pushNamed(
+                            context,
+                            AppRoute.articleWeb.path,
+                            arguments: args,
+                          );
                         },
                   child: Text(
                     args is NewsArticle ? args.urlSource : '',

@@ -20,9 +20,9 @@ class _RestClient implements RestClient {
 
   @override
   Future<List<NewsArticleResponse>> getNews(
-      {CountryCode country = CountryCode.ca}) async {
+      {String countryCode = country.canadaCode}) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'country': country.name};
+    final queryParameters = <String, dynamic>{r'country': countryCode};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -46,6 +46,33 @@ class _RestClient implements RestClient {
         .map((dynamic i) =>
             NewsArticleResponse.fromJson(i as Map<String, dynamic>))
         .toList();
+    return value;
+  }
+
+  @override
+  Future<ConclusionResponse> getNewsConclusion(String prompt) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'prompt': prompt};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ConclusionResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'news-conclusion',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ConclusionResponse.fromJson(_result.data!);
     return value;
   }
 

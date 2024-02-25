@@ -14,3 +14,12 @@ class LoadedNewsState extends NewsState {
 
   final List<NewsArticle> news;
 }
+
+class LoadedConclusionState extends LoadedNewsState {
+  const LoadedConclusionState({
+    required super.news,
+    required this.conclusion,
+  });
+
+  final String conclusion;
+}

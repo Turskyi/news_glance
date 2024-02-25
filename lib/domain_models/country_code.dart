@@ -1,1 +1,2 @@
-enum CountryCode { ca, ua, us }
+const String canadaCode = 'ca';
+const String ukraineCode = 'ua';

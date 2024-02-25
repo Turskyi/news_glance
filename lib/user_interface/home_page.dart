@@ -10,54 +10,89 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('News Glance'),
-        centerTitle: false,
-        titleTextStyle: const TextStyle(
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      ),
       body: BlocBuilder<NewsBloc, NewsState>(
         builder: (BuildContext context, NewsState state) {
           if (state is LoadedNewsState) {
-            return ListView.separated(
-              separatorBuilder: (BuildContext context, int idx) {
-                return const Divider();
-              },
-              // itemCount: _getNewsStories().length,
-              itemCount: state.news.length,
-              itemBuilder: (BuildContext context, int idx) {
-                final NewsArticle article = state.news[idx];
-                return ListTile(
-                  key: Key('$idx ${article.hashCode}'),
-                  title: Text(article.title),
-                  subtitle: Text(article.description),
-                  onTap: () async {
-                    // if (article.description.isEmpty &&
-                    //     article.articleText.isEmpty) {
-                    //   final Uri url = Uri.parse(article.urlSource);
-                    //   if (!await launchUrl(url)) {
-                    //     throw PlatformException(
-                    //       code: 'UNABLE_TO_LAUNCH_URL',
-                    //       message: 'Could not launch ${article.urlSource}',
-                    //     );
-                    //   }
-                    // } else {
-                    // When the user taps the button,
-                    // navigate to a named route and
-                    // provide the arguments as an optional
-                    // parameter.
-                    Navigator.pushNamed(
-                      context,
-                      AppRoute.article.path,
-                      arguments: article,
-                    );
-                    // }
-                  },
-                );
-              },
+            double maxWidth = MediaQuery.of(context).size.width;
+            return CustomScrollView(
+              slivers: <Widget>[
+                SliverAppBar(
+                  expandedHeight: state is LoadedConclusionState &&
+                          state.conclusion.isNotEmpty
+                      ? _calculateExpandedHeight(state.conclusion, maxWidth)
+                      : kToolbarHeight + 20,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Padding(
+                      padding: EdgeInsets.only(
+                        left: 20,
+                        top: 44,
+                        right: 20,
+                        bottom: state is LoadedConclusionState ? 20 : 0,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text(
+                            'News Glance',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 36,
+                            ),
+                          ),
+                          Text(
+                            state is LoadedConclusionState
+                                ? state.conclusion
+                                : '',
+                            maxLines: 7,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.fontSize,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      final NewsArticle article = state.news[index];
+                      return Column(
+                        children: <Widget>[
+                          ListTile(
+                            key: Key('$index ${article.hashCode}'),
+                            title: Text(article.title),
+                            subtitle: article.description.isEmpty
+                                ? const SizedBox()
+                                : Text(article.description),
+                            onTap: () async {
+                              // When the user taps the button,
+                              // navigate to a named route and
+                              // provide the arguments as an optional
+                              // parameter.
+                              Navigator.pushNamed(
+                                context,
+                                AppRoute.article.path,
+                                arguments: article,
+                              );
+                            },
+                          ),
+                          state.news.length - 1 == index
+                              ? const SizedBox()
+                              : const Divider(),
+                        ],
+                      );
+                    },
+                    childCount: state.news.length,
+                  ),
+                ),
+              ],
             );
           } else {
             return const Center(child: CircularProgressIndicator());
@@ -65,5 +100,29 @@ class HomePage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  double _calculateExpandedHeight(String conclusion, double availableWidth) {
+    const double defaultExpandedHeight = 200.0;
+    const double lineHeight = 20.0;
+
+    TextPainter textPainter = TextPainter(
+      text: TextSpan(
+        text: conclusion,
+        style: const TextStyle(fontSize: 16.0),
+      ),
+      maxLines: 100,
+      textDirection: TextDirection.ltr,
+    );
+
+    // Use the actual available width for layout
+    textPainter.layout(maxWidth: availableWidth);
+
+    // Calculate the number of lines based on the actual available width
+    int numberOfLines = (textPainter.height / lineHeight).ceil();
+
+    double expandedHeight = defaultExpandedHeight + numberOfLines * lineHeight;
+
+    return expandedHeight;
   }
 }
