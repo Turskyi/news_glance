@@ -13,13 +13,19 @@ class HomePage extends StatelessWidget {
       body: BlocBuilder<NewsBloc, NewsState>(
         builder: (BuildContext context, NewsState state) {
           if (state is LoadedNewsState) {
-            double maxWidth = MediaQuery.of(context).size.width;
+            TextStyle style = TextStyle(
+              fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+            );
             return CustomScrollView(
               slivers: <Widget>[
                 SliverAppBar(
                   expandedHeight: state is LoadedConclusionState &&
                           state.conclusion.isNotEmpty
-                      ? _calculateExpandedHeight(state.conclusion, maxWidth)
+                      ? _calculateExpandedHeight(
+                          conclusion: state.conclusion,
+                          availableWidth: MediaQuery.sizeOf(context).width,
+                          style: style,
+                        )
                       : kToolbarHeight + 20,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Padding(
@@ -45,14 +51,9 @@ class HomePage extends StatelessWidget {
                             state is LoadedConclusionState
                                 ? state.conclusion
                                 : '',
-                            maxLines: 7,
+                            maxLines: 10,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.fontSize,
-                            ),
+                            style: style,
                           ),
                         ],
                       ),
@@ -102,14 +103,17 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  double _calculateExpandedHeight(String conclusion, double availableWidth) {
+  double _calculateExpandedHeight({
+    required String conclusion,
+    required double availableWidth,
+    required TextStyle style,
+  }) {
     const double defaultExpandedHeight = 200.0;
-    const double lineHeight = 20.0;
-
+    const double adjustment = 68.0;
     TextPainter textPainter = TextPainter(
       text: TextSpan(
         text: conclusion,
-        style: const TextStyle(fontSize: 16.0),
+        style: style,
       ),
       maxLines: 100,
       textDirection: TextDirection.ltr,
@@ -119,9 +123,9 @@ class HomePage extends StatelessWidget {
     textPainter.layout(maxWidth: availableWidth);
 
     // Calculate the number of lines based on the actual available width
-    int numberOfLines = (textPainter.height / lineHeight).ceil();
-
-    double expandedHeight = defaultExpandedHeight + numberOfLines * lineHeight;
+    int numberOfLines = (textPainter.size.height / style.fontSize!).ceil();
+    double expandedHeight =
+        defaultExpandedHeight + numberOfLines * style.fontSize! - adjustment;
 
     return expandedHeight;
   }
