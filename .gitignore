@@ -41,3 +41,12 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# files with environment variables
+.env
+/.env
+/android/.env.local
+/env.g.dart
+env.g.dart
+/android/key.properties
+/android/keystore/private_key.pepk
