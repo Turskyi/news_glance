@@ -47,14 +47,14 @@ class HomePage extends StatelessWidget {
                               fontSize: 36,
                             ),
                           ),
-                          Text(
-                            state is LoadedConclusionState
-                                ? state.conclusion
-                                : '',
-                            maxLines: 10,
-                            overflow: TextOverflow.ellipsis,
-                            style: style,
-                          ),
+                          if (state is LoadedConclusionState &&
+                              state.conclusion.isNotEmpty)
+                            Text(
+                              state.conclusion,
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                              style: style,
+                            ),
                         ],
                       ),
                     ),

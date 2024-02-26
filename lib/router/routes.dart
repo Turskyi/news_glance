@@ -30,10 +30,12 @@ void _updateHeadline(String conclusion) {
   HomeWidget.setAppGroupId(appGroupId);
   // Save the headline data to the widget
   HomeWidget.saveWidgetData<String>('headline_title', 'News Glance');
-  HomeWidget.saveWidgetData<String>(
-    'headline_description',
-    conclusion,
-  );
+  if (conclusion.isNotEmpty) {
+    HomeWidget.saveWidgetData<String>(
+      'headline_description',
+      conclusion,
+    );
+  }
   HomeWidget.updateWidget(
     iOSName: iOSWidgetName,
     androidName: androidWidgetName,
