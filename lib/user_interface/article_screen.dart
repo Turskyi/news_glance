@@ -45,55 +45,71 @@ class _ArticleScreenState extends State<ArticleScreen> {
     // Extract the arguments from the current ModalRoute settings.
     final Object? args = ModalRoute.of(context)?.settings.arguments;
     String link = args is NewsArticle ? args.urlSource : '';
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(args is NewsArticle ? args.title : ''),
-        titleTextStyle: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
         ),
       ),
-      body: args is NewsArticle &&
-              args.description.isEmpty &&
-              args.articleText.isEmpty &&
-              _controller != null
-          ? WebViewWidget(controller: _controller!)
-          : ListView(
-              padding: const EdgeInsets.all(16.0),
-              children: <Widget>[
-                Text(
-                  args is NewsArticle ? args.description : '',
-                  style: Theme.of(context).textTheme.titleMedium,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(args is NewsArticle ? args.title : ''),
+          titleTextStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            // color: Colors.black,
+          ),
+        ),
+        body: args is NewsArticle &&
+                args.description.isEmpty &&
+                args.articleText.isEmpty &&
+                _controller != null
+            ? WebViewWidget(controller: _controller!)
+            : DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.blue[50],
                 ),
-                const SizedBox(height: 20.0),
-                if (args is NewsArticle && args.imageUrl.isNotEmpty)
-                  Center(
-                    child: Image.network(args.imageUrl),
-                  ),
-                if (args is NewsArticle) const SizedBox(height: 20.0),
-                Text(args is NewsArticle ? args.articleText : ''),
-                const SizedBox(height: 20.0),
-                GestureDetector(
-                  onTap: link.isEmpty
-                      ? null
-                      : () async {
-                          Navigator.pushNamed(
-                            context,
-                            AppRoute.articleWeb.path,
-                            arguments: args,
-                          );
-                        },
-                  child: Text(
-                    args is NewsArticle ? args.urlSource : '',
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
+                child: ListView(
+                  padding: const EdgeInsets.all(16.0),
+                  children: <Widget>[
+                    Text(
+                      args is NewsArticle ? args.description : '',
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                  ),
+                    const SizedBox(height: 20.0),
+                    if (args is NewsArticle && args.imageUrl.isNotEmpty)
+                      Center(
+                        child: Image.network(args.imageUrl),
+                      ),
+                    if (args is NewsArticle) const SizedBox(height: 20.0),
+                    Text(args is NewsArticle ? args.articleText : ''),
+                    const SizedBox(height: 20.0),
+                    GestureDetector(
+                      onTap: link.isEmpty
+                          ? null
+                          : () async {
+                              Navigator.pushNamed(
+                                context,
+                                AppRoute.articleWeb.path,
+                                arguments: args,
+                              );
+                            },
+                      child: Text(
+                        args is NewsArticle ? args.urlSource : '',
+                        style: const TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+      ),
     );
   }
 }

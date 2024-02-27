@@ -13,16 +13,21 @@ class NewsGlanceApp extends StatelessWidget {
       initialRoute: AppRoute.home.path,
       routes: routes.routeMap,
       theme: ThemeData(
-        // This is the theme of the application.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          primary: Colors.blue,
+          secondary: Colors.purple,
+        ),
         appBarTheme: AppBarTheme(
           backgroundColor: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
               .primaryContainer,
+          // This changes the color of AppBar icons.
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         textTheme: const TextTheme(
           titleMedium: TextStyle(
             fontFamily: 'Chewy',
-            fontSize: 20.0,
+            fontSize: 19,
           ),
         ),
       ),

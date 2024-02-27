@@ -41,16 +41,31 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
   Widget build(BuildContext context) {
     // Extract the arguments from the current ModalRoute settings.
     final Object? args = ModalRoute.of(context)?.settings.arguments;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(args is NewsArticle ? args.title : ''),
-        titleTextStyle: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
         ),
       ),
-      body: WebViewWidget(controller: _controller),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(args is NewsArticle ? args.title : ''),
+          titleTextStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        body: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.blue[50],
+          ),
+          child: WebViewWidget(controller: _controller),
+        ),
+      ),
     );
   }
 }
