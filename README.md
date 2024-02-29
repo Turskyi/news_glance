@@ -51,6 +51,17 @@ dart run build_runner clean
 dart run build_runner build --delete-conflicting-outputs
 ```
 
+## Screenshots:
+
+<!--suppress CheckImageSize -->
+<img src="screenshots/home_no_conclusion_20240228.png" width="400"  alt="screenshot">
+<img src="screenshots/home_20240228.png" width="400"  alt="screenshot">
+<img src="screenshots/home_widget_20240228.png" width="400"  alt="screenshot">
+
+## Screen Recording:
+
+<img src="screen_recordings/screen_recording_20240228.gif" width="400"  alt="screenshot">
+
 ## Credits
 
 This project is based on the codelab

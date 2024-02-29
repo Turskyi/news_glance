@@ -27,131 +27,135 @@ class HomePage extends StatelessWidget {
                 fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
               );
               const double adjustment = 20.0;
-              return CustomScrollView(
-                slivers: <Widget>[
-                  SliverAppBar(
-                    backgroundColor: Colors.transparent,
-                    expandedHeight: state is LoadedConclusionState &&
-                            state.conclusion.isNotEmpty
-                        ? _calculateExpandedHeight(
-                            conclusion: state.conclusion,
-                            availableWidth: MediaQuery.sizeOf(context).width,
-                            style: style,
-                          )
-                        : kToolbarHeight + adjustment,
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Padding(
-                        padding: EdgeInsets.only(
-                          left: 20,
-                          top: 44,
-                          right: 20,
-                          bottom: state is LoadedConclusionState ? 20 : 0,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            const Text(
-                              'News Glance',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 36,
+              return Semantics(
+                label: 'Home screen with the title on top, and the list of '
+                    'headlines of article news titles below.',
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      backgroundColor: Colors.transparent,
+                      expandedHeight: state is LoadedConclusionState &&
+                              state.conclusion.trim().isNotEmpty
+                          ? _calculateExpandedHeight(
+                              conclusion: state.conclusion,
+                              availableWidth: MediaQuery.sizeOf(context).width,
+                              style: style,
+                            )
+                          : kToolbarHeight + adjustment,
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Padding(
+                          padding: EdgeInsets.only(
+                            left: 20,
+                            top: 29,
+                            right: 20,
+                            bottom: state is LoadedConclusionState ? 20 : 0,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const Text(
+                                'News Glance',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 36,
+                                ),
                               ),
-                            ),
-                            AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 500),
-                              transitionBuilder: (
-                                Widget child,
-                                Animation<double> animation,
-                              ) {
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                );
-                              },
-                              child: (state is LoadedConclusionState &&
-                                      state.conclusion.isNotEmpty)
-                                  ? Text(
-                                      state.conclusion,
-                                      key: ValueKey<String>(state.conclusion),
-                                      maxLines: 11,
-                                      overflow: TextOverflow.ellipsis,
-                                      style:
-                                          style.copyWith(color: Colors.white),
-                                    )
-                                  : const SizedBox(),
-                            ),
-                          ],
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 500),
+                                transitionBuilder: (
+                                  Widget child,
+                                  Animation<double> animation,
+                                ) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  );
+                                },
+                                child: (state is LoadedConclusionState &&
+                                        state.conclusion.trim().isNotEmpty)
+                                    ? Text(
+                                        state.conclusion,
+                                        key: ValueKey<String>(state.conclusion),
+                                        maxLines: 11,
+                                        overflow: TextOverflow.ellipsis,
+                                        style:
+                                            style.copyWith(color: Colors.white),
+                                      )
+                                    : const SizedBox(),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        final NewsArticle article = state.news[index];
-                        return Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              15,
-                            ), // Adjust the value as needed
-                          ),
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 4,
-                            vertical: 2,
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: <Color>[
-                                  Colors.blue.shade100,
-                                  Colors.purple.shade100,
-                                ],
-                              ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          final NewsArticle article = state.news[index];
+                          return Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                15,
+                              ), // Adjust the value as needed
                             ),
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.only(
-                                left: 20,
-                                right: 8,
-                                top: 8,
-                                bottom: 8,
-                              ),
-                              title: Text(
-                                article.title,
-                                style: TextStyle(
-                                  color: Colors.blue[900],
-                                  fontWeight: FontWeight.bold,
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 4,
+                              vertical: 2,
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: <Color>[
+                                    Colors.blue.shade100,
+                                    Colors.purple.shade100,
+                                  ],
                                 ),
                               ),
-                              subtitle: Text(
-                                article.description,
-                                style: TextStyle(color: Colors.blue[900]),
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.only(
+                                  left: 20,
+                                  right: 8,
+                                  top: 8,
+                                  bottom: 8,
+                                ),
+                                title: Text(
+                                  article.title,
+                                  style: TextStyle(
+                                    color: Colors.blue[900],
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  article.description,
+                                  style: TextStyle(color: Colors.blue[900]),
+                                ),
+                                trailing: Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: Colors.blue[300],
+                                  size: 20,
+                                ),
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppRoute.article.path,
+                                    arguments: article,
+                                  );
+                                },
                               ),
-                              trailing: Icon(
-                                Icons.chevron_right_rounded,
-                                color: Colors.blue[300],
-                                size: 20,
-                              ),
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppRoute.article.path,
-                                  arguments: article,
-                                );
-                              },
                             ),
-                          ),
-                        );
-                      },
-                      childCount: state.news.length,
+                          );
+                        },
+                        childCount: state.news.length,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             } else {
               return const Center(child: CircularProgressIndicator());
