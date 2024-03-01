@@ -59,7 +59,8 @@ class HomePage extends StatelessWidget {
               ),
               _buildClickableTile(
                 context,
-                'Address: 500 Sherbourne St.,\nUnit. 2701\nToronto\nOntario\nM4X1L1\nCanada.',
+                'Address: 500 Sherbourne St.,\nUnit. 2701\nToronto\nOntario'
+                '\nM4X1L1\nCanada.',
                 () => _launchMap(),
               ),
             ],
