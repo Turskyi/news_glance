@@ -6,6 +6,7 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:label="News Glance">
+        <!--suppress AndroidDomInspection -->
         <receiver
             android:name=".NewsWidget"
             android:exported="false">
