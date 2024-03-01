@@ -1,0 +1,8 @@
+<resources>
+    <declare-styleable name="AppWidgetAttrs">
+        <!--suppress AndroidDomInspection -->
+        <attr name="appWidgetPadding" format="dimension" />
+        <attr name="appWidgetInnerRadius" format="dimension" />
+        <attr name="appWidgetRadius" format="dimension" />
+    </declare-styleable>
+</resources>

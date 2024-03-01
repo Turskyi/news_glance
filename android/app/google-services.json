@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "330705091786",
+    "project_id": "news-glance-ai",
+    "storage_bucket": "news-glance-ai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330705091786:android:2beb52e7a5126eda7e8833",
+        "android_client_info": {
+          "package_name": "com.turskyi.news_glance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtzOJGhcWmx05h4tn8MG_F-AHL6Ikoir8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
