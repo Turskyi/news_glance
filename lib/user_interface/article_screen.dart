@@ -87,7 +87,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                       ),
                     if (args is NewsArticle) const SizedBox(height: 20.0),
                     Text(args is NewsArticle ? args.articleText : ''),
-                    const SizedBox(height: 20.0),
+                    const SizedBox(height: 16.0),
                     GestureDetector(
                       onTap: link.isEmpty
                           ? null
@@ -98,12 +98,27 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                 arguments: args,
                               );
                             },
-                      child: Text(
-                        args is NewsArticle ? args.urlSource : '',
-                        style: const TextStyle(
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            args is NewsArticle ? 'Source: ' : '',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.fontSize,
+                            ),
+                          ),
+                          Text(
+                            args is NewsArticle ? args.urlSource : '',
+                            style: const TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
