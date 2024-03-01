@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/router/app_route.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -19,7 +20,51 @@ class HomePage extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        // This changes the background color
+        endDrawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
+                  ),
+                ),
+                child: Text(
+                  'Contact Us',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize:
+                        Theme.of(context).textTheme.headlineLarge?.fontSize,
+                  ),
+                ),
+              ),
+              _buildClickableTile(
+                context,
+                'Website: https://news.turskyi.com',
+                () => _launchUrl('https://news.turskyi.com'),
+              ),
+              _buildClickableTile(
+                context,
+                'Email: dmytro@turskyi.com',
+                () => _launchEmail('dmytro@turskyi.com'),
+              ),
+              _buildClickableTile(
+                context,
+                'Phone: +1 (437) 985-2581',
+                () => _launchPhone('+14379852581'),
+              ),
+              _buildClickableTile(
+                context,
+                'Address: 500 Sherbourne St.,\nUnit. 2701\nToronto\nOntario\nM4X1L1\nCanada.',
+                () => _launchMap(),
+              ),
+            ],
+          ),
+        ),
         body: BlocBuilder<NewsBloc, NewsState>(
           builder: (BuildContext context, NewsState state) {
             if (state is LoadedNewsState) {
@@ -67,12 +112,11 @@ class HomePage extends StatelessWidget {
                                 transitionBuilder: (
                                   Widget child,
                                   Animation<double> animation,
-                                ) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
+                                ) =>
+                                    FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                ),
                                 child: (state is LoadedConclusionState &&
                                         state.conclusion.trim().isNotEmpty)
                                     ? Text(
@@ -166,12 +210,60 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  ListTile _buildClickableTile(
+    BuildContext context,
+    String title,
+    Function onTap,
+  ) =>
+      ListTile(
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 16, color: Colors.blue),
+        ),
+        onTap: () => onTap(),
+      );
+
+  void _launchUrl(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw Exception('Could not launch: $url');
+    }
+  }
+
+  void _launchEmail(String email) async {
+    if (await canLaunchUrl(Uri.parse('mailto:$email'))) {
+      await launchUrl(Uri.parse('mailto:$email'));
+    } else {
+      throw Exception('Could not launch email client');
+    }
+  }
+
+  void _launchPhone(String phone) async {
+    if (await canLaunchUrl(Uri.parse('tel:$phone'))) {
+      await launchUrl(Uri.parse('tel:$phone'));
+    } else {
+      throw Exception('Could not launch phone');
+    }
+  }
+
+  void _launchMap() async {
+    const double latitude = 43.6656;
+    const double longitude = -79.3807;
+    String mapUrl = 'https://www.google.com/maps?q=$latitude,$longitude';
+    if (await canLaunchUrl(Uri.parse(mapUrl))) {
+      await launchUrl(Uri.parse(mapUrl));
+    } else {
+      throw Exception('Could not launch map');
+    }
+  }
+
   double _calculateExpandedHeight({
     required String conclusion,
     required double availableWidth,
     required TextStyle style,
   }) {
-    const double defaultExpandedHeight = 132.0;
+    const double defaultExpandedHeight = 137.0;
     TextPainter textPainter = TextPainter(
       text: TextSpan(
         text: conclusion,
