@@ -78,6 +78,21 @@ dart run build_runner clean
 dart run build_runner build --delete-conflicting-outputs
 ```
 
+## Test Coverage
+
+Run tests, generate a code coverage report, and view that report in a web
+browser. This can be useful for checking which parts of the code are covered by
+tests and which parts might need more testing. Please note that you need to
+have `lcov` and `genhtml` installed on your system to use these commands. If
+they are not installed, you can usually install them with a package manager
+like `apt` or `brew`.
+
+```bash
+flutter test --coverage
+genhtml coverage/lcov.info -o coverage
+open coverage/index.html
+```
+
 <details style="border: 1px solid #aaa; border-radius: 4px; padding: 0.5em 0.5em 0;">
   <summary style="font-weight: bold; margin: -0.5em -0.5em 0; padding: 0.5em; border-bottom: 1px solid #aaa;">Architectural pattern:
 
