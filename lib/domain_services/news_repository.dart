@@ -1,5 +1,5 @@
-import 'package:news_glance/domain_models/country_code.dart' as country;
 import 'package:news_glance/domain_models/news_article.dart';
+import 'package:news_glance/res/constants.dart' as country;
 
 abstract class NewsRepository {
   const NewsRepository();
