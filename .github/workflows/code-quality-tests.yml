@@ -3,7 +3,7 @@ name: Code Quality
 on: [ push ]
 
 jobs:
-  check_lint_errors:
+  check-code-quality-and-tests:
     if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
     steps:
