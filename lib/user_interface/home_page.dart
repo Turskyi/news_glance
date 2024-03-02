@@ -59,7 +59,7 @@ class HomePage extends StatelessWidget {
               ),
               _buildClickableTile(
                 context,
-                'Address: 500 Sherbourne St.,\nUnit. 2701\nToronto\nOntario'
+                'Address:\n500 Sherbourne St.,\nUnit. 2701\nToronto\nOntario'
                 '\nM4X1L1\nCanada.',
                 () => _launchMap(),
               ),
@@ -225,38 +225,22 @@ class HomePage extends StatelessWidget {
       );
 
   void _launchUrl(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw Exception('Could not launch: $url');
-    }
+    await launchUrl(Uri.parse(url));
   }
 
   void _launchEmail(String email) async {
-    if (await canLaunchUrl(Uri.parse('mailto:$email'))) {
-      await launchUrl(Uri.parse('mailto:$email'));
-    } else {
-      throw Exception('Could not launch email client');
-    }
+    await launchUrl(Uri.parse('mailto:$email'));
   }
 
   void _launchPhone(String phone) async {
-    if (await canLaunchUrl(Uri.parse('tel:$phone'))) {
-      await launchUrl(Uri.parse('tel:$phone'));
-    } else {
-      throw Exception('Could not launch phone');
-    }
+    await launchUrl(Uri.parse('tel:$phone'));
   }
 
   void _launchMap() async {
     const double latitude = 43.6656;
     const double longitude = -79.3807;
     String mapUrl = 'https://www.google.com/maps?q=$latitude,$longitude';
-    if (await canLaunchUrl(Uri.parse(mapUrl))) {
-      await launchUrl(Uri.parse(mapUrl));
-    } else {
-      throw Exception('Could not launch map');
-    }
+    await launchUrl(Uri.parse(mapUrl));
   }
 
   double _calculateExpandedHeight({

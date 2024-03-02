@@ -1,6 +1,5 @@
 <!--suppress AndroidDomInspection -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_container"
     style="@style/Widget.Android.AppWidget.Container"
     android:layout_width="match_parent"
@@ -14,15 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_background"
-        android:gravity="center"
-        android:text="@string/title"
-        android:padding="10dp"
-        android:textColor="#FFFFFF"
         android:fontFamily="casual"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/title"
+        android:textColor="#FFFFFF"
         android:textFontWeight="700"
         android:textSize="24sp"
-        android:textStyle="bold"
-        tools:targetApi="p" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/headline_description"
@@ -32,8 +30,8 @@
         android:layout_below="@+id/headline_title"
         android:layout_alignParentStart="true"
         android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_background"
         android:text="@string/app_widget_description"
         android:textColor="#FFFFFF"
-        android:background="@drawable/rounded_background"
         android:textSize="18sp" />
 </RelativeLayout>
