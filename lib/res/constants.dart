@@ -4,3 +4,9 @@ const String androidWidgetName = 'NewsWidget';
 const String appGroupId = '<APP GROUP>';
 const String baseUrl = 'https://news.turskyi.com/api/';
 const String canadaCode = 'ca';
+const String website = 'https://news.turskyi.com';
+const String email = 'dmytro@turskyi.com';
+const String phone = '+14379852581';
+const String address =
+    'Address:\n500 Sherbourne St.,\nToronto\nOntario\nM4X1L1\n'
+    'Canada.';

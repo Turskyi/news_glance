@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/domain_models/news_article.dart';
+import 'package:news_glance/res/constants.dart' as constants;
 import 'package:news_glance/router/app_route.dart';
+import 'package:news_glance/ui/clickable_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
@@ -42,26 +44,21 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              _buildClickableTile(
-                context,
-                'Website: https://news.turskyi.com',
-                () => _launchUrl('https://news.turskyi.com'),
+              ClickableTile(
+                title: 'Website: ${constants.website}',
+                onTap: () => _launchUrl(constants.website),
               ),
-              _buildClickableTile(
-                context,
-                'Email: dmytro@turskyi.com',
-                () => _launchEmail('dmytro@turskyi.com'),
+              ClickableTile(
+                title: 'Email: ${constants.email}',
+                onTap: () => _launchEmail(constants.email),
               ),
-              _buildClickableTile(
-                context,
-                'Phone: +1 (437) 985-2581',
-                () => _launchPhone('+14379852581'),
+              ClickableTile(
+                title: 'Phone: ${constants.phone}',
+                onTap: () => _launchPhone(constants.phone),
               ),
-              _buildClickableTile(
-                context,
-                'Address:\n500 Sherbourne St.,\nUnit. 2701\nToronto\nOntario'
-                '\nM4X1L1\nCanada.',
-                () => _launchMap(),
+              ClickableTile(
+                title: constants.address,
+                onTap: () => _launchMap(constants.address),
               ),
             ],
           ),
@@ -211,19 +208,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  ListTile _buildClickableTile(
-    BuildContext context,
-    String title,
-    Function onTap,
-  ) =>
-      ListTile(
-        title: Text(
-          title,
-          style: const TextStyle(fontSize: 16, color: Colors.blue),
-        ),
-        onTap: () => onTap(),
-      );
-
   void _launchUrl(String url) async {
     await launchUrl(Uri.parse(url));
   }
@@ -236,10 +220,8 @@ class HomePage extends StatelessWidget {
     await launchUrl(Uri.parse('tel:$phone'));
   }
 
-  void _launchMap() async {
-    const double latitude = 43.6656;
-    const double longitude = -79.3807;
-    String mapUrl = 'https://www.google.com/maps?q=$latitude,$longitude';
+  void _launchMap(String address) async {
+    String mapUrl = 'https://www.google.com/maps?q=$address';
     await launchUrl(Uri.parse(mapUrl));
   }
 

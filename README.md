@@ -2,12 +2,13 @@
 [![Build & upload to Firebase App Distribution](https://github.com/Turskyi/news_glance/actions/workflows/flutter_ci.yml/badge.svg?branch=dev&event=push)](https://appdistribution.firebase.dev/i/84a5fda691af5a9b)
 [![Codemagic build status](https://api.codemagic.io/apps/65dd5f020e35003c3f27e19f/65dd5f020e35003c3f27e19e/status_badge.svg)](https://play.google.com/store/apps/details?id=com.turskyi.news_glance)
 [![Code Quality](https://github.com/Turskyi/news_glance/actions/workflows/code-quality-tests.yml/badge.svg?branch=master&event=push)](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo)
+[![codecov](https://codecov.io/gh/Turskyi/news_glance/graph/badge.svg?token=P02XSDS5QB)](https://codecov.io/gh/Turskyi/news_glance)
 [![style: flutter lints](https://img.shields.io/badge/style-flutter__lints-blue)](https://pub.dev/packages/flutter_lints)
 <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Turskyi/news_glance">
 
 # News Glance
 
-**News Glance** is a flutter app that lets you access the latest news and insights
+**News Glance** is a flutter app that lets you access the latest news and insights even
 from your home screen widget. It uses AI to generate a conclusion from the news
 headlines and allows you to view and share the articles.
 
@@ -28,7 +29,7 @@ headlines and allows you to view and share the articles.
 • CI/CD: [GitHub Actions](https://docs.github.com/en/actions) is used to deliver
 new Android Package (APK) to
 [Firebase App Distribution](https://firebase.google.com/docs/app-distribution)
-after every push to any other than the **master**branch,
+after every push to any other than the **master** branch,
 [Codemagic](https://codemagic.io/start/) is used to deliver new release app
 bundle to **Google Play** after every merge (push) to **master** branch;
 
@@ -66,7 +67,7 @@ feedback.
 To install **News Glance**, you need to have Flutter SDK and Android Studio
 installed on your machine. You can follow
 [the official documentation](https://docs.flutter.dev/get-started/install) to
-set up your development environment. To run an **News Glance** on your
+set up your development environment. To run a **News Glance** on your
 device or emulator, you need to clone this repository and open it in Android
 Studio. Then, you can use the run button or the command line to launch the app.
 For more information, see the Flutter documentation.
@@ -109,20 +110,21 @@ open coverage/index.html
 #### APPLICATION CORE - `models`, `domain_services` and `application_services` (`core`)
 
 The number of layers in the application `core` will vary, but remember that the `Domain Model` is
-the very centre, and since all coupling is toward the centre, the `Domain Model` is only coupled to
+the very center, and since all couplings are toward the center, the `Domain Model` is only coupled
+to
 itself.
 
 #### DOMAIN MODEL - `models`
 
-In the very centre, we see the `Domain Model`, which represents the state and behaviour combination
-that models truth for the organization. Around the Domain Model are other layers with more
-behaviour.
+In the very center, we see the `Domain Model`, which represents the state and
+behavior combination that models truth for the organization.
+Around the Domain Model are other layers with more behavior.
 
 #### DOMAIN SERVICES - `domain_services`
 
 The first layer around the Domain Model is typically where we would find interfaces that provide
 object saving and retrieving behaviour, called `repository` interfaces. The implementation of the
-object-saving behaviour is not in the application core, however, because it typically involves a
+object-saving behavior is not in the application core, however, because it typically involves a
 database. Only the interface is in the application core.
 
 #### APPLICATION SERVICES - `application_services`
@@ -138,7 +140,7 @@ still adhere to the **Dependency Rule** since as far as `Application Services` i
 concerned, they are abstract. The implementation is hidden behind the
 `polymorphism`.
 
-#### UI, INFRASTRUCTURE, TESTS – `lib`, `android`, `ios` etc
+#### UI, INFRASTRUCTURE, TESTS – `lib`, `android`, `ios` etc.
 
 The outer layer is reserved for things that change often. These things should be intentionally
 isolated from the application `core`. We would find a class implementing a `data source` interface

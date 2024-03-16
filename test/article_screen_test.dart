@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:news_glance/user_interface/article_screen.dart';
+import 'package:news_glance/ui/article_screen.dart';
 
 void main() {
   testWidgets('ArticleScreen widget test', (WidgetTester tester) async {
