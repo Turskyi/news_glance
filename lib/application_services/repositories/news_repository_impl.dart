@@ -1,10 +1,10 @@
 import 'package:injectable/injectable.dart';
-import 'package:news_glance/domain_models/country_code.dart' as country;
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_response/conclusion_response.dart';
 import 'package:news_glance/infrastructure/web_services/models/news_article_response/news_article_response.dart';
 import 'package:news_glance/infrastructure/web_services/rest/client/rest_client.dart';
+import 'package:news_glance/res/constants.dart' as country;
 
 @Injectable(as: NewsRepository)
 class NewsRepositoryImpl implements NewsRepository {

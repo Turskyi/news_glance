@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:news_glance/domain_models/country_code.dart' as country;
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
+import 'package:news_glance/res/constants.dart' as country;
 
 part 'news_event.dart';
 part 'news_state.dart';
