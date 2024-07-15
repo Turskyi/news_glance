@@ -6,5 +6,5 @@ abstract interface class NewsRepository {
 
   Future<List<NewsArticle>> getNews({String countryCode = country.canadaCode});
 
-  Future<String> getNewsConclusion(String prompt);
+  Future<String> getNewsConclusion(List<NewsArticle> articles);
 }

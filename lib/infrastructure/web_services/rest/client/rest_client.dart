@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:news_glance/infrastructure/web_services/models/conclusion_request/conclusion_request.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_response/conclusion_response.dart';
 import 'package:news_glance/infrastructure/web_services/models/news_article_response/news_article_response.dart';
 import 'package:news_glance/res/constants.dart' as country;
@@ -19,4 +20,7 @@ abstract class RestClient {
   Future<ConclusionResponse> getNewsConclusion(
     @Query('prompt') String prompt,
   );
+
+  @POST('conclusion')
+  Future<ConclusionResponse> getConclusion(@Body() ConclusionRequest news);
 }
