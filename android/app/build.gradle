@@ -33,6 +33,7 @@ if (keyPropertiesFile.exists()) {
     }
 }
 
+//noinspection GroovyLocalVariableNamingConvention
 def SIGNING_KEY_DEBUG_PATH = keyProperties.getProperty('SIGNING_KEY_DEBUG_PATH')
 def SIGNING_KEY_DEBUG_PASSWORD = keyProperties.getProperty('SIGNING_KEY_DEBUG_PASSWORD')
 def SIGNING_KEY_DEBUG_KEY = keyProperties.getProperty('SIGNING_KEY_DEBUG_KEY')
@@ -45,7 +46,8 @@ def SIGNING_KEY_RELEASE_KEY_PASSWORD = keyProperties.getProperty('SIGNING_KEY_RE
 android {
     namespace rootProject.application_id
     compileSdk flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    //TODO: change back to dynamic "flutter.ndkVersion" version, when the error "One or more plugins require a higher Android NDK version." is gone.
+    ndkVersion = "26.1.10909125"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -122,9 +124,9 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-analytics:21.5.1'
-    implementation 'com.google.firebase:firebase-crashlytics:18.6.2'
-    implementation 'com.google.firebase:firebase-perf:20.5.2'
-    implementation 'com.google.firebase:firebase-messaging:23.4.1'
+    implementation 'com.google.firebase:firebase-analytics:22.0.2'
+    implementation 'com.google.firebase:firebase-crashlytics:19.0.3'
+    implementation 'com.google.firebase:firebase-perf:21.0.1'
+    implementation 'com.google.firebase:firebase-messaging:24.0.0'
     implementation 'com.android.support:multidex:1.0.3'
 }

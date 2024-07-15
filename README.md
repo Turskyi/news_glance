@@ -8,7 +8,8 @@
 
 # News Glance
 
-**News Glance** is a flutter app that lets you access the latest news and insights even
+**News Glance** is a flutter app that lets you access the latest news and
+insights even
 from your home screen widget. It uses AI to generate a conclusion from the news
 headlines and allows you to view and share the articles.
 
@@ -58,9 +59,9 @@ follow these steps:
 
 Please follow
 [the Flutter style guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo)
-and code of conduct when contributing to **News Glance**. You can also use
-the issues and discussions tabs to report bugs, request features, or give
-feedback.
+when contributing to **News Glance**.
+You can also use the issues and discussions tabs to report bugs, request
+features, or give feedback.
 
 ## Installation
 
@@ -109,10 +110,9 @@ open coverage/index.html
 
 #### APPLICATION CORE - `models`, `domain_services` and `application_services` (`core`)
 
-The number of layers in the application `core` will vary, but remember that the `Domain Model` is
-the very center, and since all couplings are toward the center, the `Domain Model` is only coupled
-to
-itself.
+The number of layers in the application `core` will vary, but remember that
+the `Domain Model` is the very center, and since all couplings are toward the
+center, the `Domain Model` is only coupled to itself.
 
 #### DOMAIN MODEL - `models`
 
@@ -122,29 +122,31 @@ Around the Domain Model are other layers with more behavior.
 
 #### DOMAIN SERVICES - `domain_services`
 
-The first layer around the Domain Model is typically where we would find interfaces that provide
-object saving and retrieving behaviour, called `repository` interfaces. The implementation of the
-object-saving behavior is not in the application core, however, because it typically involves a
-database. Only the interface is in the application core.
+The first layer around the Domain Model is typically where we would find
+interfaces that provide object saving and retrieving behaviour, called
+`repository` interfaces. The implementation of the object-saving behavior is
+not in the application core, however, because it typically involves a database.
+Only the interface is in the application core.
 
 #### APPLICATION SERVICES - `application_services`
 
-`application_services` is the layer outside `domain_services`. `Application Services`
-crosses the boundaries of the layers to communicate with
-`Domain Services`, however, the **Dependency Rule** is
-never violated. Using `polymorphism`, `Application Services` communicates with
+`application_services` is the layer outside `domain_services`.
+`Application Services` crosses the boundaries of the layers to communicate with
+`Domain Services`, however, the **Dependency Rule** is never violated.
+Using `polymorphism`, `Application Services` communicates with
 `Domain Services` using inherited classes: classes that implement
 or extend the `repository` presented in the `Domain Services` layer.
 Since `polymorphism` is used, the `repository` passed to `Application Services`
-still adhere to the **Dependency Rule** since as far as `Application Services` is
-concerned, they are abstract. The implementation is hidden behind the
+still adhere to the **Dependency Rule** since as far as `Application Services`
+is concerned, they are abstract. The implementation is hidden behind the
 `polymorphism`.
 
 #### UI, INFRASTRUCTURE, TESTS – `lib`, `android`, `ios` etc.
 
-The outer layer is reserved for things that change often. These things should be intentionally
-isolated from the application `core`. We would find a class implementing a `data source` interface
-on the edge. This class implements the `data source` interface and is thereby coupled to it.
+The outer layer is reserved for things that change often.
+These things should be intentionally isolated from the application `core`.
+We would find a class implementing a `data source` interface on the edge.
+This class implements the `data source` interface and is thereby coupled to it.
 
 </details>
 

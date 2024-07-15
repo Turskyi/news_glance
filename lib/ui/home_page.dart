@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/res/constants.dart' as constants;
@@ -117,13 +118,27 @@ class HomePage extends StatelessWidget {
                                 ),
                                 child: (state is LoadedConclusionState &&
                                         state.conclusion.trim().isNotEmpty)
-                                    ? Text(
-                                        state.conclusion,
-                                        key: ValueKey<String>(state.conclusion),
-                                        maxLines: 11,
-                                        overflow: TextOverflow.ellipsis,
-                                        style:
-                                            style.copyWith(color: Colors.white),
+                                    ? Column(
+                                        children: <Widget>[
+                                          Text(
+                                            state.conclusion.trim(),
+                                            key: ValueKey<String>(
+                                              state.conclusion,
+                                            ),
+                                            maxLines: 18,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: style.copyWith(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          ElevatedButton(
+                                            onPressed: () => _speak(
+                                              state.conclusion,
+                                            ),
+                                            child: const Text('Read Aloud'),
+                                          ),
+                                        ],
                                       )
                                     : const SizedBox(),
                               ),
@@ -230,7 +245,7 @@ class HomePage extends StatelessWidget {
     required double availableWidth,
     required TextStyle style,
   }) {
-    const double defaultExpandedHeight = 137.0;
+    const double defaultExpandedHeight = 278.0;
     TextPainter textPainter = TextPainter(
       text: TextSpan(
         text: conclusion,
@@ -249,5 +264,12 @@ class HomePage extends StatelessWidget {
         defaultExpandedHeight + numberOfLines * style.fontSize!;
 
     return expandedHeight;
+  }
+
+  Future<void> _speak(String text) async {
+    final FlutterTts flutterTts = FlutterTts();
+    await flutterTts.setLanguage('en-US');
+    await flutterTts.setPitch(1.0);
+    await flutterTts.speak(text);
   }
 }

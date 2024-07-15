@@ -10,3 +10,4 @@ const String phone = '+14379852581';
 const String address =
     'Address:\n500 Sherbourne St.,\nToronto\nOntario\nM4X1L1\n'
     'Canada.';
+const int newsMax = 5;

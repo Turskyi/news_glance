@@ -6,7 +6,7 @@ import 'package:news_glance/news_glance_app.dart';
 /// It is the initial entry point of the system.
 /// Nothing, other than the operating system, depends on it.
 /// Here you should [injectDependencies] by a dependency injection framework.
-/// The [main] is a dirty low-level module in the outermost circle of the clean
+/// The [main] is a dirty low-level module in the outermost circle of the onion
 /// architecture.
 /// Think of [main] as a plugin to the [NewsGlanceApp] — a plugin that sets up
 /// the initial conditions and configurations, gathers all the outside

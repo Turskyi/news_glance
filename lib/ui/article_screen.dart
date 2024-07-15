@@ -91,7 +91,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                     GestureDetector(
                       onTap: link.isEmpty
                           ? null
-                          : () async {
+                          : () {
                               Navigator.pushNamed(
                                 context,
                                 AppRoute.articleWeb.path,
