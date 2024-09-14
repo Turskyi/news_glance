@@ -51,3 +51,4 @@ env.g.dart
 /android/key.properties
 /android/keystore/private_key.pepk
 /android/keystore/
+/coverage/

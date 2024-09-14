@@ -13,14 +13,9 @@ abstract class RestClient {
 
   @GET('news')
   Future<List<NewsArticleResponse>> getNews({
-    @Query('country') String countryCode = country.canadaCode,
+    @Query('country') String countryCode = country.usaCode,
   });
 
-  @GET('news-conclusion')
-  Future<ConclusionResponse> getNewsConclusion(
-    @Query('prompt') String prompt,
-  );
-
-  @POST('conclusion')
+  @POST('news-conclusion')
   Future<ConclusionResponse> getConclusion(@Body() ConclusionRequest news);
 }

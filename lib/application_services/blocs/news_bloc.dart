@@ -14,8 +14,11 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
     on<LoadNewsEvent>((LoadNewsEvent event, Emitter<NewsState> emit) async {
       final String? code =
           WidgetsBinding.instance.platformDispatcher.locale.countryCode;
+
       final List<NewsArticle> news = await _newsRepository.getNews(
-        countryCode: code ?? constants.canadaCode,
+        countryCode: code == constants.canadaCode
+            ? constants.usaCode
+            : code ?? constants.usaCode,
       );
       emit(LoadedNewsState(news: news));
       final List<NewsArticle> articles = news.take(constants.newsMax).toList();
