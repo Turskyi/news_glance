@@ -3,7 +3,8 @@ const String androidWidgetName = 'NewsWidget';
 // TODO: Replace with the App Group ID https://codelabs.developers.google.com/flutter-home-screen-widgets#3
 const String appGroupId = '<APP GROUP>';
 const String baseUrl = 'https://news.turskyi.com/api/';
-const String canadaCode = 'ca';
+const String canadaCode = 'CA';
+const String usaCode = 'US';
 const String website = 'https://news.turskyi.com';
 const String email = 'dmytro@turskyi.com';
 const String phone = '+14379852581';
