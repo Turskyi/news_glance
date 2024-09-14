@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/res/constants.dart' as constants;
 import 'package:news_glance/router/app_route.dart';
-import 'package:news_glance/ui/clickable_tile.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:news_glance/ui/end_drawer.dart';
+import 'package:news_glance/ui/markdown_preview.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -23,53 +24,10 @@ class HomePage extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        endDrawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
-                  ),
-                ),
-                child: Text(
-                  'Contact Us',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize:
-                        Theme.of(context).textTheme.headlineLarge?.fontSize,
-                  ),
-                ),
-              ),
-              ClickableTile(
-                title: 'Website: ${constants.website}',
-                onTap: () => _launchUrl(constants.website),
-              ),
-              ClickableTile(
-                title: 'Email: ${constants.email}',
-                onTap: () => _launchEmail(constants.email),
-              ),
-              ClickableTile(
-                title: 'Phone: ${constants.phone}',
-                onTap: () => _launchPhone(constants.phone),
-              ),
-              ClickableTile(
-                title: constants.address,
-                onTap: () => _launchMap(constants.address),
-              ),
-            ],
-          ),
-        ),
+        endDrawer: const EndDrawer(),
         body: BlocBuilder<NewsBloc, NewsState>(
           builder: (BuildContext context, NewsState state) {
             if (state is LoadedNewsState) {
-              TextStyle style = TextStyle(
-                fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-              );
               const double adjustment = 20.0;
               return Semantics(
                 label: 'Home screen with the title on top, and the list of '
@@ -80,11 +38,7 @@ class HomePage extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       expandedHeight: state is LoadedConclusionState &&
                               state.conclusion.trim().isNotEmpty
-                          ? _calculateExpandedHeight(
-                              conclusion: state.conclusion,
-                              availableWidth: MediaQuery.sizeOf(context).width,
-                              style: style,
-                            )
+                          ? constants.defaultExpandedHeight
                           : kToolbarHeight + adjustment,
                       flexibleSpace: FlexibleSpaceBar(
                         background: Padding(
@@ -119,24 +73,32 @@ class HomePage extends StatelessWidget {
                                 child: (state is LoadedConclusionState &&
                                         state.conclusion.trim().isNotEmpty)
                                     ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text(
-                                            state.conclusion.trim(),
-                                            key: ValueKey<String>(
-                                              state.conclusion,
-                                            ),
-                                            maxLines: 18,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: style.copyWith(
-                                              color: Colors.white,
-                                            ),
+                                          MarkdownPreview(
+                                            text: state.conclusion.trim(),
                                           ),
                                           const SizedBox(height: 10),
-                                          ElevatedButton(
-                                            onPressed: () => _speak(
-                                              state.conclusion,
-                                            ),
-                                            child: const Text('Read Aloud'),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              ElevatedButton(
+                                                onPressed: () =>
+                                                    _showFullConclusionDialog(
+                                                  context,
+                                                  state.conclusion,
+                                                ),
+                                                child: const Text('Read More'),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () => _speak(
+                                                  state.conclusion,
+                                                ),
+                                                child: const Text('Read Aloud'),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       )
@@ -154,9 +116,7 @@ class HomePage extends StatelessWidget {
                           return Card(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                15,
-                              ), // Adjust the value as needed
+                              borderRadius: BorderRadius.circular(15),
                             ),
                             margin: const EdgeInsets.symmetric(
                               horizontal: 4,
@@ -197,13 +157,11 @@ class HomePage extends StatelessWidget {
                                   color: Colors.blue[300],
                                   size: 20,
                                 ),
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    AppRoute.article.path,
-                                    arguments: article,
-                                  );
-                                },
+                                onTap: () => Navigator.pushNamed(
+                                  context,
+                                  AppRoute.article.path,
+                                  arguments: article,
+                                ),
                               ),
                             ),
                           );
@@ -223,53 +181,49 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  void _launchUrl(String url) async {
-    await launchUrl(Uri.parse(url));
-  }
-
-  void _launchEmail(String email) async {
-    await launchUrl(Uri.parse('mailto:$email'));
-  }
-
-  void _launchPhone(String phone) async {
-    await launchUrl(Uri.parse('tel:$phone'));
-  }
-
-  void _launchMap(String address) async {
-    String mapUrl = 'https://www.google.com/maps?q=$address';
-    await launchUrl(Uri.parse(mapUrl));
-  }
-
-  double _calculateExpandedHeight({
-    required String conclusion,
-    required double availableWidth,
-    required TextStyle style,
-  }) {
-    const double defaultExpandedHeight = 278.0;
-    TextPainter textPainter = TextPainter(
-      text: TextSpan(
-        text: conclusion,
-        style: style,
-      ),
-      maxLines: 100,
-      textDirection: TextDirection.ltr,
-    );
-
-    // Use the actual available width for layout
-    textPainter.layout(maxWidth: availableWidth);
-
-    // Calculate the number of lines based on the actual available width
-    int numberOfLines = (textPainter.size.height / style.fontSize!).ceil();
-    double expandedHeight =
-        defaultExpandedHeight + numberOfLines * style.fontSize!;
-
-    return expandedHeight;
-  }
-
   Future<void> _speak(String text) async {
     final FlutterTts flutterTts = FlutterTts();
     await flutterTts.setLanguage('en-US');
     await flutterTts.setPitch(1.0);
     await flutterTts.speak(text);
+  }
+
+  void _showFullConclusionDialog(BuildContext context, String conclusion) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Text(
+                  'Conclusion',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: MarkdownBody(
+                      data: conclusion.trim(),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Close'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
