@@ -5,9 +5,11 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
 migrate_working_dir/
 
 # IntelliJ related
@@ -51,4 +53,5 @@ env.g.dart
 /android/key.properties
 /android/keystore/private_key.pepk
 /android/keystore/
-/coverage/
+android/app/.cxx
+coverage
