@@ -5,6 +5,8 @@
 [![codecov](https://codecov.io/gh/Turskyi/news_glance/graph/badge.svg?token=P02XSDS5QB)](https://codecov.io/gh/Turskyi/news_glance)
 [![style: flutter lints](https://img.shields.io/badge/style-flutter__lints-blue)](https://pub.dev/packages/flutter_lints)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Turskyi/news_glance)
+[![Deploy to Firebase Hosting on PR](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-pull-request.yml/badge.svg)](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-pull-request.yml)
+[![Deploy to Firebase Hosting on merge](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-merge.yml)
 <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Turskyi/news_glance">
 
 # News Glance
