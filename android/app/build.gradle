@@ -47,7 +47,7 @@ android {
     namespace rootProject.application_id
     compileSdk flutter.compileSdkVersion
     //TODO: change back to dynamic "flutter.ndkVersion" version, when the error "One or more plugins require a higher Android NDK version." is gone.
-    ndkVersion = "26.1.10909125"
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -124,9 +124,9 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-analytics:22.0.2'
-    implementation 'com.google.firebase:firebase-crashlytics:19.0.3'
-    implementation 'com.google.firebase:firebase-perf:21.0.1'
-    implementation 'com.google.firebase:firebase-messaging:24.0.0'
+    implementation 'com.google.firebase:firebase-analytics:22.3.0'
+    implementation 'com.google.firebase:firebase-crashlytics:19.4.1'
+    implementation 'com.google.firebase:firebase-perf:21.0.4'
+    implementation 'com.google.firebase:firebase-messaging:24.1.0'
     implementation 'com.android.support:multidex:1.0.3'
 }

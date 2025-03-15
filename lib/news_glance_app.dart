@@ -16,6 +16,7 @@ class NewsGlanceApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
           primary: Colors.blue,
+          primaryContainer: Colors.indigo,
           secondary: Colors.purple,
         ),
         appBarTheme: AppBarTheme(

@@ -10,19 +10,34 @@ class AppErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
-          color: Theme.of(context).colorScheme.error.withValues(alpha: 0.1),
-          // Light red background from theme
+          decoration: BoxDecoration(
+            // Background color.
+            color: colorScheme.errorContainer,
+            // Rounded corners.
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                // Shadow color.
+                color: colorScheme.error.withValues(alpha: 0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3), // Shadow offset
+              ),
+            ],
+          ),
           padding: const EdgeInsets.all(16.0),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Icon(
                 Icons.error_outline,
-                color: Theme.of(context).colorScheme.error,
+                color: colorScheme.onErrorContainer,
                 size: 24.0,
               ),
               const SizedBox(width: 8.0),
@@ -30,11 +45,10 @@ class AppErrorWidget extends StatelessWidget {
                 child: Text(
                   errorMessage,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.error,
-                        // Red error color from theme
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: colorScheme.onErrorContainer,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -11,10 +13,15 @@ part 'news_state.dart';
 @injectable
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   NewsBloc(this._newsRepository) : super(const LoadingNewsState()) {
-    on<LoadNewsEvent>((LoadNewsEvent event, Emitter<NewsState> emit) async {
-      final String? code =
-          WidgetsBinding.instance.platformDispatcher.locale.countryCode;
+    on<LoadNewsEvent>(_loadNews);
+  }
 
+  final NewsRepository _newsRepository;
+
+  FutureOr<void> _loadNews(LoadNewsEvent event, Emitter<NewsState> emit) async {
+    final String? code =
+        WidgetsBinding.instance.platformDispatcher.locale.countryCode;
+    try {
       final List<NewsArticle> news = await _newsRepository.getNews(
         countryCode: code == constants.canadaCode
             ? constants.usaCode
@@ -26,8 +33,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         articles,
       );
       emit(LoadedConclusionState(news: news, conclusion: conclusion));
-    });
+    } catch (e) {
+      emit(ErrorState(errorMessage: e.toString()));
+    }
   }
-
-  final NewsRepository _newsRepository;
 }

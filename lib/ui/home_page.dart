@@ -9,17 +9,24 @@ import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/ui/end_drawer.dart';
 import 'package:news_glance/ui/markdown_preview.dart';
 
+import 'app_error_widget.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return DecoratedBox(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-          colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
+          colors: <Color>[
+            colorScheme.primary,
+            colorScheme.primaryContainer,
+            colorScheme.secondary,
+          ],
         ),
       ),
       child: Scaffold(
@@ -44,7 +51,7 @@ class HomePage extends StatelessWidget {
                         background: Padding(
                           padding: EdgeInsets.only(
                             left: 20,
-                            top: 29,
+                            top: MediaQuery.paddingOf(context).top,
                             right: 20,
                             bottom: state is LoadedConclusionState ? 20 : 0,
                           ),
@@ -52,12 +59,15 @@ class HomePage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              const Text(
+                              Text(
                                 'News Glance',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 36,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.fontSize,
                                 ),
                               ),
                               AnimatedSwitcher(
@@ -171,6 +181,10 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
+              );
+            } else if (state is ErrorState) {
+              return AppErrorWidget(
+                errorMessage: state.errorMessage,
               );
             } else {
               return const Center(child: CircularProgressIndicator());

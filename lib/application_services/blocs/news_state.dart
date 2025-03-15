@@ -23,3 +23,11 @@ class LoadedConclusionState extends LoadedNewsState {
 
   final String conclusion;
 }
+
+final class ErrorState extends NewsState {
+  const ErrorState({
+    this.errorMessage = 'Something went wrong',
+  });
+
+  final String errorMessage;
+}
