@@ -1,3 +1,6 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -102,12 +105,16 @@ class HomePage extends StatelessWidget {
                                                 ),
                                                 child: const Text('Read More'),
                                               ),
-                                              ElevatedButton(
-                                                onPressed: () => _speak(
-                                                  state.conclusion,
+                                              //TODO: fix for iOS, does not
+                                              // make a sound
+                                              if (kIsWeb || Platform.isAndroid)
+                                                ElevatedButton(
+                                                  onPressed: () => _speak(
+                                                    state.conclusion,
+                                                  ),
+                                                  child:
+                                                      const Text('Read Aloud'),
                                                 ),
-                                                child: const Text('Read Aloud'),
-                                              ),
                                             ],
                                           ),
                                         ],
@@ -197,6 +204,21 @@ class HomePage extends StatelessWidget {
 
   Future<void> _speak(String text) async {
     final FlutterTts flutterTts = FlutterTts();
+    if (!kIsWeb) {
+      if (Platform.isIOS) {
+        await flutterTts.setSharedInstance(true);
+        await flutterTts.setIosAudioCategory(
+          IosTextToSpeechAudioCategory.ambient,
+          <IosTextToSpeechAudioCategoryOptions>[
+            IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+            IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+            IosTextToSpeechAudioCategoryOptions.mixWithOthers,
+          ],
+          IosTextToSpeechAudioMode.voicePrompt,
+        );
+      }
+    }
+
     await flutterTts.setLanguage('en-US');
     await flutterTts.setPitch(1.0);
     await flutterTts.speak(text);

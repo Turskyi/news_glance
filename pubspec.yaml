@@ -24,21 +24,19 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build
 # suffix.
-version: 0.0.8+8
+version: 0.0.9+9
 
 environment:
   sdk: '>=3.2.6 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
+# To automatically upgrade your package dependencies to the latest versions,
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
   bloc: ^9.0.0
-  # Because every version of flutter_test from sdk depends on collection 1.18.0 and news_glance depends on collection ^1.19.0, flutter_test from sdk is forbidden.
-  #So, because news_glance depends on flutter_test from sdk, version solving failed.
   collection: ^1.19.1
   dio: ^5.8.0+1
   expandable: ^5.0.1
