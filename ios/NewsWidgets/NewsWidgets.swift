@@ -52,17 +52,25 @@ struct NewsWidgetsEntryView : View {
     var entry: Provider.Entry
     
     var body: some View {
-        VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
+        ZStack {
+            // Create the gradient
+            LinearGradient(
+                gradient: Gradient(colors: [Color.blue, Color.purple]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
             
-            Text(entry.title).font(Font.custom("Chewy", size: 13))
-            // Use Markdown view to display markdown formated text.
-            Markdown(entry.description)
-                .markdownTextStyle {
-                    // You can customize the markdown styling here
-                    ForegroundColor(.white)
-                }
+            VStack {
+                
+                Text(entry.title).font(Font.custom("Chewy", size: 22))
+                
+                Markdown(entry.description)
+                    .markdownTextStyle {
+                        
+                        ForegroundColor(.white)
+                    }
+            }.padding()
         }
     }
     
