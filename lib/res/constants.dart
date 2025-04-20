@@ -12,3 +12,4 @@ const String address =
     'Canada.';
 const int newsMax = 10;
 const double defaultExpandedHeight = 278.0;
+const String appName = 'News Glance';

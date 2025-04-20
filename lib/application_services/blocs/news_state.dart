@@ -3,6 +3,12 @@ part of 'news_bloc.dart';
 @immutable
 abstract class NewsState {
   const NewsState();
+
+  bool get canUpdateHomeWidget =>
+      !kIsWeb &&
+      !Platform.isMacOS &&
+      this is LoadedConclusionState &&
+      (this as LoadedConclusionState).conclusion.isNotEmpty;
 }
 
 class LoadingNewsState extends NewsState {

@@ -37,8 +37,8 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
-  Future<String> getNewsConclusion(List<NewsArticle> articles) async {
-    final ConclusionResponse response = await _restClient.getConclusion(
+  Future<String> getNewsConclusion(Iterable<NewsArticle> articles) async {
+    final ConclusionResponse response = await _restClient.getNewsConclusion(
       ConclusionRequest(
         articles: articles
             .take(constants.newsMax)

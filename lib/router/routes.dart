@@ -1,3 +1,6 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -14,7 +17,7 @@ Map<String, WidgetBuilder> routeMap = <String, WidgetBuilder>{
         create: (_) => GetIt.I.get<NewsBloc>()..add(const LoadNewsEvent()),
         child: BlocListener<NewsBloc, NewsState>(
           listener: (BuildContext context, NewsState state) {
-            if (state is LoadedConclusionState && state.conclusion.isNotEmpty) {
+            if (state.canUpdateHomeWidget && state is LoadedConclusionState) {
               _updateHomeWidgetConclusion(state.conclusion);
             }
           },

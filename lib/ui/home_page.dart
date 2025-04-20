@@ -92,7 +92,6 @@ class HomePage extends StatelessWidget {
                                           MarkdownPreview(
                                             text: state.conclusion.trim(),
                                           ),
-                                          const SizedBox(height: 10),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -243,11 +242,9 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: MarkdownBody(
-                      data: conclusion.trim(),
-                    ),
+                SingleChildScrollView(
+                  child: MarkdownBody(
+                    data: conclusion.trim(),
                   ),
                 ),
                 const SizedBox(height: 10),

@@ -6,5 +6,5 @@ abstract interface class NewsRepository {
 
   Future<List<NewsArticle>> getNews({String countryCode = country.usaCode});
 
-  Future<String> getNewsConclusion(List<NewsArticle> articles);
+  Future<String> getNewsConclusion(Iterable<NewsArticle> articles);
 }
