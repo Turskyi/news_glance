@@ -244,6 +244,7 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 10),
                 SingleChildScrollView(
                   child: MarkdownBody(
+                    selectable: true,
                     data: conclusion.trim(),
                   ),
                 ),
