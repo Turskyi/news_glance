@@ -21,6 +21,15 @@ class LoadedNewsState extends NewsState {
   final List<NewsArticle> news;
 }
 
+final class NewsConclusionError extends LoadedNewsState {
+  const NewsConclusionError({
+    required super.news,
+    this.errorMessage = 'Something went wrong',
+  });
+
+  final String errorMessage;
+}
+
 class LoadedConclusionState extends LoadedNewsState {
   const LoadedConclusionState({
     required super.news,

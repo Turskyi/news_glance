@@ -6,13 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
-import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/res/constants.dart' as constants;
-import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/ui/end_drawer.dart';
 import 'package:news_glance/ui/markdown_preview.dart';
+import 'package:news_glance/ui/news_article_list.dart';
 
 import 'app_error_widget.dart';
+import 'empty_news_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -35,10 +35,12 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         endDrawer: const EndDrawer(),
-        body: BlocBuilder<NewsBloc, NewsState>(
+        body: BlocConsumer<NewsBloc, NewsState>(
+          listener: _blocListener,
           builder: (BuildContext context, NewsState state) {
             if (state is LoadedNewsState) {
               const double adjustment = 20.0;
+
               return Semantics(
                 label: 'Home screen with the title on top, and the list of '
                     'headlines of article news titles below.',
@@ -125,66 +127,9 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          final NewsArticle article = state.news[index];
-                          return Card(
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 4,
-                              vertical: 2,
-                            ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: <Color>[
-                                    Colors.blue.shade100,
-                                    Colors.purple.shade100,
-                                  ],
-                                ),
-                              ),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.only(
-                                  left: 20,
-                                  right: 8,
-                                  top: 8,
-                                  bottom: 8,
-                                ),
-                                title: Text(
-                                  article.title,
-                                  style: TextStyle(
-                                    color: Colors.blue[900],
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  article.description,
-                                  style: TextStyle(color: Colors.blue[900]),
-                                ),
-                                trailing: Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: Colors.blue[300],
-                                  size: 20,
-                                ),
-                                onTap: () => Navigator.pushNamed(
-                                  context,
-                                  AppRoute.article.path,
-                                  arguments: article,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                        childCount: state.news.length,
-                      ),
-                    ),
+                    state.news.isEmpty
+                        ? const EmptyNewsWidget()
+                        : NewsArticleList(news: state.news),
                   ],
                 ),
               );
@@ -196,6 +141,31 @@ class HomePage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
           },
+        ),
+      ),
+    );
+  }
+
+  void _blocListener(BuildContext context, NewsState state) {
+    if (state is NewsConclusionError) {
+      _showErrorSnackBar(
+        context: context,
+        errorMessage: state.errorMessage,
+      );
+    }
+  }
+
+  void _showErrorSnackBar({
+    required BuildContext context,
+    required String errorMessage,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(errorMessage),
+        duration: const Duration(seconds: 3),
+        action: SnackBarAction(
+          label: 'Close',
+          onPressed: ScaffoldMessenger.of(context).hideCurrentSnackBar,
         ),
       ),
     );
