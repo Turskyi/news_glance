@@ -17,5 +17,8 @@ abstract class RestClient {
   });
 
   @POST('news-conclusion')
+  Future<ConclusionResponse> getNewsConclusion(@Body() ConclusionRequest news);
+
+  @POST('conclusion')
   Future<ConclusionResponse> getConclusion(@Body() ConclusionRequest news);
 }

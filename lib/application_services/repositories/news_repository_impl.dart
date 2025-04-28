@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:news_glance/domain_models/bad_request_exception.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_request/article_request.dart';
@@ -37,21 +39,49 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
-  Future<String> getNewsConclusion(List<NewsArticle> articles) async {
-    final ConclusionResponse response = await _restClient.getConclusion(
-      ConclusionRequest(
-        articles: articles
-            .take(constants.newsMax)
-            .map(
-              (NewsArticle article) => ArticleRequest(
-                title: article.title,
-                description: article.description,
-                articleText: article.articleText,
-              ),
-            )
-            .toList(),
-      ),
-    );
-    return response.conclusion;
+  Future<String> getNewsConclusion(Iterable<NewsArticle> articles) async {
+    try {
+      final ConclusionResponse response = await _restClient.getNewsConclusion(
+        ConclusionRequest(
+          articles: articles
+              .take(constants.newsMax)
+              .map(
+                (NewsArticle article) => ArticleRequest(
+                  title: article.title,
+                  description: article.description,
+                  articleText: article.articleText,
+                ),
+              )
+              .toList(),
+        ),
+      );
+      return response.conclusion;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400) {
+        // Handle 400 Bad Request specifically.
+        final Object? errorData = e.response?.data;
+
+        if (errorData is Map<String, Object?>? &&
+            errorData != null &&
+            errorData.containsKey('error')) {
+          final Object? errorMessage = errorData['error'];
+
+          if (errorMessage is String) {
+            // Throw the custom exception.
+            throw BadRequestException(errorMessage);
+          }
+        }
+        throw Exception(
+          'Bad request: Server returned a 400 status code, '
+          'but the error message is not in the expected format.',
+        );
+      } else {
+        // Handle other DioExceptions.
+        throw Exception('An error occurred: ${e.message}');
+      }
+    } catch (e) {
+      // Handle any other exceptions.
+      throw Exception('An unexpected error occurred: $e');
+    }
   }
 }

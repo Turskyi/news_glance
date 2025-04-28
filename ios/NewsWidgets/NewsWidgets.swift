@@ -7,6 +7,7 @@
 
 import WidgetKit
 import SwiftUI
+import MarkdownUI
 
 struct Provider: TimelineProvider {
     // Placeholder is used as a placeholder when the widget is first displayed
@@ -23,7 +24,7 @@ struct Provider: TimelineProvider {
         }
         else{
             //      Get the data from the user defaults to display
-            let userDefaults = UserDefaults(suiteName: "<YOUR APP GROUP>")
+            let userDefaults = UserDefaults(suiteName: "group.dmytrowidget")
             let title = userDefaults?.string(forKey: "headline_title") ?? "No Title Set"
             let description = userDefaults?.string(forKey: "headline_description") ?? "No Description Set"
             entry = NewsArticleEntry(date: Date(), title: title, description: description)
@@ -51,18 +52,31 @@ struct NewsWidgetsEntryView : View {
     var entry: Provider.Entry
     
     var body: some View {
-        VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
+        ZStack {
+            // Create the gradient
+            LinearGradient(
+                gradient: Gradient(colors: [Color.blue, Color.purple]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
             
-            Text(entry.title).font(Font.custom("Chewy", size: 13))
-            Text(entry.description)
+            VStack {
+                
+                Text(entry.title).font(Font.custom("Chewy", size: 22))
+                
+                Markdown(entry.description)
+                    .markdownTextStyle {
+                        
+                        ForegroundColor(.white)
+                    }
+            }.padding()
         }
     }
     
     init(entry: Provider.Entry){
-      self.entry = entry
-      CTFontManagerRegisterFontsForURL(bundle.appending(path: "assets/fonts/Chewy-Regular.ttf") as CFURL, CTFontManagerScope.process, nil)
+        self.entry = entry
+        CTFontManagerRegisterFontsForURL(bundle.appending(path: "assets/fonts/Chewy-Regular.ttf") as CFURL, CTFontManagerScope.process, nil)
     }
     
     var bundle: URL {

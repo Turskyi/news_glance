@@ -7,7 +7,7 @@ part 'conclusion_response.g.dart';
 class ConclusionResponse {
   const ConclusionResponse({required this.conclusion});
 
-  factory ConclusionResponse.fromJson(Map<String, dynamic> json) {
+  factory ConclusionResponse.fromJson(Map<String, Object?> json) {
     return _$ConclusionResponseFromJson(json);
   }
 
@@ -16,7 +16,7 @@ class ConclusionResponse {
   @override
   String toString() => 'ConclusionResponse(conclusion: $conclusion)';
 
-  Map<String, dynamic> toJson() => _$ConclusionResponseToJson(this);
+  Map<String, Object?> toJson() => _$ConclusionResponseToJson(this);
 
   ConclusionResponse copyWith({
     String? conclusion,

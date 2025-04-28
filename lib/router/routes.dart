@@ -14,7 +14,7 @@ Map<String, WidgetBuilder> routeMap = <String, WidgetBuilder>{
         create: (_) => GetIt.I.get<NewsBloc>()..add(const LoadNewsEvent()),
         child: BlocListener<NewsBloc, NewsState>(
           listener: (BuildContext context, NewsState state) {
-            if (state is LoadedConclusionState && state.conclusion.isNotEmpty) {
+            if (state.canUpdateHomeWidget && state is LoadedConclusionState) {
               _updateHomeWidgetConclusion(state.conclusion);
             }
           },

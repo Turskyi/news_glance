@@ -14,7 +14,24 @@
 **News Glance** is a flutter app that lets you access the latest news and
 insights even
 from your home screen widget. It uses AI to generate a conclusion from the news
-headlines and allows you to view and share the articles.
+and allows you to view and share the articles.
+
+## Live Demos
+
+- **Mobile (Flutter):** The core of News Glance is designed for mobile devices.
+  You can download it from
+  [Android Play Market](https://play.google.com/store/apps/details?id=com.turskyi.news_glance)
+  or [iOS TestFlight](https://testflight.apple.com/join/rMxpk2Cp).
+- **Web (Next.js):** [https://news.turskyi.com](https://news.turskyi.com/) -
+  This is the primary web version of News Glance, built with Next.js. It offers
+  a full-featured web experience. This version is maintained in a
+  [separate repository](https://github.com/Turskyi/news-nextjs)
+- **Web (Flutter):**
+  [https://news-glance-ai.web.app](https://news-glance-ai.web.app) - A web
+  version of the Flutter app is also available and deployed to Firebase Hosting.
+  While the primary focus of this project is on mobile, this version allows for
+  quick testing and a preview of the app's functionality directly in the
+  browser without the need to download and install the app.
 
 ## PROJECT SPECIFICATION
 
@@ -40,7 +57,8 @@ bundle to **Google Play** after every merge (push) to **master** branch;
 • State management approach: [BLoC](https://bloclibrary.dev);
 
 • App testing platforms:
-[Firebase App Distribution](https://appdistribution.firebase.dev/i/84a5fda691af5a9b);
+[Firebase App Distribution](https://appdistribution.firebase.dev/i/84a5fda691af5a9b),
+[iOS TestFlight](https://testflight.apple.com/join/rMxpk2Cp);
 
 **Code Readability:** code is easily readable with no unnecessary blank lines,
 no unused variables or methods, and no commented-out code, all variables,
@@ -83,6 +101,19 @@ dart run build_runner clean
 dart run build_runner build --delete-conflicting-outputs
 ```
 
+## Running on Web (Debug Mode)
+
+If you need to run the Flutter app on the web in debug mode, you'll need to use
+the following command to avoid Cross-Origin Resource Sharing (CORS) issues:
+
+```bash 
+flutter run -d chrome --web-browser-flag "--disable-web-security" 
+```
+
+This command disables web security for the Chrome browser instance used for
+debugging. **Please note that this should only be used for local development
+and debugging purposes.** Do not use this flag in production environments.
+
 ## Test Coverage
 
 Run tests, generate a code coverage report, and view that report in a web
@@ -111,7 +142,9 @@ open coverage/index.html
 
 ## Layers
 
-#### APPLICATION CORE - `models`, `domain_services` and `application_services` (`core`)
+#### APPLICATION CORE - `models`, `domain_services` and `application_services` (
+
+`core`)
 
 The number of layers in the application `core` will vary, but remember that
 the `Domain Model` is the very center, and since all couplings are toward the
@@ -126,7 +159,7 @@ Around the Domain Model are other layers with more behavior.
 #### DOMAIN SERVICES - `domain_services`
 
 The first layer around the Domain Model is typically where we would find
-interfaces that provide object saving and retrieving behaviour, called
+interfaces that provide object saving and retrieving behavior, called
 `repository` interfaces. The implementation of the object-saving behavior is
 not in the application core, however, because it typically involves a database.
 Only the interface is in the application core.
@@ -165,7 +198,8 @@ This class implements the `data source` interface and is thereby coupled to it.
 
 - [DON'T cast a nullable value to a non-nullable type. This hides a null check and most of the time it is not what is expected.](https://dart-lang.github.io/linter/lints/avoid_as.html)
 
-- [PREFER using `const` for instantiating constant constructors](https://dart-lang.github.io/linter/lints/prefer_const_constructors.html)
+- [PREFER using
+  `const` for instantiating constant constructors](https://dart-lang.github.io/linter/lints/prefer_const_constructors.html)
 
 If a constructor can be invoked as const to produce a canonicalized instance,
 it's preferable to do so.
@@ -436,6 +470,7 @@ more expression and flexibility.
 
 ## Credits
 
-This project is based on the codelab
+This [project](https://github.com/flutter/codelabs/tree/main/homescreen_codelab/step_06)
+is based on the codelab
 [Adding a Home Screen widget to your Flutter App](https://codelabs.developers.google.com/flutter-home-screen-widgets)
 by Leigha Jarett and Eric Windmill.

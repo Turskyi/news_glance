@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_glance/res/constants.dart' as constants;
 import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/router/routes.dart' as routes;
 
@@ -9,7 +10,8 @@ class NewsGlanceApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'News Glance',
+      debugShowCheckedModeBanner: false,
+      title: constants.appName,
       initialRoute: AppRoute.home.path,
       routes: routes.routeMap,
       theme: ThemeData(
