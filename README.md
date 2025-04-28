@@ -14,7 +14,24 @@
 **News Glance** is a flutter app that lets you access the latest news and
 insights even
 from your home screen widget. It uses AI to generate a conclusion from the news
-headlines and allows you to view and share the articles.
+and allows you to view and share the articles.
+
+## Live Demos
+
+- **Mobile (Flutter):** The core of News Glance is designed for mobile devices.
+  You can download it from
+  [Android Play Market](https://play.google.com/store/apps/details?id=com.turskyi.news_glance)
+  or [iOS TestFlight](https://testflight.apple.com/join/rMxpk2Cp).
+- **Web (Next.js):** [https://news.turskyi.com](https://news.turskyi.com/) -
+  This is the primary web version of News Glance, built with Next.js. It offers
+  a full-featured web experience. This version is maintained in a
+  [separate repository](https://github.com/Turskyi/news-nextjs)
+- **Web (Flutter):**
+  [https://news-glance-ai.web.app](https://news-glance-ai.web.app) - A web
+  version of the Flutter app is also available and deployed to Firebase Hosting.
+  While the primary focus of this project is on mobile, this version allows for
+  quick testing and a preview of the app's functionality directly in the
+  browser without the need to download and install the app.
 
 ## PROJECT SPECIFICATION
 
