@@ -1,5 +1,5 @@
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner-direct-single.svg)](https://stand-with-ukraine.pp.ua)
-[![Build & upload to Firebase App Distribution](https://github.com/Turskyi/news_glance/actions/workflows/flutter_ci.yml/badge.svg?branch=dev&event=push)](https://appdistribution.firebase.dev/i/84a5fda691af5a9b)
+[![Build & upload to Firebase App Distribution](https://github.com/Turskyi/news_glance/actions/workflows/flutter_ci.yml/badge.svg)](https://github.com/Turskyi/news_glance/actions/workflows/flutter_ci.yml)
 [![Codemagic build status](https://api.codemagic.io/apps/65dd5f020e35003c3f27e19f/65dd5f020e35003c3f27e19e/status_badge.svg)](https://codemagic.io/apps/65dd5f020e35003c3f27e19f/65dd5f020e35003c3f27e19e/latest_build)
 [![Code Quality](https://github.com/Turskyi/news_glance/actions/workflows/code-quality-tests.yml/badge.svg?branch=master&event=push)](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo)
 [![codecov](https://codecov.io/gh/Turskyi/news_glance/graph/badge.svg?token=P02XSDS5QB)](https://codecov.io/gh/Turskyi/news_glance)
