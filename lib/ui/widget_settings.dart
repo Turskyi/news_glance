@@ -2,14 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news_glance/application_services/home_widget_service_impl.dart';
 import 'package:news_glance/domain_services/home_widget_service.dart';
 import 'package:news_glance/res/constants.dart' as constants;
-
-/// Widget frequency options displayed to users
-class WidgetFrequencyOption {
-  const WidgetFrequencyOption({required this.label, required this.minutes});
-
-  final String label;
-  final int minutes;
-}
+import 'package:news_glance/ui/widget_frequency_option.dart';
 
 class WidgetSettings extends StatefulWidget {
   const WidgetSettings({super.key});
@@ -77,52 +70,50 @@ class _WidgetSettingsState extends State<WidgetSettings> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Text(
-            'Widget Update Frequency',
-            style: TextStyle(
-              fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'Choose how often the News Glance widget updates in '
-            'Notification Center',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ...<Widget>[
-          for (final WidgetFrequencyOption option in _frequencyOptions)
-            ListTile(
-              // ignore: deprecated_member_use
-              title: Text(option.label),
-              // ignore: deprecated_member_use
-              leading: Radio<int>(
-                value: option.minutes,
-                // ignore: deprecated_member_use
-                groupValue: _selectedFrequency,
-                // ignore: deprecated_member_use
-                onChanged: _isSaving
-                    ? null
-                    : (int? value) {
-                        if (value != null) {
-                          _saveFrequency(value);
-                        }
-                      },
+    return RadioGroup<int>(
+      groupValue: _selectedFrequency,
+      onChanged: (int? value) {
+        if (value != null) {
+          _saveFrequency(value);
+        } else {
+          // Deselection is not supported.
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              'Widget Update Frequency',
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+                fontWeight: FontWeight.bold,
               ),
-              enabled: !_isSaving,
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Choose how often the News Glance widget updates in '
+              'Notification Center',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+          const SizedBox(height: 12),
+          ...<Widget>[
+            for (final WidgetFrequencyOption option in _frequencyOptions)
+              RadioListTile<int>(
+                title: Text(option.label),
+                value: option.minutes,
+                enabled: !_isSaving,
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              ),
+          ],
+          const Divider(),
         ],
-        const Divider(),
-      ],
+      ),
     );
   }
 }
