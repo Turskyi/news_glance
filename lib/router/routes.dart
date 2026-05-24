@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:home_widget/home_widget.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
-import 'package:news_glance/res/constants.dart' as constants;
+import 'package:news_glance/application_services/home_widget_service_impl.dart';
+import 'package:news_glance/domain_services/home_widget_service.dart';
 import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/ui/article_screen.dart';
 import 'package:news_glance/ui/article_web_screen.dart';
@@ -30,18 +30,10 @@ void _handleNewsStateChange(BuildContext _, NewsState state) {
 }
 
 void _updateHomeWidgetConclusion(String conclusion) {
-  // Set the group ID
-  HomeWidget.setAppGroupId(constants.appGroupId);
-  // Save the headline data to the widget
-  HomeWidget.saveWidgetData<String>(
-    'headline_title',
-    'News Glance from ${DateTime.now().toString().substring(0, 10)}',
-  );
-  if (conclusion.isNotEmpty) {
-    HomeWidget.saveWidgetData<String>('headline_description', conclusion);
-  }
-  HomeWidget.updateWidget(
-    iOSName: constants.iOSWidgetName,
-    androidName: constants.androidWidgetName,
+  const HomeWidgetService homeWidgetService = HomeWidgetServiceImpl();
+  final String formattedDate = DateTime.now().toString().substring(0, 10);
+  homeWidgetService.updateHomeWidget(
+    headlineTitle: 'News Glance from $formattedDate',
+    headlineDescription: conclusion,
   );
 }

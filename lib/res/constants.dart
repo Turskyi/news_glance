@@ -14,3 +14,10 @@ const String address =
 const int newsMax = 10;
 const double defaultExpandedHeight = 278.0;
 const String appName = 'News Glance';
+
+// Home Widget Method Channel
+const String homeWidgetMethodChannel = 'com.newsglance.home_widget';
+const String setAppGroupIdMethod = 'setAppGroupId';
+const String saveWidgetDataMethod = 'saveWidgetData';
+const String updateWidgetMethod = 'updateWidget';
+const String appGroupIdArgKey = 'appGroupId';

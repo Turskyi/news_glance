@@ -2,28 +2,25 @@
 //  NewsWidgets.swift
 //  NewsWidgets
 //
-//  Created by Dmytro on 2024-02-19.
+//  Created by Dmytro on 2024-05-23.
 //
 
 import WidgetKit
 import SwiftUI
-import MarkdownUI
 
 struct Provider: TimelineProvider {
     // Placeholder is used as a placeholder when the widget is first displayed
     func placeholder(in context: Context) -> NewsArticleEntry {
-        //      Add some placeholder title and description, and get the current date
         NewsArticleEntry(date: Date(), title: "Placeholder Title", description: "Placeholder description")
     }
-    
+
     // Snapshot entry represents the current time and state
     func getSnapshot(in context: Context, completion: @escaping (NewsArticleEntry) -> ()) {
         let entry: NewsArticleEntry
-        if context.isPreview{
+        if context.isPreview {
             entry = placeholder(in: context)
-        }
-        else{
-            //      Get the data from the user defaults to display
+        } else {
+            // Get the data from the user defaults to display
             let userDefaults = UserDefaults(suiteName: "group.dmytrowidget")
             let title = userDefaults?.string(forKey: "headline_title") ?? "No Title Set"
             let description = userDefaults?.string(forKey: "headline_description") ?? "No Description Set"
@@ -31,10 +28,10 @@ struct Provider: TimelineProvider {
         }
         completion(entry)
     }
-    
-    //    getTimeline is called for the current and optionally future times to update the widget
+
+    // getTimeline is called for the current and optionally future times to update the widget
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        //      This just uses the snapshot function you defined earlier
+        // This just uses the snapshot function you defined earlier
         getSnapshot(in: context) { (entry) in
             // atEnd policy tells widgetkit to request a new entry after the date has passed
             let timeline = Timeline(entries: [entry], policy: .atEnd)
@@ -43,9 +40,9 @@ struct Provider: TimelineProvider {
     }
 }
 
-struct NewsWidgetsEntryView : View {
+struct NewsWidgetsEntryView: View {
     var entry: Provider.Entry
-    
+
     var body: some View {
         ZStack {
             // Create the gradient
@@ -54,44 +51,31 @@ struct NewsWidgetsEntryView : View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .ignoresSafeArea()
-            
+                .ignoresSafeArea()
+
             VStack {
-                
-                Text(entry.title).font(Font.custom("Chewy", size: 22))
-                
-                Markdown(entry.description)
-                    .markdownTextStyle {
-                        
-                        ForegroundColor(.white)
-                    }
-            }.padding()
+                Text(entry.title)
+                    .font(.system(size: 18, weight: .semibold))
+                    .lineLimit(2)
+                    .foregroundColor(.white)
+
+                Text(entry.description)
+                    .font(.system(size: 14, weight: .regular))
+                    .lineLimit(3)
+                    .foregroundColor(.white)
+                    .opacity(0.9)
+            }
+            .padding()
         }
-    }
-    
-    init(entry: Provider.Entry){
-        self.entry = entry
-        CTFontManagerRegisterFontsForURL(bundle.appending(path: "assets/fonts/Chewy-Regular.ttf") as CFURL, CTFontManagerScope.process, nil)
-    }
-    
-    var bundle: URL {
-        let bundle = Bundle.main
-        if bundle.bundleURL.pathExtension == "appex" {
-            // Peel off two directory levels - MY_APP.app/PlugIns/MY_APP_EXTENSION.appex
-            var url = bundle.bundleURL.deletingLastPathComponent().deletingLastPathComponent()
-            url.append(component: "Frameworks/App.framework/flutter_assets")
-            return url
-        }
-        return bundle.bundleURL
     }
 }
 
 struct NewsWidgets: Widget {
     let kind: String = "NewsWidgets"
-    
+
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            if #available(iOS 17.0, *) {
+            if #available(macOS 14.0, *) {
                 NewsWidgetsEntryView(entry: entry)
                     .containerBackground(.fill.tertiary, for: .widget)
             } else {
@@ -100,8 +84,9 @@ struct NewsWidgets: Widget {
                     .background()
             }
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("News Glance Widget")
+        .description("Display the latest news headline in your Notification Center")
+        .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
@@ -116,5 +101,5 @@ struct NewsWidgets: Widget {
 struct NewsArticleEntry: TimelineEntry {
     let date: Date
     let title: String
-    let description:String
+    let description: String
 }

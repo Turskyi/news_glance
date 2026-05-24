@@ -46,8 +46,7 @@ def SIGNING_KEY_RELEASE_KEY_PASSWORD = keyProperties.getProperty('SIGNING_KEY_RE
 android {
     namespace rootProject.application_id
     compileSdk flutter.compileSdkVersion
-    //TODO: change back to dynamic "flutter.ndkVersion" version, when the error "One or more plugins require a higher Android NDK version." is gone.
-    ndkVersion = "27.0.12077973"
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
