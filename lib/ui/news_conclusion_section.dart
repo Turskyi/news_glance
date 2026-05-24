@@ -53,13 +53,10 @@ class NewsConclusionSection extends StatelessWidget {
                           )
                         else
                           const SizedBox.shrink(),
-                        //TODO: fix for iOS, does not
-                        // make a sound
-                        if (kIsWeb || Platform.isAndroid)
-                          ElevatedButton(
-                            onPressed: () => _speak(conclusion),
-                            child: const Text('Read Aloud'),
-                          ),
+                        ElevatedButton(
+                          onPressed: () => _speak(conclusion),
+                          child: const Text('Read Aloud'),
+                        ),
                       ],
                     ),
                   ],
@@ -76,11 +73,12 @@ class NewsConclusionSection extends StatelessWidget {
       if (Platform.isIOS) {
         await flutterTts.setSharedInstance(true);
         await flutterTts.setIosAudioCategory(
-          IosTextToSpeechAudioCategory.ambient,
+          IosTextToSpeechAudioCategory.playback,
           <IosTextToSpeechAudioCategoryOptions>[
             IosTextToSpeechAudioCategoryOptions.allowBluetooth,
             IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
             IosTextToSpeechAudioCategoryOptions.mixWithOthers,
+            IosTextToSpeechAudioCategoryOptions.defaultToSpeaker,
           ],
           IosTextToSpeechAudioMode.voicePrompt,
         );
