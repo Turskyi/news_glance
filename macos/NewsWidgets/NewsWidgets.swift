@@ -11,7 +11,11 @@ import SwiftUI
 struct Provider: TimelineProvider {
     // Placeholder is used as a placeholder when the widget is first displayed
     func placeholder(in context: Context) -> NewsArticleEntry {
-        NewsArticleEntry(date: Date(), title: "Placeholder Title", description: "Placeholder description")
+        NewsArticleEntry(
+            date: Date(),
+            title: "Major News Headline",
+            description: "A concise summary of the most significant events happening around the world today."
+        )
     }
 
     // Snapshot entry represents the current time and state
@@ -43,6 +47,7 @@ struct Provider: TimelineProvider {
 // MARK: - Widget View
 struct NewsWidgetsEntryView: View {
     var entry: Provider.Entry
+    @Environment(\.widgetFamily) var family
 
     var body: some View {
         ZStack {
@@ -54,19 +59,23 @@ struct NewsWidgetsEntryView: View {
             )
                 .ignoresSafeArea()
 
-            VStack {
+            VStack(alignment: .leading, spacing: 8) {
                 Text(entry.title)
                     .font(.system(size: 18, weight: .semibold))
-                    .lineLimit(2)
+                    .lineLimit(family == .systemSmall ? 2 : 3)
                     .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                 Text(entry.description)
                     .font(.system(size: 14, weight: .regular))
-                    .lineLimit(3)
+                    .lineLimit(family == .systemSmall ? 3 : (family == .systemMedium ? 6 : 20))
                     .foregroundColor(.white)
                     .opacity(0.9)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
         }
         .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
     }

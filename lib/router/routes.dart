@@ -33,7 +33,7 @@ void _updateHomeWidgetConclusion(String conclusion) {
   const HomeWidgetService homeWidgetService = HomeWidgetServiceImpl();
   final String formattedDate = DateTime.now().toString().substring(0, 10);
   homeWidgetService.updateHomeWidget(
-    headlineTitle: 'News Glance from $formattedDate',
+    headlineTitle: 'News Glance\nfrom $formattedDate',
     headlineDescription: conclusion,
   );
 }
