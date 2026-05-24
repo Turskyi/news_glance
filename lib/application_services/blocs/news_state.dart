@@ -6,8 +6,6 @@ abstract class NewsState {
 
   bool get canUpdateHomeWidget =>
       !kIsWeb &&
-      //TODO: add support for macos
-      !Platform.isMacOS &&
       this is LoadedConclusionState &&
       (this as LoadedConclusionState).conclusion.isNotEmpty;
 }

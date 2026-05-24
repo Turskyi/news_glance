@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' show Platform, SocketException;
+import 'dart:io' show SocketException;
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
