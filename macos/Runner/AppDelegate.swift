@@ -133,7 +133,8 @@ class AppDelegate: FlutterAppDelegate {
 
     private func updateWidget(call: FlutterMethodCall, result: @escaping FlutterResult) {
         // Allow widget updates in both debug and release to ensure a better developer experience.
-        let minimumReloadInterval: TimeInterval = 5 // Reduced interval for development
+        // Reduce interval for development to "5" and keep in release at "60".
+        let minimumReloadInterval: TimeInterval = 60
         let now = Date()
         if let lastReload = lastWidgetReloadAt,
            now.timeIntervalSince(lastReload) < minimumReloadInterval {
