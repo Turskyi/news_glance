@@ -1,50 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:news_glance/res/constants.dart' as constants;
 import 'package:markdown/markdown.dart' as md;
 
 /// Markdown preview with limited lines.
 class MarkdownPreview extends StatelessWidget {
-  const MarkdownPreview({required this.text, super.key});
+  const MarkdownPreview({
+    required this.text,
+    this.maxLines = 5,
+    super.key,
+  });
+
   final String text;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
     final TextStyle style = TextStyle(
       fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+      color: Colors.white,
     );
-    return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxHeight: constants.defaultExpandedHeight,
-      ),
-      child: SizedBox(
-        height: 144,
-        child: Markdown(
-          data: _getMarkdownPreview(
-            text,
-          ),
-          styleSheet: MarkdownStyleSheet(
-            p: style.copyWith(
-              color: Colors.white,
-            ),
-          ),
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-        ),
-      ),
+
+    return Text(
+      getPlainText(text),
+      style: style,
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
     );
   }
 
-  String _getMarkdownPreview(String markdown) {
-    // Strip Markdown to plain text for preview with ellipsis.
+  static String getPlainText(String markdown) {
+    // Strip Markdown to plain text.
     String plainText = md.markdownToHtml(markdown);
     // Remove HTML tags.
     plainText = plainText.replaceAll(RegExp(r'<[^>]*>'), '');
-    const int previewLength = 120;
-    if (plainText.length > previewLength) {
-      // Limit preview length.
-      return '${plainText.substring(0, previewLength)}...';
-    }
-    return plainText;
+    // Decode HTML entities if any (optional, but good for UX)
+    // For now, let's keep it simple as it was.
+    return plainText.trim();
   }
 }

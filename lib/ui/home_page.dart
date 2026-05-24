@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
-import 'package:news_glance/res/constants.dart' as constants;
 import 'package:news_glance/ui/end_drawer.dart';
 import 'package:news_glance/ui/markdown_preview.dart';
 import 'package:news_glance/ui/news_article_list.dart';
@@ -39,91 +38,127 @@ class HomePage extends StatelessWidget {
           listener: _blocListener,
           builder: (BuildContext context, NewsState state) {
             if (state is LoadedNewsState) {
-              const double adjustment = 20.0;
-
               return Semantics(
                 label: 'Home screen with the title on top, and the list of '
                     'headlines of article news titles below.',
                 child: CustomScrollView(
                   slivers: <Widget>[
-                    SliverAppBar(
-                      backgroundColor: Colors.transparent,
-                      expandedHeight: state is LoadedConclusionState &&
-                              state.conclusion.trim().isNotEmpty
-                          ? constants.defaultExpandedHeight
-                          : kToolbarHeight + adjustment,
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: Padding(
-                          padding: EdgeInsets.only(
-                            left: 20,
-                            top: MediaQuery.paddingOf(context).top,
-                            right: 20,
-                            bottom: state is LoadedConclusionState ? 20 : 0,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'News Glance',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .displaySmall
-                                      ?.fontSize,
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: 20,
+                          top: MediaQuery.paddingOf(context).top,
+                          right: 20,
+                          bottom: 20,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  'News Glance',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .displaySmall
+                                        ?.fontSize,
+                                  ),
                                 ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.menu,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () =>
+                                      Scaffold.of(context).openEndDrawer(),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 500),
+                              transitionBuilder: (
+                                Widget child,
+                                Animation<double> animation,
+                              ) =>
+                                  FadeTransition(
+                                opacity: animation,
+                                child: child,
                               ),
-                              AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 500),
-                                transitionBuilder: (
-                                  Widget child,
-                                  Animation<double> animation,
-                                ) =>
-                                    FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                ),
-                                child: (state is LoadedConclusionState &&
-                                        state.conclusion.trim().isNotEmpty)
-                                    ? Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          MarkdownPreview(
-                                            text: state.conclusion.trim(),
+                              child: (state is LoadedConclusionState &&
+                                      state.conclusion.trim().isNotEmpty)
+                                  ? LayoutBuilder(
+                                      builder: (BuildContext context,
+                                          BoxConstraints constraints) {
+                                        final String plainText =
+                                            MarkdownPreview.getPlainText(
+                                                state.conclusion);
+                                        final TextPainter textPainter =
+                                            TextPainter(
+                                          text: TextSpan(
+                                            text: plainText,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium
+                                                ?.copyWith(color: Colors.white),
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              ElevatedButton(
-                                                onPressed: () =>
-                                                    _showFullConclusionDialog(
-                                                  context,
-                                                  state.conclusion,
-                                                ),
-                                                child: const Text('Read More'),
-                                              ),
-                                              //TODO: fix for iOS, does not
-                                              // make a sound
-                                              if (kIsWeb || Platform.isAndroid)
-                                                ElevatedButton(
-                                                  onPressed: () => _speak(
-                                                    state.conclusion,
+                                          maxLines: 5,
+                                          textDirection: TextDirection.ltr,
+                                        )..layout(
+                                                maxWidth: constraints.maxWidth);
+
+                                        final bool hasOverflow =
+                                            textPainter.didExceedMaxLines;
+
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            MarkdownPreview(
+                                              text: state.conclusion.trim(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                if (hasOverflow)
+                                                  ElevatedButton(
+                                                    onPressed: () =>
+                                                        _showFullConclusionDialog(
+                                                      context,
+                                                      state.conclusion,
+                                                    ),
+                                                    child:
+                                                        const Text('Read More'),
+                                                  )
+                                                else
+                                                  const SizedBox.shrink(),
+                                                //TODO: fix for iOS, does not
+                                                // make a sound
+                                                if (kIsWeb ||
+                                                    Platform.isAndroid)
+                                                  ElevatedButton(
+                                                    onPressed: () => _speak(
+                                                      state.conclusion,
+                                                    ),
+                                                    child: const Text(
+                                                        'Read Aloud'),
                                                   ),
-                                                  child:
-                                                      const Text('Read Aloud'),
-                                                ),
-                                            ],
-                                          ),
-                                        ],
-                                      )
-                                    : const SizedBox(),
-                              ),
-                            ],
-                          ),
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    )
+                                  : const SizedBox(),
+                            ),
+                          ],
                         ),
                       ),
                     ),
