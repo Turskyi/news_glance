@@ -40,6 +40,7 @@ struct Provider: TimelineProvider {
     }
 }
 
+// MARK: - Widget View
 struct NewsWidgetsEntryView: View {
     var entry: Provider.Entry
 
@@ -67,9 +68,11 @@ struct NewsWidgetsEntryView: View {
             }
             .padding()
         }
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
     }
 }
 
+// MARK: - Widget Configuration
 struct NewsWidgets: Widget {
     let kind: String = "NewsWidgets"
 
@@ -86,11 +89,12 @@ struct NewsWidgets: Widget {
         }
         .configurationDisplayName("News Glance Widget")
         .description("Display the latest news headline in your Notification Center")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
 
-#Preview(as: .systemSmall) {
+// MARK: - Preview
+#Preview(as: .systemMedium) {
     NewsWidgets()
 } timeline: {
     NewsArticleEntry(date: .now, title: "Latest Tech Trends", description: "Discover the latest innovations in AI and quantum computing.")
