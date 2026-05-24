@@ -18,7 +18,7 @@ class NewsRepositoryImpl implements NewsRepository {
 
   @override
   Future<List<NewsArticle>> getNews({
-    String countryCode = constants.usaCode,
+    String countryCode = constants.internationalCode,
   }) async {
     final List<NewsArticle> articles = <NewsArticle>[];
     final List<NewsArticleResponse> response = await _restClient.getNews(

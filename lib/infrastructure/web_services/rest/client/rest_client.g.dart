@@ -21,7 +21,7 @@ class _RestClient implements RestClient {
 
   @override
   Future<List<NewsArticleResponse>> getNews({
-    String countryCode = country.usaCode,
+    String countryCode = country.internationalCode,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': countryCode};

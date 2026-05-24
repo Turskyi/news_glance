@@ -4,7 +4,8 @@ import 'package:news_glance/res/constants.dart' as country;
 abstract interface class NewsRepository {
   const NewsRepository();
 
-  Future<List<NewsArticle>> getNews({String countryCode = country.usaCode});
+  Future<List<NewsArticle>> getNews(
+      {String countryCode = country.internationalCode});
 
   Future<String> getNewsConclusion(Iterable<NewsArticle> articles);
 }

@@ -24,7 +24,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   FutureOr<void> _loadNews(LoadNewsEvent event, Emitter<NewsState> emit) async {
     try {
       final List<NewsArticle> news = await _newsRepository.getNews(
-        countryCode: constants.usaCode,
+        countryCode: constants.internationalCode,
       );
       emit(LoadedNewsState(news: news));
       if (news.isNotEmpty) {

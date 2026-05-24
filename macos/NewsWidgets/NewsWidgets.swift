@@ -75,7 +75,7 @@ struct NewsWidgetsEntryView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             .padding()
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
     }

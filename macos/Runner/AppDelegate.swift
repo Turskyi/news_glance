@@ -132,13 +132,8 @@ class AppDelegate: FlutterAppDelegate {
     }
 
     private func updateWidget(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        #if DEBUG
-        // Keep debug runs stable on macOS; WidgetCenter calls can be noisy on some systems.
-        result(true)
-        return
-        #else
-        // Avoid over-triggering WidgetKit daemon calls when Flutter asks for frequent updates.
-        let minimumReloadInterval: TimeInterval = 60
+        // Allow widget updates in both debug and release to ensure a better developer experience.
+        let minimumReloadInterval: TimeInterval = 5 // Reduced interval for development
         let now = Date()
         if let lastReload = lastWidgetReloadAt,
            now.timeIntervalSince(lastReload) < minimumReloadInterval {
@@ -149,7 +144,6 @@ class AppDelegate: FlutterAppDelegate {
         lastWidgetReloadAt = now
         WidgetCenter.shared.reloadTimelines(ofKind: widgetKind)
         result(true)
-        #endif
     }
 
     override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
