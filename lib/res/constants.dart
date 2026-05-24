@@ -4,6 +4,7 @@ const String appGroupId = 'group.dmytrowidget';
 const String developerDomain = 'turskyi.com';
 const String baseUrl = 'https://news.$developerDomain/api/';
 const String usaCode = 'US';
+const String internationalCode = 'intl';
 const String website = 'https://news.$developerDomain';
 const String email = 'dmytro@$developerDomain';
 const String phone = '+14379852581';

@@ -13,7 +13,7 @@ abstract class RestClient {
 
   @GET('news')
   Future<List<NewsArticleResponse>> getNews({
-    @Query('country') String countryCode = country.usaCode,
+    @Query('country') String countryCode = country.internationalCode,
   });
 
   @POST('news-conclusion')
