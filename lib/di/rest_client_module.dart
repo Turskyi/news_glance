@@ -6,9 +6,7 @@ import 'package:news_glance/res/constants.dart' as constants;
 
 @module
 abstract class RestClientModule {
-  RestClient getRestClient(
-    LoggingInterceptor loggingInterceptor,
-  ) {
+  RestClient getRestClient(LoggingInterceptor loggingInterceptor) {
     final Dio dio = Dio();
     dio.interceptors.add(loggingInterceptor);
     return RestClient(dio, baseUrl: constants.baseUrl);

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppErrorWidget extends StatelessWidget {
-  const AppErrorWidget({
-    this.errorMessage = 'Something went wrong',
-    super.key,
-  });
+  const AppErrorWidget({this.errorMessage = 'Something went wrong', super.key});
 
   final String errorMessage;
 

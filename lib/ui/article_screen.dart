@@ -12,30 +12,44 @@ class ArticleScreen extends StatefulWidget {
 
 class _ArticleScreenState extends State<ArticleScreen> {
   WebViewController? _controller;
+  int _loadingProgress = 0;
 
   @override
   void didChangeDependencies() {
-    final Object? args = ModalRoute.of(context)?.settings.arguments;
-    if (args is NewsArticle &&
-        args.description.isEmpty &&
-        args.articleText.isEmpty) {
-      _controller = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..setBackgroundColor(const Color(0x00000000))
-        ..setNavigationDelegate(
-          NavigationDelegate(
-            onProgress: (int progress) {
-              //TODO: Update loading bar.
-            },
-            onPageStarted: (String url) {},
-            onPageFinished: (String url) {},
-            onWebResourceError: (WebResourceError error) {},
-            onNavigationRequest: (NavigationRequest request) {
-              return NavigationDecision.navigate;
-            },
-          ),
-        )
-        ..loadRequest(Uri.parse(args.urlSource));
+    super.didChangeDependencies();
+    if (_controller == null) {
+      final Object? args = ModalRoute.of(context)?.settings.arguments;
+      if (args is NewsArticle &&
+          args.description.isEmpty &&
+          args.articleText.isEmpty) {
+        _controller = WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setBackgroundColor(const Color(0x00000000))
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onProgress: (int progress) {
+                setState(() {
+                  _loadingProgress = progress;
+                });
+              },
+              onPageStarted: (String url) {
+                setState(() {
+                  _loadingProgress = 0;
+                });
+              },
+              onPageFinished: (String url) {
+                setState(() {
+                  _loadingProgress = 100;
+                });
+              },
+              onWebResourceError: (WebResourceError error) {},
+              onNavigationRequest: (NavigationRequest request) {
+                return NavigationDecision.navigate;
+              },
+            ),
+          )
+          ..loadRequest(Uri.parse(args.urlSource));
+      }
     }
     super.didChangeDependencies();
   }
@@ -64,15 +78,26 @@ class _ArticleScreenState extends State<ArticleScreen> {
             // color: Colors.black,
           ),
         ),
-        body: args is NewsArticle &&
+        body:
+            args is NewsArticle &&
                 args.description.isEmpty &&
                 args.articleText.isEmpty &&
                 _controller != null
-            ? WebViewWidget(controller: _controller!)
+            ? Stack(
+                children: <Widget>[
+                  WebViewWidget(controller: _controller!),
+                  if (_loadingProgress < 100)
+                    LinearProgressIndicator(
+                      value: _loadingProgress / 100.0,
+                      backgroundColor: Colors.transparent,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                ],
+              )
             : DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.blue[50],
-                ),
+                decoration: BoxDecoration(color: Colors.blue[50]),
                 child: ListView(
                   padding: const EdgeInsets.all(16.0),
                   children: <Widget>[
@@ -82,9 +107,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                     ),
                     const SizedBox(height: 20.0),
                     if (args is NewsArticle && args.imageUrl.isNotEmpty)
-                      Center(
-                        child: Image.network(args.imageUrl),
-                      ),
+                      Center(child: Image.network(args.imageUrl)),
                     if (args is NewsArticle) const SizedBox(height: 20.0),
                     Text(args is NewsArticle ? args.articleText : ''),
                     const SizedBox(height: 16.0),
@@ -105,10 +128,9 @@ class _ArticleScreenState extends State<ArticleScreen> {
                             args is NewsArticle ? 'Source: ' : '',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.fontSize,
+                              fontSize: Theme.of(
+                                context,
+                              ).textTheme.titleLarge?.fontSize,
                             ),
                           ),
                           Text(

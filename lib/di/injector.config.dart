@@ -22,25 +22,25 @@ import 'package:news_glance/infrastructure/web_services/rest/logging_interceptor
     as _i890;
 
 extension GetItInjectableX on _i174.GetIt {
-// initializes the registration of main-scope dependencies inside of GetIt
+  // initializes the registration of main-scope dependencies inside of GetIt
   _i174.GetIt initDependencyInjection({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
   }) {
-    final gh = _i526.GetItHelper(
-      this,
-      environment,
-      environmentFilter,
-    );
+    final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final restClientModule = _$RestClientModule();
     gh.factory<_i890.LoggingInterceptor>(
-        () => const _i890.LoggingInterceptor());
+      () => const _i890.LoggingInterceptor(),
+    );
     gh.factory<_i979.RestClient>(
-        () => restClientModule.getRestClient(gh<_i890.LoggingInterceptor>()));
+      () => restClientModule.getRestClient(gh<_i890.LoggingInterceptor>()),
+    );
     gh.factory<_i875.NewsRepository>(
-        () => _i491.NewsRepositoryImpl(gh<_i979.RestClient>()));
+      () => _i491.NewsRepositoryImpl(gh<_i979.RestClient>()),
+    );
     gh.factory<_i347.NewsBloc>(
-        () => _i347.NewsBloc(gh<_i875.NewsRepository>()));
+      () => _i347.NewsBloc(gh<_i875.NewsRepository>()),
+    );
     return this;
   }
 }

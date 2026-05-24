@@ -22,16 +22,14 @@ class NewsGlanceApp extends StatelessWidget {
           secondary: Colors.purple,
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
-              .primaryContainer,
+          backgroundColor: ColorScheme.fromSeed(
+            seedColor: Colors.deepPurple,
+          ).primaryContainer,
           // This changes the color of AppBar icons.
           iconTheme: const IconThemeData(color: Colors.white),
         ),
         textTheme: const TextTheme(
-          titleMedium: TextStyle(
-            fontFamily: 'Chewy',
-            fontSize: 19,
-          ),
+          titleMedium: TextStyle(fontFamily: 'Chewy', fontSize: 19),
         ),
       ),
     );

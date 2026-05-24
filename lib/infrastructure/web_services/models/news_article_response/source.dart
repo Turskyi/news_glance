@@ -19,20 +19,14 @@ class Source {
 
   Map<String, dynamic> toJson() => _$SourceToJson(this);
 
-  Source copyWith({
-    String? id,
-    String? name,
-  }) =>
-      Source(
-        id: id ?? this.id,
-        name: name ?? this.name,
-      );
+  Source copyWith({String? id, String? name}) =>
+      Source(id: id ?? this.id, name: name ?? this.name);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     if (other is! Source) return false;
-    final bool Function(Object? _, Object? __) mapEquals =
+    final bool Function(Object? _, Object? _) mapEquals =
         const DeepCollectionEquality().equals;
     return mapEquals(other.toJson(), toJson());
   }

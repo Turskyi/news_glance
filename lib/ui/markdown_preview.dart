@@ -3,11 +3,7 @@ import 'package:markdown/markdown.dart' as md;
 
 /// Markdown preview with limited lines.
 class MarkdownPreview extends StatelessWidget {
-  const MarkdownPreview({
-    required this.text,
-    this.maxLines = 5,
-    super.key,
-  });
+  const MarkdownPreview({required this.text, this.maxLines = 5, super.key});
 
   final String text;
   final int maxLines;

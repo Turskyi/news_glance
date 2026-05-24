@@ -10,10 +10,15 @@ class ArticleWebScreen extends StatefulWidget {
 }
 
 class _ArticleWebScreenState extends State<ArticleWebScreen> {
-  late WebViewController _controller;
+  WebViewController? _controller;
+  int _loadingProgress = 0;
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_controller != null) {
+      return;
+    }
     final Object? args = ModalRoute.of(context)?.settings.arguments;
     if (args is NewsArticle) {
       _controller = WebViewController()
@@ -22,10 +27,20 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
         ..setNavigationDelegate(
           NavigationDelegate(
             onProgress: (int progress) {
-              //TODO: Update loading bar.
+              setState(() {
+                _loadingProgress = progress;
+              });
             },
-            onPageStarted: (String url) {},
-            onPageFinished: (String url) {},
+            onPageStarted: (String url) {
+              setState(() {
+                _loadingProgress = 0;
+              });
+            },
+            onPageFinished: (String url) {
+              setState(() {
+                _loadingProgress = 100;
+              });
+            },
             onWebResourceError: (WebResourceError error) {},
             onNavigationRequest: (NavigationRequest request) {
               return NavigationDecision.navigate;
@@ -34,7 +49,6 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
         )
         ..loadRequest(Uri.parse(args.urlSource));
     }
-    super.didChangeDependencies();
   }
 
   @override
@@ -60,10 +74,22 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
           ),
         ),
         body: DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.blue[50],
-          ),
-          child: WebViewWidget(controller: _controller),
+          decoration: BoxDecoration(color: Colors.blue[50]),
+          child: _controller == null
+              ? const SizedBox.shrink()
+              : Stack(
+                  children: <Widget>[
+                    WebViewWidget(controller: _controller!),
+                    if (_loadingProgress < 100)
+                      LinearProgressIndicator(
+                        value: _loadingProgress / 100.0,
+                        backgroundColor: Colors.transparent,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                  ],
+                ),
         ),
       ),
     );

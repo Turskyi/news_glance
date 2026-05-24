@@ -31,18 +31,13 @@ final class NewsConclusionError extends LoadedNewsState {
 }
 
 class LoadedConclusionState extends LoadedNewsState {
-  const LoadedConclusionState({
-    required super.news,
-    required this.conclusion,
-  });
+  const LoadedConclusionState({required super.news, required this.conclusion});
 
   final String conclusion;
 }
 
 final class ErrorState extends NewsState {
-  const ErrorState({
-    this.errorMessage = 'Something went wrong',
-  });
+  const ErrorState({this.errorMessage = 'Something went wrong'});
 
   final String errorMessage;
 }

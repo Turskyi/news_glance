@@ -50,23 +50,22 @@ class NewsArticleResponse {
     dynamic urlToImage,
     String? publishedAt,
     dynamic content,
-  }) =>
-      NewsArticleResponse(
-        source: source ?? this.source,
-        author: author ?? this.author,
-        title: title ?? this.title,
-        description: description ?? this.description,
-        url: url ?? this.url,
-        urlToImage: urlToImage ?? this.urlToImage,
-        publishedAt: publishedAt ?? this.publishedAt,
-        content: content ?? this.content,
-      );
+  }) => NewsArticleResponse(
+    source: source ?? this.source,
+    author: author ?? this.author,
+    title: title ?? this.title,
+    description: description ?? this.description,
+    url: url ?? this.url,
+    urlToImage: urlToImage ?? this.urlToImage,
+    publishedAt: publishedAt ?? this.publishedAt,
+    content: content ?? this.content,
+  );
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     if (other is! NewsArticleResponse) return false;
-    final bool Function(Object? _, Object? __) mapEquals =
+    final bool Function(Object? _, Object? _) mapEquals =
         const DeepCollectionEquality().equals;
     return mapEquals(other.toJson(), toJson());
   }

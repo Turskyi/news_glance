@@ -16,12 +16,8 @@ class ConclusionRequest {
 
   Map<String, dynamic> toJson() => _$ConclusionRequestToJson(this);
 
-  ConclusionRequest copyWith({
-    List<ArticleRequest>? articles,
-  }) {
-    return ConclusionRequest(
-      articles: articles ?? this.articles,
-    );
+  ConclusionRequest copyWith({List<ArticleRequest>? articles}) {
+    return ConclusionRequest(articles: articles ?? this.articles);
   }
 
   @override

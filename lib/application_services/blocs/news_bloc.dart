@@ -29,9 +29,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       emit(LoadedNewsState(news: news));
       if (news.isNotEmpty) {
         final List<NewsArticle> articles = news
-            .take(
-              constants.newsMax,
-            )
+            .take(constants.newsMax)
             .toList();
 
         try {
@@ -40,12 +38,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           );
           emit(LoadedConclusionState(news: news, conclusion: conclusion));
         } on BadRequestException catch (e) {
-          emit(
-            NewsConclusionError(
-              news: news,
-              errorMessage: e.message,
-            ),
-          );
+          emit(NewsConclusionError(news: news, errorMessage: e.message));
         } catch (e) {
           emit(
             NewsConclusionError(
@@ -59,7 +52,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       // Handle network errors.
       emit(
         const ErrorState(
-          errorMessage: 'No internet connection. '
+          errorMessage:
+              'No internet connection. '
               'Please check your network settings.',
         ),
       );
@@ -70,7 +64,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           e.type == DioExceptionType.unknown) {
         emit(
           const ErrorState(
-            errorMessage: 'Failed to connect to the server. '
+            errorMessage:
+                'Failed to connect to the server. '
                 'Please check your internet connection.',
           ),
         );

@@ -11,16 +11,16 @@ import 'package:news_glance/ui/home_page.dart';
 
 Map<String, WidgetBuilder> routeMap = <String, WidgetBuilder>{
   AppRoute.home.path: (_) => BlocProvider<NewsBloc>(
-        create: (_) => GetIt.I.get<NewsBloc>()..add(const LoadNewsEvent()),
-        child: BlocListener<NewsBloc, NewsState>(
-          listener: (BuildContext context, NewsState state) {
-            if (state.canUpdateHomeWidget && state is LoadedConclusionState) {
-              _updateHomeWidgetConclusion(state.conclusion);
-            }
-          },
-          child: const HomePage(),
-        ),
-      ),
+    create: (_) => GetIt.I.get<NewsBloc>()..add(const LoadNewsEvent()),
+    child: BlocListener<NewsBloc, NewsState>(
+      listener: (BuildContext context, NewsState state) {
+        if (state.canUpdateHomeWidget && state is LoadedConclusionState) {
+          _updateHomeWidgetConclusion(state.conclusion);
+        }
+      },
+      child: const HomePage(),
+    ),
+  ),
   AppRoute.article.path: (_) => const ArticleScreen(),
   AppRoute.articleWeb.path: (_) => const ArticleWebScreen(),
 };
@@ -34,10 +34,7 @@ void _updateHomeWidgetConclusion(String conclusion) {
     'News Glance from ${DateTime.now().toString().substring(0, 10)}',
   );
   if (conclusion.isNotEmpty) {
-    HomeWidget.saveWidgetData<String>(
-      'headline_description',
-      conclusion,
-    );
+    HomeWidget.saveWidgetData<String>('headline_description', conclusion);
   }
   HomeWidget.updateWidget(
     iOSName: constants.iOSWidgetName,

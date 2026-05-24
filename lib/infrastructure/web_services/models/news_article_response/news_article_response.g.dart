@@ -19,14 +19,14 @@ NewsArticleResponse _$NewsArticleResponseFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$NewsArticleResponseToJson(
-        NewsArticleResponse instance) =>
-    <String, dynamic>{
-      'title': instance.title,
-      'description': instance.description,
-      'urlToImage': instance.urlToImage,
-      'url': instance.url,
-      'source': instance.source,
-      'author': instance.author,
-      'publishedAt': instance.publishedAt,
-      'content': instance.content,
-    };
+  NewsArticleResponse instance,
+) => <String, dynamic>{
+  'title': instance.title,
+  'description': instance.description,
+  'urlToImage': instance.urlToImage,
+  'url': instance.url,
+  'source': instance.source,
+  'author': instance.author,
+  'publishedAt': instance.publishedAt,
+  'content': instance.content,
+};

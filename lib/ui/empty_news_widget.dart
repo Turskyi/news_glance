@@ -24,18 +24,11 @@ class EmptyNewsWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(
-                  Icons.info_outline,
-                  size: 64,
-                  color: colorScheme.primary,
-                ),
+                Icon(Icons.info_outline, size: 64, color: colorScheme.primary),
                 const SizedBox(height: 16),
                 Text(
                   'No news available at the moment.',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: colorScheme.onSurface,
-                  ),
+                  style: TextStyle(fontSize: 18, color: colorScheme.onSurface),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
