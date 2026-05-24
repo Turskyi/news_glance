@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_glance/res/constants.dart' as constants;
 import 'package:news_glance/ui/clickable_tile.dart';
+import 'package:news_glance/ui/widget_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EndDrawer extends StatelessWidget {
@@ -21,11 +22,22 @@ class EndDrawer extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Contact Us',
+              'Menu',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize,
+              ),
+            ),
+          ),
+          const WidgetSettings(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              'Contact Us',
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

@@ -9,6 +9,9 @@ import WidgetKit
 import SwiftUI
 
 struct Provider: TimelineProvider {
+    let appGroupIdentifier = "group.dmytrowidget"
+    private let updateFrequencyKey = "news_glance_widget_update_frequency"
+
     // Placeholder is used as a placeholder when the widget is first displayed
     func placeholder(in context: Context) -> NewsArticleEntry {
         NewsArticleEntry(
@@ -25,7 +28,7 @@ struct Provider: TimelineProvider {
             entry = placeholder(in: context)
         } else {
             // Get the data from the user defaults to display
-            let userDefaults = UserDefaults(suiteName: "group.dmytrowidget")
+            let userDefaults = UserDefaults(suiteName: appGroupIdentifier)
             let title = userDefaults?.string(forKey: "headline_title") ?? "No Title Set"
             let description = userDefaults?.string(forKey: "headline_description") ?? "No Description Set"
             entry = NewsArticleEntry(date: Date(), title: title, description: description)
@@ -35,12 +38,31 @@ struct Provider: TimelineProvider {
 
     // getTimeline is called for the current and optionally future times to update the widget
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        // This just uses the snapshot function you defined earlier
         getSnapshot(in: context) { (entry) in
-            // atEnd policy tells widgetkit to request a new entry after the date has passed
-            let timeline = Timeline(entries: [entry], policy: .atEnd)
+            let currentDate = Date()
+            let nextUpdateDate = Calendar.current.date(
+                byAdding: .minute,
+                value: self.refreshIntervalMinutes(),
+                to: currentDate
+            ) ?? currentDate.addingTimeInterval(86400) // Fallback to 24 hours
+
+            let timeline = Timeline(entries: [entry], policy: .after(nextUpdateDate))
             completion(timeline)
         }
+    }
+
+    // Returns the widget refresh interval in minutes, as configured by the user (via Flutter app)
+    // Defaults to 1440 minutes (24 hours) if not set
+    // Minimum enforced at 30 minutes as per macOS widget system limits
+    private func refreshIntervalMinutes() -> Int {
+        guard
+            let userDefaults = UserDefaults(suiteName: appGroupIdentifier),
+            let minutes = userDefaults.object(forKey: updateFrequencyKey) as? Int,
+            minutes > 0
+        else {
+            return 1440 // Default to 24 hours
+        }
+        return max(30, minutes) // Enforce minimum 30 minutes
     }
 }
 

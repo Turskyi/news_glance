@@ -21,5 +21,10 @@ abstract interface class HomeWidgetService {
   Future<void> updateHomeWidget({
     required String headlineTitle,
     required String headlineDescription,
+    int? widgetUpdateFrequencyMinutes,
   });
+
+  /// Set widget update frequency in minutes
+  /// The widget will use this to determine refresh intervals
+  Future<bool?> setWidgetUpdateFrequency(int frequencyMinutes);
 }

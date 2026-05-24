@@ -71,10 +71,11 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
   Future<void> updateHomeWidget({
     required String headlineTitle,
     required String headlineDescription,
+    int? widgetUpdateFrequencyMinutes,
   }) async {
     debugPrint(
       'HomeWidgetService updateHomeWidget: start '
-      '(title=$headlineTitle).',
+      '(title=$headlineTitle, frequency=${widgetUpdateFrequencyMinutes}min).',
     );
 
     // Set app group ID
@@ -88,6 +89,17 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
       await saveWidgetData<String>('headline_description', headlineDescription);
     }
 
+    // Save widget update frequency if provided
+    if (widgetUpdateFrequencyMinutes != null &&
+        widgetUpdateFrequencyMinutes > 0) {
+      final int frequency =
+          widgetUpdateFrequencyMinutes <
+              constants.minWidgetUpdateFrequencyMinutes
+          ? constants.minWidgetUpdateFrequencyMinutes
+          : widgetUpdateFrequencyMinutes;
+      await saveWidgetData<int>(constants.widgetUpdateFrequencyKey, frequency);
+    }
+
     // Update the widget
     await updateWidget(
       iOSName: constants.iOSWidgetName,
@@ -95,5 +107,20 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
     );
 
     debugPrint('HomeWidgetService updateHomeWidget: completed.');
+  }
+
+  /// Save widget update frequency independently
+  /// This allows the frequency to be changed without updating widget content
+  @override
+  Future<bool?> setWidgetUpdateFrequency(int frequencyMinutes) async {
+    final int frequency =
+        frequencyMinutes < constants.minWidgetUpdateFrequencyMinutes
+        ? constants.minWidgetUpdateFrequencyMinutes
+        : frequencyMinutes;
+    debugPrint(
+      'HomeWidgetService setWidgetUpdateFrequency: $frequency minutes '
+      '(requested: $frequencyMinutes).',
+    );
+    return saveWidgetData<int>(constants.widgetUpdateFrequencyKey, frequency);
   }
 }
