@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:news_glance/di/injector.dart';
+import 'package:news_glance/di/injector.dart' as di;
 import 'package:news_glance/news_glance_app.dart';
 
 /// The [main] is the ultimate detail — the lowest-level policy.
 /// It is the initial entry point of the system.
 /// Nothing, other than the operating system, depends on it.
-/// Here you should [injectDependencies] by a dependency injection framework.
+/// Here you should [di.injectDependencies] by a dependency injection framework.
 /// The [main] is a dirty low-level module in the outermost circle of the onion
 /// architecture.
 /// Think of [main] as a plugin to the [NewsGlanceApp] — a plugin that sets up
@@ -16,6 +16,6 @@ import 'package:news_glance/news_glance_app.dart';
 /// components in the system. They don’t know about [main], and they don’t care
 /// when it changes.
 void main() {
-  injectDependencies();
+  di.injectDependencies();
   runApp(const NewsGlanceApp());
 }
