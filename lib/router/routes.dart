@@ -10,20 +10,24 @@ import 'package:news_glance/ui/article_web_screen.dart';
 import 'package:news_glance/ui/home_page.dart';
 
 Map<String, WidgetBuilder> routeMap = <String, WidgetBuilder>{
-  AppRoute.home.path: (_) => BlocProvider<NewsBloc>(
-    create: (_) => GetIt.I.get<NewsBloc>()..add(const LoadNewsEvent()),
-    child: BlocListener<NewsBloc, NewsState>(
-      listener: (BuildContext context, NewsState state) {
-        if (state.canUpdateHomeWidget && state is LoadedConclusionState) {
-          _updateHomeWidgetConclusion(state.conclusion);
-        }
-      },
-      child: const HomePage(),
+  AppRoute.home.path: (BuildContext _) => BlocProvider<NewsBloc>(
+    create: (BuildContext _) {
+      return GetIt.I.get<NewsBloc>()..add(const LoadNewsEvent());
+    },
+    child: const BlocListener<NewsBloc, NewsState>(
+      listener: _handleNewsStateChange,
+      child: HomePage(),
     ),
   ),
   AppRoute.article.path: (_) => const ArticleScreen(),
   AppRoute.articleWeb.path: (_) => const ArticleWebScreen(),
 };
+
+void _handleNewsStateChange(BuildContext _, NewsState state) {
+  if (state.canUpdateHomeWidget && state is LoadedConclusionState) {
+    _updateHomeWidgetConclusion(state.conclusion);
+  }
+}
 
 void _updateHomeWidgetConclusion(String conclusion) {
   // Set the group ID
