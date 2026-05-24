@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/application_services/home_widget_service_impl.dart';
+import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_services/home_widget_service.dart';
 import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/ui/article_screen.dart';
@@ -25,15 +26,11 @@ Map<String, WidgetBuilder> routeMap = <String, WidgetBuilder>{
 
 void _handleNewsStateChange(BuildContext _, NewsState state) {
   if (state.canUpdateHomeWidget && state is LoadedConclusionState) {
-    _updateHomeWidgetConclusion(state.conclusion);
+    _updateHomeWidgetConclusion(state.insight);
   }
 }
 
-void _updateHomeWidgetConclusion(String conclusion) {
+void _updateHomeWidgetConclusion(ActionableInsight insight) {
   const HomeWidgetService homeWidgetService = HomeWidgetServiceImpl();
-  final String formattedDate = DateTime.now().toString().substring(0, 10);
-  homeWidgetService.updateHomeWidget(
-    headlineTitle: 'News Glance\nfrom $formattedDate',
-    headlineDescription: conclusion,
-  );
+  homeWidgetService.updateHomeWidgetWithSignal(insight: insight);
 }

@@ -7,7 +7,7 @@ abstract class NewsState {
   bool get canUpdateHomeWidget =>
       !kIsWeb &&
       this is LoadedConclusionState &&
-      (this as LoadedConclusionState).conclusion.isNotEmpty;
+      (this as LoadedConclusionState).insight.conclusion.isNotEmpty;
 }
 
 class LoadingNewsState extends NewsState {
@@ -30,9 +30,9 @@ final class NewsConclusionError extends LoadedNewsState {
 }
 
 class LoadedConclusionState extends LoadedNewsState {
-  const LoadedConclusionState({required super.news, required this.conclusion});
+  const LoadedConclusionState({required super.news, required this.insight});
 
-  final String conclusion;
+  final ActionableInsight insight;
 }
 
 final class ErrorState extends NewsState {

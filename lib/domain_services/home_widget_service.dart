@@ -1,3 +1,5 @@
+import 'package:news_glance/domain_models/actionable_insight.dart';
+
 abstract interface class HomeWidgetService {
   const HomeWidgetService();
 
@@ -17,10 +19,16 @@ abstract interface class HomeWidgetService {
     String? qualifiedAndroidName,
   });
 
-  /// Update home widget with headline data
+  /// Update home widget with headline data (legacy)
   Future<void> updateHomeWidget({
     required String headlineTitle,
     required String headlineDescription,
+    int? widgetUpdateFrequencyMinutes,
+  });
+
+  /// Update home widget with signal insight data
+  Future<void> updateHomeWidgetWithSignal({
+    required ActionableInsight insight,
     int? widgetUpdateFrequencyMinutes,
   });
 

@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/bad_request_exception.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
@@ -33,10 +34,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
             .toList();
 
         try {
-          final String conclusion = await _newsRepository.getNewsConclusion(
-            articles,
-          );
-          emit(LoadedConclusionState(news: news, conclusion: conclusion));
+          final ActionableInsight insight = await _newsRepository
+              .getActionableInsight(articles);
+          emit(LoadedConclusionState(news: news, insight: insight));
         } on BadRequestException catch (e) {
           emit(NewsConclusionError(news: news, errorMessage: e.message));
         } catch (e) {

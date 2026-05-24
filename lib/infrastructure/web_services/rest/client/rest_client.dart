@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/actionable_insight_response.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_request/conclusion_request.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_response/conclusion_response.dart';
 import 'package:news_glance/infrastructure/web_services/models/news_article_response/news_article_response.dart';
@@ -15,6 +16,11 @@ abstract class RestClient {
   Future<List<NewsArticleResponse>> getNews({
     @Query('country') String countryCode = country.internationalCode,
   });
+
+  @POST('actionable-insight')
+  Future<ActionableInsightResponse> getActionableInsight(
+    @Body() ConclusionRequest news,
+  );
 
   @POST('news-conclusion')
   Future<ConclusionResponse> getNewsConclusion(@Body() ConclusionRequest news);

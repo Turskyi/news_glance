@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_services/home_widget_service.dart';
 import 'package:news_glance/res/constants.dart' as constants;
 
@@ -107,6 +108,48 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
     );
 
     debugPrint('HomeWidgetService updateHomeWidget: completed.');
+  }
+
+  @override
+  Future<void> updateHomeWidgetWithSignal({
+    required ActionableInsight insight,
+    int? widgetUpdateFrequencyMinutes,
+  }) async {
+    debugPrint(
+      'HomeWidgetService updateHomeWidgetWithSignal: start '
+      '(level=${insight.level}, frequency=${widgetUpdateFrequencyMinutes}min).',
+    );
+
+    // Set app group ID
+    await setAppGroupId(constants.appGroupId);
+
+    // Save signal data
+    await saveWidgetData<String>('signal_level', insight.level.value);
+    await saveWidgetData<String>('signal_conclusion', insight.conclusion);
+    await saveWidgetData<int>(
+      'signal_probability',
+      (insight.probability * 100).toInt(),
+    );
+    await saveWidgetData<String>('signal_category', insight.category.value);
+
+    // Save widget update frequency if provided
+    if (widgetUpdateFrequencyMinutes != null &&
+        widgetUpdateFrequencyMinutes > 0) {
+      final int frequency =
+          widgetUpdateFrequencyMinutes <
+              constants.minWidgetUpdateFrequencyMinutes
+          ? constants.minWidgetUpdateFrequencyMinutes
+          : widgetUpdateFrequencyMinutes;
+      await saveWidgetData<int>(constants.widgetUpdateFrequencyKey, frequency);
+    }
+
+    // Update the widget
+    await updateWidget(
+      iOSName: constants.iOSWidgetName,
+      androidName: constants.androidWidgetName,
+    );
+
+    debugPrint('HomeWidgetService updateHomeWidgetWithSignal: completed.');
   }
 
   /// Save widget update frequency independently

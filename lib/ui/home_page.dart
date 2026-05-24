@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/ui/end_drawer.dart';
 import 'package:news_glance/ui/news_article_list.dart';
-import 'package:news_glance/ui/news_conclusion_section.dart';
+import 'package:news_glance/ui/signal_card.dart';
 
 import 'app_error_widget.dart';
 import 'empty_news_widget.dart';
@@ -74,11 +74,10 @@ class HomePage extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 10),
-                            NewsConclusionSection(
-                              conclusion: state is LoadedConclusionState
-                                  ? state.conclusion
-                                  : '',
-                            ),
+                            if (state is LoadedConclusionState)
+                              SignalCard(insight: state.insight)
+                            else
+                              const SizedBox.shrink(),
                           ],
                         ),
                       ),

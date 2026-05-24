@@ -12,7 +12,6 @@ class MarkdownPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle style = TextStyle(
       fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-      color: Colors.white,
     );
 
     return Text(

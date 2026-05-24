@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/bad_request_exception.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
@@ -39,26 +40,64 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
+  Future<ActionableInsight> getActionableInsight(
+    Iterable<NewsArticle> articles,
+  ) async {
+    final ConclusionRequest request = _buildConclusionRequest(articles);
+
+    try {
+      final dynamic response = await _restClient.getActionableInsight(request);
+      if (response.probability == 0) {
+        final ConclusionResponse fallbackResponse = await _restClient
+            .getNewsConclusion(request);
+        return ActionableInsight.fromPlainText(fallbackResponse);
+      } else {
+        return ActionableInsight(
+          conclusion: response.conclusion,
+          level: response.level,
+          probability: response.probability,
+          category: response.category,
+        );
+      }
+    } catch (e) {
+      // Fallback to the legacy endpoint
+      try {
+        final ConclusionResponse fallbackResponse = await _restClient
+            .getNewsConclusion(request);
+        return ActionableInsight.fromPlainText(fallbackResponse);
+      } on DioException catch (e) {
+        if (e.response?.statusCode == 400) {
+          final Object? errorData = e.response?.data;
+          if (errorData is Map<String, Object?>? &&
+              errorData != null &&
+              errorData.containsKey('error')) {
+            final Object? errorMessage = errorData['error'];
+            if (errorMessage is String) {
+              throw BadRequestException(errorMessage);
+            }
+          }
+          throw Exception(
+            'Bad request: Server returned a 400 status code, '
+            'but the error message is not in the expected format.',
+          );
+        } else {
+          throw Exception('An error occurred: ${e.message}');
+        }
+      } catch (e) {
+        throw Exception('An unexpected error occurred: $e');
+      }
+    }
+  }
+
+  @override
   Future<String> getNewsConclusion(Iterable<NewsArticle> articles) async {
     try {
       final ConclusionResponse response = await _restClient.getNewsConclusion(
-        ConclusionRequest(
-          articles: articles
-              .take(constants.newsMax)
-              .map(
-                (NewsArticle article) => ArticleRequest(
-                  title: article.title,
-                  description: article.description,
-                  articleText: article.articleText,
-                ),
-              )
-              .toList(),
-        ),
+        _buildConclusionRequest(articles),
       );
       return response.conclusion;
     } on DioException catch (e) {
       if (e.response?.statusCode == 400) {
-        // Handle 400 Bad Request specifically.
         final Object? errorData = e.response?.data;
 
         if (errorData is Map<String, Object?>? &&
@@ -67,7 +106,6 @@ class NewsRepositoryImpl implements NewsRepository {
           final Object? errorMessage = errorData['error'];
 
           if (errorMessage is String) {
-            // Throw the custom exception.
             throw BadRequestException(errorMessage);
           }
         }
@@ -76,12 +114,25 @@ class NewsRepositoryImpl implements NewsRepository {
           'but the error message is not in the expected format.',
         );
       } else {
-        // Handle other DioExceptions.
         throw Exception('An error occurred: ${e.message}');
       }
     } catch (e) {
-      // Handle any other exceptions.
       throw Exception('An unexpected error occurred: $e');
     }
+  }
+
+  ConclusionRequest _buildConclusionRequest(Iterable<NewsArticle> articles) {
+    return ConclusionRequest(
+      articles: articles
+          .take(constants.newsMax)
+          .map(
+            (NewsArticle article) => ArticleRequest(
+              title: article.title,
+              description: article.description,
+              articleText: article.articleText,
+            ),
+          )
+          .toList(),
+    );
   }
 }
