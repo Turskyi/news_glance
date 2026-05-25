@@ -47,23 +47,13 @@ class NewsRepositoryImpl implements NewsRepository {
 
     try {
       final dynamic response = await _restClient.getActionableInsight(request);
-      if (response.probability == 0) {
-        // Just to clarify what's happening here, I do not like having to
-        // requests to get one conclusion, but at this point I was not able to
-        // create such a one prompt on backend that would give me the
-        // conclusion that I find OK, similar to what I get by making two
-        // separate requests with different prompts (on the backend).
-        final ConclusionResponse fallbackResponse = await _restClient
-            .getNewsConclusion(request);
-        return ActionableInsight.fromPlainText(fallbackResponse);
-      } else {
-        return ActionableInsight(
-          conclusion: response.conclusion,
-          level: response.level,
-          probability: response.probability,
-          category: response.category,
-        );
-      }
+
+      return ActionableInsight(
+        conclusion: response.conclusion,
+        level: response.level,
+        probability: response.probability,
+        category: response.category,
+      );
     } catch (e) {
       // Fallback to the legacy endpoint
       try {

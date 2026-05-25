@@ -14,11 +14,13 @@ class MarkdownPreview extends StatelessWidget {
       fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
     );
 
-    return Text(
-      getPlainText(text),
-      style: style,
-      maxLines: maxLines,
-      overflow: TextOverflow.ellipsis,
+    return SelectionArea(
+      child: Text(
+        getPlainText(text),
+        style: style,
+        maxLines: maxLines,
+        overflow: TextOverflow.ellipsis,
+      ),
     );
   }
 

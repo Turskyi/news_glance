@@ -2,6 +2,9 @@ const String iOSWidgetName = 'NewsWidgets';
 const String androidWidgetName = 'NewsWidget';
 const String appGroupId = 'group.dmytrowidget';
 const String developerDomain = 'turskyi.com';
+
+/// Change it to `const String baseUrl = 'http://localhost:3000/api/';` when
+/// running the backend locally.
 const String baseUrl = 'https://news.$developerDomain/api/';
 const String usaCode = 'US';
 const String internationalCode = 'intl';
