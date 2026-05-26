@@ -7,10 +7,14 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Build
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetPlugin
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * Implementation of App Widget functionality.
@@ -38,6 +42,50 @@ class NewsWidget : AppWidgetProvider() {
     }
 }
 
+data class SignalStyle(
+    val bgColor: Int,
+    val borderColor: Int,
+    val textColor: Int,
+    val icon: String,
+    val label: String
+)
+
+internal fun getSignalStyle(level: String?): SignalStyle {
+    return when (level?.uppercase()) {
+        "CRITICAL" -> SignalStyle(
+            bgColor = Color.parseColor("#FEF2F2"),
+            borderColor = Color.parseColor("#EF4444"),
+            textColor = Color.parseColor("#991B1B"),
+            icon = "🚨",
+            label = "CRITICAL ACTION"
+        )
+
+        "WARNING" -> SignalStyle(
+            bgColor = Color.parseColor("#FFFBEB"),
+            borderColor = Color.parseColor("#F59E0B"),
+            textColor = Color.parseColor("#B45309"),
+            icon = "⚠️",
+            label = "WARNING"
+        )
+
+        "ADVISORY" -> SignalStyle(
+            bgColor = Color.parseColor("#EFF6FF"),
+            borderColor = Color.parseColor("#3B82F6"),
+            textColor = Color.parseColor("#1D4ED8"),
+            icon = "ℹ️",
+            label = "ADVISORY"
+        )
+
+        else -> SignalStyle(
+            bgColor = Color.parseColor("#ECFDF5"),
+            borderColor = Color.parseColor("#10B981"),
+            textColor = Color.parseColor("#047857"),
+            icon = "✅",
+            label = "ALL CLEAR"
+        )
+    }
+}
+
 @SuppressLint("ObsoleteSdkInt")
 @TargetApi(Build.VERSION_CODES.CUPCAKE)
 internal fun updateAppWidget(
@@ -55,11 +103,48 @@ internal fun updateAppWidget(
                 MainActivity::class.java
             )
         setOnClickPendingIntent(R.id.widget_container, pendingIntent)
-        val title: String? = widgetData.getString("headline_title", null)
-        setTextViewText(R.id.headline_title, title ?: "No title set")
 
-        val description: String? = widgetData.getString("headline_description", null)
-        setTextViewText(R.id.headline_description, description ?: "No description set")
+        // Read signal data
+        val signalLevel: String? = widgetData.getString("signal_level", null)
+        val conclusion: String? =
+            widgetData.getString("signal_conclusion", null)
+        val probability: Int = widgetData.getInt("signal_probability", 0)
+        val category: String? = widgetData.getString("signal_category", null)
+
+        val style = getSignalStyle(signalLevel)
+
+        // Set background color
+        setInt(R.id.widget_container, "setBackgroundColor", style.bgColor)
+
+        // Set icon
+        setTextViewText(R.id.signal_icon, style.icon)
+        setTextColor(R.id.signal_icon, style.textColor)
+
+        // Set signal label and level
+        setTextViewText(R.id.headline_title, style.label)
+        setTextColor(R.id.headline_title, style.textColor)
+
+        // Set conclusion
+        val conclusionText = conclusion ?: "No insight available"
+        setTextViewText(R.id.headline_description, conclusionText)
+        setTextColor(R.id.headline_description, style.textColor)
+
+        // Set category and probability (only if not NEUTRAL)
+        if (signalLevel?.uppercase() != "NEUTRAL" && category != null) {
+            val metadata = "$category • ${probability}% Probability"
+            setTextViewText(R.id.signal_metadata, metadata)
+            setTextColor(R.id.signal_metadata, style.textColor)
+            setViewVisibility(R.id.signal_metadata, android.view.View.VISIBLE)
+        } else {
+            setViewVisibility(R.id.signal_metadata, android.view.View.GONE)
+        }
+
+        // Set branding footer with timestamp
+        val dateFormat = SimpleDateFormat("MMM d, h:mm a", Locale.getDefault())
+        val formattedDate = dateFormat.format(Date())
+        val timestampText = "News Glance\nfrom $formattedDate"
+        setTextViewText(R.id.widget_timestamp, timestampText)
+        setTextColor(R.id.widget_timestamp, style.textColor)
     }
 
     appWidgetManager.updateAppWidget(appWidgetId, views)
