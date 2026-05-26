@@ -23,38 +23,34 @@
     <!-- Signal Label (e.g., "ALL CLEAR") -->
     <TextView
         android:id="@+id/headline_title"
-        style="@style/Widget.Android.AppWidget.InnerView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="12dp"
         android:layout_toEndOf="@+id/signal_icon"
         android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
         android:gravity="start|center_vertical"
         android:maxLines="1"
-        android:fontFamily="casual"
-        android:textFontWeight="700"
         android:text="ALL CLEAR"
-        android:textColor="#047857"
-        android:textSize="14sp"
-        android:textStyle="bold"
+        android:textColor="#166534"
+        android:textSize="18sp"
         tools:targetApi="p" />
 
     <!-- Conclusion Text -->
     <TextView
         android:id="@+id/headline_description"
-        style="@style/Widget.Android.AppWidget.InnerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signal_icon"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:ellipsize="end"
-        android:maxLines="5"
+        android:lineSpacingExtra="2sp"
+        android:maxLines="6"
         android:text="No insight available"
-        android:textColor="#047857"
-        android:textSize="14sp" />
+        android:textColor="#166534"
+        android:textSize="15sp" />
 
     <!-- Category and Probability metadata -->
     <TextView
@@ -66,7 +62,7 @@
         android:layout_marginTop="6dp"
         android:alpha="0.7"
         android:text="TRAVEL • 85% Probability"
-        android:textColor="#047857"
+        android:textColor="#166534"
         android:textSize="11sp"
         android:visibility="gone" />
 
@@ -82,7 +78,7 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:text="News Glance from now"
-        android:textColor="#047857"
+        android:textColor="#166534"
         android:textSize="9sp" />
 
 </RelativeLayout>

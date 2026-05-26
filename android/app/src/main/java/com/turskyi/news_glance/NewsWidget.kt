@@ -53,33 +53,33 @@ data class SignalStyle(
 internal fun getSignalStyle(level: String?): SignalStyle {
     return when (level?.uppercase()) {
         "CRITICAL" -> SignalStyle(
-            bgColor = Color.parseColor("#FEF2F2"),
-            borderColor = Color.parseColor("#EF4444"),
-            textColor = Color.parseColor("#991B1B"),
+            bgColor = Color.parseColor("#FFF1F2"), // Lighter red
+            borderColor = Color.parseColor("#FDA4AF"),
+            textColor = Color.parseColor("#9F1239"), // Deeper red for text
             icon = "🚨",
             label = "CRITICAL ACTION"
         )
 
         "WARNING" -> SignalStyle(
-            bgColor = Color.parseColor("#FFFBEB"),
-            borderColor = Color.parseColor("#F59E0B"),
-            textColor = Color.parseColor("#B45309"),
+            bgColor = Color.parseColor("#FFFBEB"), // Light yellow
+            borderColor = Color.parseColor("#FDE68A"),
+            textColor = Color.parseColor("#92400E"), // Brownish orange for text
             icon = "⚠️",
             label = "WARNING"
         )
 
         "ADVISORY" -> SignalStyle(
-            bgColor = Color.parseColor("#EFF6FF"),
-            borderColor = Color.parseColor("#3B82F6"),
-            textColor = Color.parseColor("#1D4ED8"),
+            bgColor = Color.parseColor("#F0F9FF"), // Very light blue
+            borderColor = Color.parseColor("#BAE6FD"),
+            textColor = Color.parseColor("#075985"), // Deep blue for text
             icon = "ℹ️",
             label = "ADVISORY"
         )
 
         else -> SignalStyle(
-            bgColor = Color.parseColor("#ECFDF5"),
-            borderColor = Color.parseColor("#10B981"),
-            textColor = Color.parseColor("#047857"),
+            bgColor = Color.parseColor("#F0FDF4"), // Very light green
+            borderColor = Color.parseColor("#BBF7D0"),
+            textColor = Color.parseColor("#166534"), // Deep green for text
             icon = "✅",
             label = "ALL CLEAR"
         )
