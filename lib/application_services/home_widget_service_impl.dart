@@ -6,6 +6,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_services/home_widget_service.dart';
 import 'package:news_glance/res/constants.dart' as constants;
+import 'package:news_glance/res/storage_keys.dart' as storage_keys;
 
 class HomeWidgetServiceImpl implements HomeWidgetService {
   const HomeWidgetServiceImpl();
@@ -83,11 +84,14 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
     await setAppGroupId(constants.appGroupId);
 
     // Save headline title
-    await saveWidgetData<String>('headline_title', headlineTitle);
+    await saveWidgetData<String>(storage_keys.headlineTitle, headlineTitle);
 
     // Save headline description
     if (headlineDescription.isNotEmpty) {
-      await saveWidgetData<String>('headline_description', headlineDescription);
+      await saveWidgetData<String>(
+        storage_keys.headlineDescription,
+        headlineDescription,
+      );
     }
 
     // Save widget update frequency if provided
@@ -98,7 +102,7 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
               constants.minWidgetUpdateFrequencyMinutes
           ? constants.minWidgetUpdateFrequencyMinutes
           : widgetUpdateFrequencyMinutes;
-      await saveWidgetData<int>(constants.widgetUpdateFrequencyKey, frequency);
+      await saveWidgetData<int>(storage_keys.widgetUpdateFrequency, frequency);
     }
 
     // Update the widget
@@ -124,13 +128,19 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
     await setAppGroupId(constants.appGroupId);
 
     // Save signal data
-    await saveWidgetData<String>('signal_level', insight.level.value);
-    await saveWidgetData<String>('signal_conclusion', insight.conclusion);
+    await saveWidgetData<String>(storage_keys.signalLevel, insight.level.value);
+    await saveWidgetData<String>(
+      storage_keys.signalConclusion,
+      insight.conclusion,
+    );
     await saveWidgetData<int>(
-      'signal_probability',
+      storage_keys.signalProbability,
       (insight.probability * 100).toInt(),
     );
-    await saveWidgetData<String>('signal_category', insight.category.value);
+    await saveWidgetData<String>(
+      storage_keys.signalCategory,
+      insight.category.value,
+    );
 
     // Save widget update frequency if provided
     if (widgetUpdateFrequencyMinutes != null &&
@@ -140,7 +150,7 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
               constants.minWidgetUpdateFrequencyMinutes
           ? constants.minWidgetUpdateFrequencyMinutes
           : widgetUpdateFrequencyMinutes;
-      await saveWidgetData<int>(constants.widgetUpdateFrequencyKey, frequency);
+      await saveWidgetData<int>(storage_keys.widgetUpdateFrequency, frequency);
     }
 
     // Update the widget
@@ -164,6 +174,13 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
       'HomeWidgetService setWidgetUpdateFrequency: $frequency minutes '
       '(requested: $frequencyMinutes).',
     );
-    return saveWidgetData<int>(constants.widgetUpdateFrequencyKey, frequency);
+    return saveWidgetData<int>(storage_keys.widgetUpdateFrequency, frequency);
+  }
+
+  /// Save widget style preference for platform widgets to read
+  @override
+  Future<bool?> setWidgetStyle(String style) async {
+    debugPrint('HomeWidgetService setWidgetStyle: $style.');
+    return saveWidgetData<String>('widget_style', style);
   }
 }

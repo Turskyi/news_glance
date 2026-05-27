@@ -3,15 +3,22 @@ import 'package:markdown/markdown.dart' as md;
 
 /// Markdown preview with limited lines.
 class MarkdownPreview extends StatelessWidget {
-  const MarkdownPreview({required this.text, this.maxLines = 5, super.key});
+  const MarkdownPreview({
+    required this.text,
+    this.maxLines = 5,
+    this.color,
+    super.key,
+  });
 
   final String text;
   final int maxLines;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     final TextStyle style = TextStyle(
       fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+      color: color ?? Theme.of(context).colorScheme.onSurface,
     );
 
     return SelectionArea(

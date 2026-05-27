@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
+import 'package:news_glance/application_services/settings_bloc.dart';
+import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/ui/end_drawer.dart';
 import 'package:news_glance/ui/news_article_list.dart';
+import 'package:news_glance/ui/news_conclusion_section.dart';
+import 'package:news_glance/ui/refresh_button.dart';
 import 'package:news_glance/ui/signal_card.dart';
 
 import 'app_error_widget.dart';
@@ -63,21 +67,40 @@ class HomePage extends StatelessWidget {
                                     ).textTheme.displaySmall?.fontSize,
                                   ),
                                 ),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.menu,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () =>
-                                      Scaffold.of(context).openEndDrawer(),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    const RefreshButton(),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.menu,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: Scaffold.of(
+                                        context,
+                                      ).openEndDrawer,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                             const SizedBox(height: 10),
-                            if (state is LoadedConclusionState)
-                              SignalCard(insight: state.insight)
-                            else
-                              const SizedBox.shrink(),
+                            BlocBuilder<SettingsBloc, SettingsState>(
+                              builder: (BuildContext context, SettingsState s) {
+                                final ConclusionUiStyle style = s.style;
+                                if (style == ConclusionUiStyle.conclusion) {
+                                  return state is LoadedConclusionState
+                                      ? NewsConclusionSection(
+                                          conclusion: state.insight.conclusion,
+                                          textColor: Colors.white,
+                                        )
+                                      : const SizedBox.shrink();
+                                }
+                                return state is LoadedConclusionState
+                                    ? SignalCard(insight: state.insight)
+                                    : const SizedBox.shrink();
+                              },
+                            ),
                           ],
                         ),
                       ),

@@ -7,12 +7,20 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:news_glance/ui/markdown_preview.dart';
 
 class NewsConclusionSection extends StatelessWidget {
-  const NewsConclusionSection({required this.conclusion, super.key});
+  const NewsConclusionSection({
+    required this.conclusion,
+    this.textColor,
+    super.key,
+  });
 
   final String conclusion;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
+    final Color effectiveColor =
+        textColor ?? Theme.of(context).colorScheme.onSurface;
+
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
       transitionBuilder: (Widget child, Animation<double> animation) {
@@ -29,7 +37,7 @@ class NewsConclusionSection extends StatelessWidget {
                     text: plainText,
                     style: Theme.of(
                       context,
-                    ).textTheme.titleMedium?.copyWith(color: Colors.white),
+                    ).textTheme.titleMedium?.copyWith(color: effectiveColor),
                   ),
                   maxLines: 5,
                   textDirection: TextDirection.ltr,
@@ -40,7 +48,10 @@ class NewsConclusionSection extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    MarkdownPreview(text: conclusion.trim()),
+                    MarkdownPreview(
+                      text: conclusion.trim(),
+                      color: effectiveColor,
+                    ),
                     const SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

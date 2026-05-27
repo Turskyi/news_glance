@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:news_glance/application_services/blocs/news_bloc.dart';
+import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/di/injector.dart' as di;
 import 'package:news_glance/news_glance_app.dart';
+import 'package:news_glance/res/app_theme.dart';
+import 'package:news_glance/router/routes.dart';
 
 /// The [main] is the ultimate detail — the lowest-level policy.
 /// It is the initial entry point of the system.
@@ -17,5 +22,11 @@ import 'package:news_glance/news_glance_app.dart';
 /// when it changes.
 void main() {
   di.injectDependencies();
-  runApp(const NewsGlanceApp());
+
+  final AppRouter appRouter = AppRouter(
+    newsBloc: GetIt.I.get<NewsBloc>(),
+    settingsBloc: SettingsBloc(),
+  );
+
+  runApp(NewsGlanceApp(routes: appRouter.routeMap, theme: AppTheme.light));
 }

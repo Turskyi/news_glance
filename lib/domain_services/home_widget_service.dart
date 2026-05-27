@@ -35,4 +35,8 @@ abstract interface class HomeWidgetService {
   /// Set widget update frequency in minutes
   /// The widget will use this to determine refresh intervals
   Future<bool?> setWidgetUpdateFrequency(int frequencyMinutes);
+
+  /// Save widget style preference ('insight' or 'conclusion')
+  /// Platform widgets read this to display the appropriate style
+  Future<bool?> setWidgetStyle(String style);
 }

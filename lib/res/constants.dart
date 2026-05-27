@@ -25,9 +25,9 @@ const String saveWidgetDataMethod = 'saveWidgetData';
 const String updateWidgetMethod = 'updateWidget';
 const String appGroupIdArgKey = 'appGroupId';
 
-/// Widget Update Frequency
-const String widgetUpdateFrequencyKey = 'news_glance_widget_update_frequency';
-
 /// 24 hours
 const int defaultWidgetUpdateFrequencyMinutes = 1440;
 const int minWidgetUpdateFrequencyMinutes = 30;
+
+/// Minimum minutes between manual refreshes shown to the user
+const int manualRefreshMinMinutes = 30;

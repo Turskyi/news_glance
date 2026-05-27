@@ -104,47 +104,81 @@ internal fun updateAppWidget(
             )
         setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
-        // Read signal data
-        val signalLevel: String? = widgetData.getString("signal_level", null)
-        val conclusion: String? =
-            widgetData.getString("signal_conclusion", null)
-        val probability: Int = widgetData.getInt("signal_probability", 0)
-        val category: String? = widgetData.getString("signal_category", null)
+        // Determine widget style (insight vs conclusion)
+        val widgetStyle: String? =
+            widgetData.getString("widget_style", "insight")
+        if (widgetStyle == "conclusion") {
+            val title: String? = widgetData.getString("headline_title", null)
+            val description: String? =
+                widgetData.getString("headline_description", null)
 
-        val style = getSignalStyle(signalLevel)
+            // Map conclusion style into headline views
+            setTextViewText(R.id.headline_title, title ?: "No headline")
+            setTextColor(R.id.headline_title, Color.BLACK)
+            setTextViewText(
+                R.id.headline_description,
+                description ?: "No insight available"
+            )
+            setTextColor(R.id.headline_description, Color.DKGRAY)
 
-        // Set background color
-        setInt(R.id.widget_container, "setBackgroundColor", style.bgColor)
-
-        // Set icon
-        setTextViewText(R.id.signal_icon, style.icon)
-        setTextColor(R.id.signal_icon, style.textColor)
-
-        // Set signal label and level
-        setTextViewText(R.id.headline_title, style.label)
-        setTextColor(R.id.headline_title, style.textColor)
-
-        // Set conclusion
-        val conclusionText = conclusion ?: "No insight available"
-        setTextViewText(R.id.headline_description, conclusionText)
-        setTextColor(R.id.headline_description, style.textColor)
-
-        // Set category and probability (only if not NEUTRAL)
-        if (signalLevel?.uppercase() != "NEUTRAL" && category != null) {
-            val metadata = "$category • ${probability}% Probability"
-            setTextViewText(R.id.signal_metadata, metadata)
-            setTextColor(R.id.signal_metadata, style.textColor)
-            setViewVisibility(R.id.signal_metadata, android.view.View.VISIBLE)
-        } else {
+            // hide metadata if any
             setViewVisibility(R.id.signal_metadata, android.view.View.GONE)
-        }
 
-        // Set branding footer with timestamp
-        val dateFormat = SimpleDateFormat("MMM d, h:mm a", Locale.getDefault())
-        val formattedDate = dateFormat.format(Date())
-        val timestampText = "News Glance\nfrom $formattedDate"
-        setTextViewText(R.id.widget_timestamp, timestampText)
-        setTextColor(R.id.widget_timestamp, style.textColor)
+            // branding footer
+            val dateFormat =
+                SimpleDateFormat("MMM d, h:mm a", Locale.getDefault())
+            val formattedDate = dateFormat.format(Date())
+            val timestampText = "News Glance\nfrom $formattedDate"
+            setTextViewText(R.id.widget_timestamp, timestampText)
+            setTextColor(R.id.widget_timestamp, Color.DKGRAY)
+        } else {
+            val signalLevel: String? =
+                widgetData.getString("signal_level", null)
+            val conclusion: String? =
+                widgetData.getString("signal_conclusion", null)
+            val probability: Int = widgetData.getInt("signal_probability", 0)
+            val category: String? =
+                widgetData.getString("signal_category", null)
+
+            val style = getSignalStyle(signalLevel)
+
+            // Set background color
+            setInt(R.id.widget_container, "setBackgroundColor", style.bgColor)
+
+            // Set icon
+            setTextViewText(R.id.signal_icon, style.icon)
+            setTextColor(R.id.signal_icon, style.textColor)
+
+            // Set signal label and level
+            setTextViewText(R.id.headline_title, style.label)
+            setTextColor(R.id.headline_title, style.textColor)
+
+            // Set conclusion
+            val conclusionText = conclusion ?: "No insight available"
+            setTextViewText(R.id.headline_description, conclusionText)
+            setTextColor(R.id.headline_description, style.textColor)
+
+            // Set category and probability (only if not NEUTRAL)
+            if (signalLevel?.uppercase() != "NEUTRAL" && category != null) {
+                val metadata = "$category • ${probability}% Probability"
+                setTextViewText(R.id.signal_metadata, metadata)
+                setTextColor(R.id.signal_metadata, style.textColor)
+                setViewVisibility(
+                    R.id.signal_metadata,
+                    android.view.View.VISIBLE
+                )
+            } else {
+                setViewVisibility(R.id.signal_metadata, android.view.View.GONE)
+            }
+
+            // Set branding footer with timestamp
+            val dateFormat =
+                SimpleDateFormat("MMM d, h:mm a", Locale.getDefault())
+            val formattedDate = dateFormat.format(Date())
+            val timestampText = "News Glance\nfrom $formattedDate"
+            setTextViewText(R.id.widget_timestamp, timestampText)
+            setTextColor(R.id.widget_timestamp, style.textColor)
+        }
     }
 
     appWidgetManager.updateAppWidget(appWidgetId, views)

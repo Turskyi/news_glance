@@ -8,8 +8,7 @@ class LoggingInterceptor extends Interceptor {
   const LoggingInterceptor();
 
   @override
-  void onResponse(
-    Response<dynamic> response,
+  void onResponse(Response<Object?> response,
     ResponseInterceptorHandler handler,
   ) {
     log('onResponse -------------------');

@@ -18,8 +18,8 @@ class NewsArticleResponse {
     this.content = '',
   });
 
-  factory NewsArticleResponse.fromJson(Map<String, dynamic> json) {
-    return _$NewsArticleResponseFromJson(json);
+  factory NewsArticleResponse.fromJson(Map<String, Object?> json) {
+    return _$NewsArticleResponseFromJson(json as Map<String, dynamic>);
   }
 
   final String title;
@@ -39,17 +39,17 @@ class NewsArticleResponse {
         'content: $content)';
   }
 
-  Map<String, dynamic> toJson() => _$NewsArticleResponseToJson(this);
+  Map<String, Object?> toJson() => _$NewsArticleResponseToJson(this);
 
   NewsArticleResponse copyWith({
     Source? source,
     String? author,
     String? title,
-    dynamic description,
+    String? description,
     String? url,
-    dynamic urlToImage,
+    String? urlToImage,
     String? publishedAt,
-    dynamic content,
+    String? content,
   }) => NewsArticleResponse(
     source: source ?? this.source,
     author: author ?? this.author,

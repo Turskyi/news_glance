@@ -21,7 +21,7 @@ class ArticleRequest {
         'articleText: $articleText)';
   }
 
-  Map<String, dynamic> toJson() => _$ArticleRequestToJson(this);
+  Map<String, Object?> toJson() => _$ArticleRequestToJson(this);
 
   ArticleRequest copyWith({
     String? title,

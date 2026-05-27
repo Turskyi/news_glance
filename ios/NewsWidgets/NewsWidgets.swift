@@ -28,17 +28,30 @@ struct Provider: TimelineProvider {
             entry = placeholder(in: context)
         } else {
             let userDefaults = UserDefaults(suiteName: "group.dmytrowidget")
-            let level = userDefaults?.string(forKey: "signal_level") ?? "NEUTRAL"
-            let conclusion = userDefaults?.string(forKey: "signal_conclusion") ?? "No insight available"
-            let probability = userDefaults?.integer(forKey: "signal_probability") ?? 0
-            let category = userDefaults?.string(forKey: "signal_category") ?? "GENERAL"
-            entry = SignalEntry(
-                date: Date(),
-                level: level,
-                conclusion: conclusion,
-                probability: probability,
-                category: category
-            )
+            let widgetStyle = userDefaults?.string(forKey: "widget_style") ?? "insight"
+            if widgetStyle == "conclusion" {
+                let title = userDefaults?.string(forKey: "headline_title") ?? ""
+                let desc = userDefaults?.string(forKey: "headline_description") ?? userDefaults?.string(forKey: "signal_conclusion") ?? "No insight available"
+                entry = SignalEntry(
+                    date: Date(),
+                    level: "NEUTRAL",
+                    conclusion: desc,
+                    probability: 0,
+                    category: "GENERAL"
+                )
+            } else {
+                let level = userDefaults?.string(forKey: "signal_level") ?? "NEUTRAL"
+                let conclusion = userDefaults?.string(forKey: "signal_conclusion") ?? "No insight available"
+                let probability = userDefaults?.integer(forKey: "signal_probability") ?? 0
+                let category = userDefaults?.string(forKey: "signal_category") ?? "GENERAL"
+                entry = SignalEntry(
+                    date: Date(),
+                    level: level,
+                    conclusion: conclusion,
+                    probability: probability,
+                    category: category
+                )
+            }
         }
         completion(entry)
     }

@@ -1,0 +1,1 @@
+enum ConclusionUiStyle { insight, conclusion }

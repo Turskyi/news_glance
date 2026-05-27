@@ -4,6 +4,7 @@ import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/bad_request_exception.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
+import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/actionable_insight_response.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_request/article_request.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_request/conclusion_request.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_response/conclusion_response.dart';
@@ -46,7 +47,8 @@ class NewsRepositoryImpl implements NewsRepository {
     final ConclusionRequest request = _buildConclusionRequest(articles);
 
     try {
-      final dynamic response = await _restClient.getActionableInsight(request);
+      final ActionableInsightResponse response = await _restClient
+          .getActionableInsight(request);
 
       return ActionableInsight(
         conclusion: response.conclusion,
