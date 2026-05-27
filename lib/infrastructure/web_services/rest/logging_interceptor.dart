@@ -8,7 +8,8 @@ class LoggingInterceptor extends Interceptor {
   const LoggingInterceptor();
 
   @override
-  void onResponse(Response<Object?> response,
+  void onResponse(
+    Response<Object?> response,
     ResponseInterceptorHandler handler,
   ) {
     log('onResponse -------------------');
