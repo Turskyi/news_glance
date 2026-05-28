@@ -1,5 +1,6 @@
 {
   "@@locale": "en",
+  "appName": "News Glance",
   "menu": "Menu",
   "search": "Search",
   "contactUs": "Contact Us",

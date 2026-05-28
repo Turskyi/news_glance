@@ -11,5 +11,4 @@ Map<String, dynamic> _$ArticleRequestToJson(ArticleRequest instance) =>
       'title': instance.title,
       'description': instance.description,
       'articleText': instance.articleText,
-      'hashCode': instance.hashCode,
     };

@@ -42,32 +42,36 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
     try {
       final SettingsService settingsService = SettingsService();
       final Locale locale = await settingsService.getLocale();
-      final String countryCode =
-      locale.languageCode == 'uk' ? 'ua' : constants.internationalCode;
+      final String countryCode = locale.languageCode == 'uk'
+          ? 'ua'
+          : constants.internationalCode;
 
       debugPrint(
-          'NewsBloc: [_loadNews] fetching for countryCode: $countryCode');
+        'NewsBloc: [_loadNews] fetching for countryCode: $countryCode',
+      );
       final List<NewsArticle> news = await _newsRepository.getNews(
         countryCode: countryCode,
       );
       debugPrint(
-          'NewsBloc: [_loadNews] repository returned ${news.length} articles');
+        'NewsBloc: [_loadNews] repository returned ${news.length} articles',
+      );
 
       if (news.isEmpty) {
         debugPrint(
-            'NewsBloc: [_loadNews] news is empty, emitting LoadedNewsState([])');
+          'NewsBloc: [_loadNews] news is empty, emitting LoadedNewsState([])',
+        );
         emit(const LoadedNewsState(news: <NewsArticle>[]));
         return;
       }
 
       debugPrint(
-          'NewsBloc: [_loadNews] emitting intermediate LoadedNewsState with ${news
-              .length} articles');
+        'NewsBloc: [_loadNews] emitting intermediate LoadedNewsState with ${news.length} articles',
+      );
       emit(LoadedNewsState(news: news));
 
       try {
-        final ConclusionUiStyle style =
-        await settingsService.getConclusionUiStyle();
+        final ConclusionUiStyle style = await settingsService
+            .getConclusionUiStyle();
         debugPrint('NewsBloc: [_loadNews] using style: $style for AI');
 
         ActionableInsight insight;
@@ -100,7 +104,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         final int checksum = computeNewsHash(news);
         _lastNewsHash = checksum;
         debugPrint(
-            'NewsBloc: [_loadNews] AI generation finished, emitting LoadedConclusionState');
+          'NewsBloc: [_loadNews] AI generation finished, emitting LoadedConclusionState',
+        );
 
         // (persistence logic kept same as before but without ! operator)
         try {
@@ -130,9 +135,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           }
           await prefs.setInt(
             storage_keys.newsLastFetchAt,
-            DateTime
-                .now()
-                .millisecondsSinceEpoch,
+            DateTime.now().millisecondsSinceEpoch,
           );
         } catch (_) {}
 
@@ -143,10 +146,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       } catch (e) {
         debugPrint('NewsBloc: [_loadNews] AI error: $e');
         emit(
-          NewsConclusionError(
-            news: news,
-            errorMessage: 'Unexpected error: $e',
-          ),
+          NewsConclusionError(news: news, errorMessage: 'Unexpected error: $e'),
         );
       }
     } on SocketException catch (e) {

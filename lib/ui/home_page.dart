@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
+import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/ui/end_drawer.dart';
 import 'package:news_glance/ui/news_article_list.dart';
 import 'package:news_glance/ui/news_conclusion_section.dart';
@@ -18,6 +19,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final AppLocalizations? l10n = AppLocalizations.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -38,8 +40,9 @@ class HomePage extends StatelessWidget {
           builder: (BuildContext context, NewsState state) {
             debugPrint('HomePage: [_builder] state is ${state.runtimeType}');
             if (state is LoadedNewsState) {
-              debugPrint('HomePage: [_builder] state has ${state.news
-                  .length} articles');
+              debugPrint(
+                'HomePage: [_builder] state has ${state.news.length} articles',
+              );
               return Semantics(
                 label:
                     'Home screen with the title on top, and the list of '
@@ -61,7 +64,7 @@ class HomePage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
-                                  'News Glance',
+                                  l10n?.appName ?? 'News Glance',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,

@@ -5,7 +5,7 @@ import 'article_request.dart';
 
 part 'conclusion_request.g.dart';
 
-@JsonSerializable(createFactory: false)
+@JsonSerializable(createFactory: false, explicitToJson: true)
 class ConclusionRequest {
   const ConclusionRequest({required this.articles, this.lang});
 
@@ -34,5 +34,6 @@ class ConclusionRequest {
   }
 
   @override
+  @JsonKey(includeToJson: false)
   int get hashCode => Object.hash(articles, lang);
 }

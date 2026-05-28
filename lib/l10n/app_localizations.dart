@@ -98,6 +98,12 @@ abstract class AppLocalizations {
     Locale('uk'),
   ];
 
+  /// No description provided for @appName.
+  ///
+  /// In en, this message translates to:
+  /// **'News Glance'**
+  String get appName;
+
   /// No description provided for @menu.
   ///
   /// In en, this message translates to:

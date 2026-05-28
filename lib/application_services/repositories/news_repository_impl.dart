@@ -41,10 +41,10 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
-  Future<ActionableInsight> getActionableInsight(Iterable<NewsArticle> articles,
-      {
-        String? lang,
-      }) async {
+  Future<ActionableInsight> getActionableInsight(
+    Iterable<NewsArticle> articles, {
+    String? lang,
+  }) async {
     final ConclusionRequest request = _buildConclusionRequest(
       articles,
       lang: lang,

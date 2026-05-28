@@ -45,6 +45,7 @@ class ArticleRequest {
   }
 
   @override
+  @JsonKey(includeToJson: false)
   int get hashCode =>
       title.hashCode ^ description.hashCode ^ articleText.hashCode;
 }

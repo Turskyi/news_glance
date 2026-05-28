@@ -10,6 +10,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get appName => 'News Glance';
+
+  @override
   String get menu => 'Menu';
 
   @override
