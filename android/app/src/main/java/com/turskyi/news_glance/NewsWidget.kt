@@ -95,7 +95,13 @@ internal fun updateAppWidget(
 ) {
     // Get reference to SharedPreferences
     val widgetData: SharedPreferences = HomeWidgetPlugin.getData(context)
-    val views: RemoteViews = RemoteViews(context.packageName, R.layout.news_widget).apply {
+    val widgetStyle: String? =
+        widgetData.getString("widget_style", "insight")
+
+    val layoutRes =
+        if (widgetStyle == "conclusion") R.layout.news_widget_conclusion else R.layout.news_widget
+
+    val views: RemoteViews = RemoteViews(context.packageName, layoutRes).apply {
         // Open App on Widget Click
         val pendingIntent: PendingIntent =
             HomeWidgetLaunchIntent.getActivity(
@@ -104,33 +110,37 @@ internal fun updateAppWidget(
             )
         setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
-        // Determine widget style (insight vs conclusion)
-        val widgetStyle: String? =
-            widgetData.getString("widget_style", "insight")
         if (widgetStyle == "conclusion") {
-            val title: String? = widgetData.getString("headline_title", null)
+            // Derive title for conclusion layout as a date-based headline
             val description: String? =
                 widgetData.getString("headline_description", null)
 
-            // Map conclusion style into headline views
-            setTextViewText(R.id.headline_title, title ?: "No headline")
-            setTextColor(R.id.headline_title, Color.BLACK)
+            // Use a compact date (YYYY-MM-DD) for the headline title to match legacy style
+            val dateFormatTitle =
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val formattedDateTitle = dateFormatTitle.format(Date())
+            val titleToShow = "News Glance from $formattedDateTitle"
+
+            // Map conclusion style into headline views (white text for dark bg)
+            setTextViewText(R.id.headline_title, titleToShow)
+            setViewVisibility(R.id.headline_title, android.view.View.VISIBLE)
+            setTextColor(R.id.headline_title, Color.WHITE)
+
             setTextViewText(
                 R.id.headline_description,
                 description ?: "No insight available"
             )
-            setTextColor(R.id.headline_description, Color.DKGRAY)
+            setTextColor(R.id.headline_description, Color.WHITE)
 
-            // hide metadata if any
-            setViewVisibility(R.id.signal_metadata, android.view.View.GONE)
-
-            // branding footer
-            val dateFormat =
+            // branding footer (conclusion layout)
+            val dateFormatConclusion =
                 SimpleDateFormat("MMM d, h:mm a", Locale.getDefault())
-            val formattedDate = dateFormat.format(Date())
-            val timestampText = "News Glance\nfrom $formattedDate"
-            setTextViewText(R.id.widget_timestamp, timestampText)
-            setTextColor(R.id.widget_timestamp, Color.DKGRAY)
+            val formattedDateConclusion = dateFormatConclusion.format(Date())
+            val timestampTextConclusion =
+                "News Glance\nfrom $formattedDateConclusion"
+            setTextViewText(R.id.widget_timestamp, timestampTextConclusion)
+            setTextColor(R.id.widget_timestamp, Color.WHITE)
+
         } else {
             val signalLevel: String? =
                 widgetData.getString("signal_level", null)

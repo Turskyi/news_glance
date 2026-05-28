@@ -17,7 +17,8 @@ struct Provider: TimelineProvider {
             level: "NEUTRAL",
             conclusion: "Placeholder description",
             probability: 0,
-            category: "GENERAL"
+            category: "GENERAL",
+            style: "insight"
         )
     }
     
@@ -29,7 +30,8 @@ struct Provider: TimelineProvider {
         } else {
             let userDefaults = UserDefaults(suiteName: "group.dmytrowidget")
             let widgetStyle = userDefaults?.string(forKey: "widget_style") ?? "insight"
-            if widgetStyle == "conclusion" {
+            let styleValue = userDefaults?.string(forKey: "widget_style") ?? "insight"
+            if styleValue == "conclusion" {
                 let title = userDefaults?.string(forKey: "headline_title") ?? ""
                 let desc = userDefaults?.string(forKey: "headline_description") ?? userDefaults?.string(forKey: "signal_conclusion") ?? "No insight available"
                 entry = SignalEntry(
@@ -37,7 +39,8 @@ struct Provider: TimelineProvider {
                     level: "NEUTRAL",
                     conclusion: desc,
                     probability: 0,
-                    category: "GENERAL"
+                    category: "GENERAL",
+                    style: "conclusion"
                 )
             } else {
                 let level = userDefaults?.string(forKey: "signal_level") ?? "NEUTRAL"
@@ -49,7 +52,8 @@ struct Provider: TimelineProvider {
                     level: level,
                     conclusion: conclusion,
                     probability: probability,
-                    category: category
+                    category: category,
+                    style: "insight"
                 )
             }
         }
@@ -119,80 +123,129 @@ struct NewsWidgetsEntryView : View {
     var entry: Provider.Entry
     
     var body: some View {
-        let style = getSignalStyle(entry.level)
-        let isHighRisk = entry.level.uppercased() != "NEUTRAL" && entry.probability >= 80
-        let isNeutral = entry.level.uppercased() == "NEUTRAL"
-        let dateFormatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MMM d, h:mm a"
-            return formatter
-        }()
-        let formattedDate = dateFormatter.string(from: entry.date)
-
-        ZStack {
-            RoundedRectangle(cornerRadius: 16)
-                .fill(style.bgColor)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(style.borderColor, lineWidth: 2)
+        // Legacy conclusion layout
+        if entry.style == "conclusion" {
+            ZStack {
+                // Gradient background: blue to purple (matching Android)
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color(red: 0, green: 0, blue: 1.0), // Blue
+                        Color(red: 0.5, green: 0, blue: 0.5)     // Purple
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 )
 
-            VStack(alignment: .leading, spacing: 6) {
-                HStack(spacing: 10) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.white)
-                            .frame(width: 40, height: 40)
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(.systemBackground))
+                    .opacity(0)
 
-                        Text(style.icon)
-                            .font(.system(size: 24))
-                    }
+                VStack(alignment: .leading, spacing: 0) {
+                    // Description fills most of the space
+                    Text(entry.conclusion)
+                        .font(.system(size: 14))
+                        .foregroundColor(.white)
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.leading)
+                        .padding(12)
 
-                    VStack(alignment: .leading, spacing: 1) {
-                        HStack(spacing: 4) {
-                            Circle()
-                                .fill(style.lightColor)
-                                .frame(width: 5, height: 5)
-                                .shadow(color: style.lightColor.opacity(0.6), radius: 2, x: 0, y: 0)
+                    Spacer(minLength: 0)
 
-                            Text(style.label)
-                                .font(.system(size: 11, weight: .bold))
-                                .tracking(0.4)
-                                .textCase(.uppercase)
-                                .foregroundColor(style.textColor)
-                        }
+                    // Footer with timestamp at bottom
+                    let dateFormatter: DateFormatter = {
+                        let formatter = DateFormatter()
+                        formatter.dateFormat = "MMM d, h:mm a"
+                        return formatter
+                    }()
+                    let formattedDate = dateFormatter.string(from: entry.date)
 
-                        if !isNeutral {
-                            Text("\(entry.category) • \(entry.probability)%")
-                                .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(isHighRisk ? Color(red: 0.88, green: 0.11, blue: 0.29) : style.textColor.opacity(0.75))
-                                .lineLimit(1)
-                        } else {
-                            Text("All Clear")
-                                .font(.system(size: 10, weight: .medium))
-                                .foregroundColor(style.textColor.opacity(0.6))
-                        }
-                    }
-
-                    Spacer()
+                    Text("News Glance\nfrom \(formattedDate)")
+                        .font(.system(size: 10, weight: .medium))
+                        .lineLimit(2)
+                        .foregroundColor(.white)
+                        .opacity(0.7)
+                        .tracking(0.2)
+                        .padding(10)
                 }
-
-                Text(entry.conclusion)
-                    .font(.system(size: 12, weight: .regular))
-                    .lineLimit(4)
-                    .foregroundColor(style.textColor)
-
-                Spacer(minLength: 0)
-
-                Text("News Glance\nfrom \(formattedDate)")
-                    .font(.system(size: 9, weight: .medium))
-                    .lineLimit(2)
-                    .foregroundColor(style.textColor.opacity(0.5))
-                    .tracking(0.2)
             }
-            .padding(10)
+            .padding()
+        } else {
+            // Insight style (existing)
+            let style = getSignalStyle(entry.level)
+            let isHighRisk = entry.level.uppercased() != "NEUTRAL" && entry.probability >= 80
+            let isNeutral = entry.level.uppercased() == "NEUTRAL"
+            let dateFormatter: DateFormatter = {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "MMM d, h:mm a"
+                return formatter
+            }()
+            let formattedDate = dateFormatter.string(from: entry.date)
+
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(style.bgColor)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(style.borderColor, lineWidth: 2)
+                    )
+
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 10) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 40, height: 40)
+
+                            Text(style.icon)
+                                .font(.system(size: 24))
+                        }
+
+                        VStack(alignment: .leading, spacing: 1) {
+                            HStack(spacing: 4) {
+                                Circle()
+                                    .fill(style.lightColor)
+                                    .frame(width: 5, height: 5)
+                                    .shadow(color: style.lightColor.opacity(0.6), radius: 2, x: 0, y: 0)
+
+                                Text(style.label)
+                                    .font(.system(size: 11, weight: .bold))
+                                    .tracking(0.4)
+                                    .textCase(.uppercase)
+                                    .foregroundColor(style.textColor)
+                            }
+
+                            if !isNeutral {
+                                Text("\(entry.category) • \(entry.probability)%")
+                                    .font(.system(size: 10, weight: .semibold))
+                                    .foregroundColor(isHighRisk ? Color(red: 0.88, green: 0.11, blue: 0.29) : style.textColor.opacity(0.75))
+                                    .lineLimit(1)
+                            } else {
+                                Text("All Clear")
+                                    .font(.system(size: 10, weight: .medium))
+                                    .foregroundColor(style.textColor.opacity(0.6))
+                            }
+                        }
+
+                        Spacer()
+                    }
+
+                    Text(entry.conclusion)
+                        .font(.system(size: 12, weight: .regular))
+                        .lineLimit(4)
+                        .foregroundColor(style.textColor)
+
+                    Spacer(minLength: 0)
+
+                    Text("News Glance\nfrom \(formattedDate)")
+                        .font(.system(size: 9, weight: .medium))
+                        .lineLimit(2)
+                        .foregroundColor(style.textColor.opacity(0.5))
+                        .tracking(0.2)
+                }
+                .padding(10)
+            }
+            .padding()
         }
-        .padding()
     }
     
     init(entry: Provider.Entry){
@@ -222,9 +275,9 @@ struct NewsWidgets: Widget {
 #Preview(as: .systemSmall) {
     NewsWidgets()
 } timeline: {
-    SignalEntry(date: .now, level: "CRITICAL", conclusion: "Urgent: Market volatility alert", probability: 92, category: "FINANCE")
-    SignalEntry(date: .now, level: "ADVISORY", conclusion: "Flight delays reported at major airports", probability: 75, category: "TRAVEL")
-    SignalEntry(date: .now, level: "NEUTRAL", conclusion: "Markets stable, no immediate action needed", probability: 0, category: "GENERAL")
+    SignalEntry(date: .now, level: "CRITICAL", conclusion: "Urgent: Market volatility alert", probability: 92, category: "FINANCE", style: "insight")
+    SignalEntry(date: .now, level: "ADVISORY", conclusion: "Flight delays reported at major airports", probability: 75, category: "TRAVEL", style: "insight")
+    SignalEntry(date: .now, level: "NEUTRAL", conclusion: "Markets stable, no immediate action needed", probability: 0, category: "GENERAL", style: "insight")
 }
 
 // Signal entry with structured data
@@ -234,4 +287,5 @@ struct SignalEntry: TimelineEntry {
     let conclusion: String
     let probability: Int
     let category: String
+    let style: String
 }
