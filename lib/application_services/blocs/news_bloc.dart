@@ -64,9 +64,6 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         return;
       }
 
-      debugPrint(
-        'NewsBloc: [_loadNews] emitting intermediate LoadedNewsState with ${news.length} articles',
-      );
       emit(LoadedNewsState(news: news));
 
       try {
@@ -76,7 +73,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
         ActionableInsight insight;
 
-        if (style == ConclusionUiStyle.conclusion) {
+        if (style.isConclusion) {
           debugPrint('NewsBloc: [_loadNews] calling getNewsConclusion');
           final String conclusionText = await _newsRepository.getNewsConclusion(
             news,
@@ -103,11 +100,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
         final int checksum = computeNewsHash(news);
         _lastNewsHash = checksum;
-        debugPrint(
-          'NewsBloc: [_loadNews] AI generation finished, emitting LoadedConclusionState',
-        );
 
-        // (persistence logic kept same as before but without ! operator)
         try {
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           final String? ct = _cachedConclusionText;
@@ -201,7 +194,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       // If not cached in memory, try SharedPreferences
       try {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        if (event.style == ConclusionUiStyle.conclusion) {
+        if (event.style.isConclusion) {
           final String? stored = prefs.getString(
             storage_keys.aiCacheConclusion(checksum),
           );
@@ -253,7 +246,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         final Locale locale = await settingsService.getLocale();
         final String lang = locale.languageCode;
 
-        if (event.style == ConclusionUiStyle.conclusion) {
+        if (event.style.isConclusion) {
           final String conclusionText = await _newsRepository.getNewsConclusion(
             articles,
             lang: lang,

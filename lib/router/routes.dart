@@ -63,10 +63,10 @@ class AppRouter {
     final ConclusionUiStyle style = await settingsService
         .getConclusionUiStyle();
 
-    if (style == ConclusionUiStyle.conclusion) {
-      final String title = insight.conclusion.split('\n').first;
+    if (style.isConclusion) {
+      final String? title = insight.conclusion.split('\n').firstOrNull;
       await homeWidgetService.updateHomeWidget(
-        headlineTitle: title,
+        headlineTitle: title ?? '',
         headlineDescription: insight.conclusion,
       );
     } else {

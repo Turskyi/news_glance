@@ -92,19 +92,20 @@ class HomePage extends StatelessWidget {
                             ),
                             const SizedBox(height: 10),
                             BlocBuilder<SettingsBloc, SettingsState>(
-                              builder: (BuildContext context, SettingsState s) {
+                              builder: (BuildContext _, SettingsState s) {
                                 final ConclusionUiStyle style = s.style;
-                                if (style == ConclusionUiStyle.conclusion) {
+                                if (style.isConclusion) {
                                   return state is LoadedConclusionState
                                       ? NewsConclusionSection(
                                           conclusion: state.insight.conclusion,
                                           textColor: Colors.white,
                                         )
                                       : const SizedBox.shrink();
+                                } else {
+                                  return state is LoadedConclusionState
+                                      ? SignalCard(insight: state.insight)
+                                      : const SizedBox.shrink();
                                 }
-                                return state is LoadedConclusionState
-                                    ? SignalCard(insight: state.insight)
-                                    : const SizedBox.shrink();
                               },
                             ),
                           ],
