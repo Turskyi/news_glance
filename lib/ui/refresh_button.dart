@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
@@ -14,6 +16,7 @@ class RefreshButton extends StatefulWidget {
 
 class _RefreshButtonState extends State<RefreshButton> {
   late Future<int?> _lastFetchFuture;
+  StreamSubscription<NewsState>? _newsSub;
 
   @override
   void initState() {
@@ -21,6 +24,31 @@ class _RefreshButtonState extends State<RefreshButton> {
     _lastFetchFuture = SharedPreferences.getInstance().then(
       (SharedPreferences p) => p.getInt(storage_keys.newsLastFetchAt),
     );
+
+    // Subscribe to NewsBloc stream to refresh the cached future when news
+    // are loaded so the button visibility updates immediately.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        final NewsBloc bloc = context.read<NewsBloc>();
+        _newsSub = bloc.stream.listen((_) async {
+          // Re-read the last fetch time from preferences and trigger rebuild
+          final Future<int?> newFuture = SharedPreferences.getInstance().then(
+            (SharedPreferences p) => p.getInt(storage_keys.newsLastFetchAt),
+          );
+          setState(() {
+            _lastFetchFuture = newFuture;
+          });
+        });
+      } catch (_) {
+        // If bloc is not available, ignore — still works initially
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _newsSub?.cancel();
+    super.dispose();
   }
 
   @override
