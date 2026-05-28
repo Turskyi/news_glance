@@ -1,0 +1,44 @@
+{
+  "@@locale": "uk",
+  "menu": "Меню",
+  "search": "Пошук",
+  "contactUs": "Зв'яжіться з нами",
+  "actionableInsight": "Практичне розуміння",
+  "probability": "Ймовірність",
+  "category": "Категорія",
+  "signalLevel": "Рівень сигналу",
+  "noNewsFound": "Новин не знайдено",
+  "language": "Мова",
+  "english": "Англійська",
+  "ukrainian": "Українська",
+  "allClear": "ВСЕ ЧИСТО",
+  "criticalAction": "КРИТИЧНА ДІЯ",
+  "warning": "ПОПЕРЕДЖЕННЯ",
+  "advisory": "ПОРАДА",
+  "noImmediateActionRequired": "Негайних дій не потрібно",
+  "noNewsAvailable": "На даний момент новин немає.",
+  "pleaseCheckBackLater": "Будь ласка, перевірте пізніше.",
+  "widgetUpdateFrequency": "Частота оновлення віджета",
+  "chooseFrequency": "Виберіть, як часто віджет News Glance оновлюється в Центрі сповіщень",
+  "conclusionStyle": "Стиль висновку",
+  "insight": "Розуміння",
+  "conclusion": "Висновок",
+  "usingInsight": "Використовується розуміння",
+  "usingConclusion": "Використовується висновок",
+  "every4Hours": "Кожні 4 години",
+  "every12Hours": "Кожні 12 годин",
+  "onceDaily": "Раз на день (за замовчуванням)",
+  "frequencySetTo": "Частота оновлення віджета встановлена на: {label}",
+  "@frequencySetTo": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "frequencyChanged": "Частоту оновлення віджета змінено",
+  "readMore": "Читати далі",
+  "readAloud": "Читати вголос",
+  "close": "Закрити",
+  "source": "Джерело"
+}

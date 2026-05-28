@@ -5,8 +5,8 @@ import 'package:news_glance/application_services/home_widget_service_impl.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/domain_services/home_widget_service.dart';
+import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/res/constants.dart' as constants;
-import 'package:news_glance/ui/widget_frequency_option.dart';
 
 class WidgetSettings extends StatefulWidget {
   const WidgetSettings({super.key});
@@ -16,13 +16,6 @@ class WidgetSettings extends StatefulWidget {
 }
 
 class _WidgetSettingsState extends State<WidgetSettings> {
-  static const List<WidgetFrequencyOption> _frequencyOptions =
-      <WidgetFrequencyOption>[
-        WidgetFrequencyOption(label: 'Every 4 hours', minutes: 240),
-        WidgetFrequencyOption(label: 'Every 12 hours', minutes: 720),
-        WidgetFrequencyOption(label: 'Once daily (default)', minutes: 1440),
-      ];
-
   int _selectedFrequency = constants.defaultWidgetUpdateFrequencyMinutes;
   bool _isSaving = false;
   final HomeWidgetService _homeWidgetService = const HomeWidgetServiceImpl();
@@ -30,9 +23,21 @@ class _WidgetSettingsState extends State<WidgetSettings> {
   @override
   void initState() {
     super.initState();
+    _loadCurrentFrequency();
+  }
+
+  Future<void> _loadCurrentFrequency() async {
+    final int freq = await _homeWidgetService.getWidgetUpdateFrequency();
+    if (mounted) {
+      setState(() => _selectedFrequency = freq);
+    }
   }
 
   Future<void> _saveFrequency(int frequency) async {
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      return;
+    }
     setState(() => _isSaving = true);
     try {
       await _homeWidgetService.setWidgetUpdateFrequency(frequency);
@@ -41,7 +46,7 @@ class _WidgetSettingsState extends State<WidgetSettings> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              _getFrequencyLabel(frequency),
+              _getFrequencyLabel(l10n, frequency),
               style: const TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.green,
@@ -69,6 +74,10 @@ class _WidgetSettingsState extends State<WidgetSettings> {
   }
 
   Future<void> _saveConclusionStyle(int selection) async {
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      return;
+    }
     setState(() => _isSaving = true);
     try {
       final ConclusionUiStyle style = ConclusionUiStyle.values[selection];
@@ -87,7 +96,7 @@ class _WidgetSettingsState extends State<WidgetSettings> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              selection == 0 ? 'Using Insight' : 'Using Conclusion',
+              selection == 0 ? l10n.usingInsight : l10n.usingConclusion,
               style: const TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.green,
@@ -114,17 +123,28 @@ class _WidgetSettingsState extends State<WidgetSettings> {
     }
   }
 
-  String _getFrequencyLabel(int minutes) {
-    for (final WidgetFrequencyOption option in _frequencyOptions) {
-      if (option.minutes == minutes) {
-        return 'Widget update frequency set to: ${option.label}';
-      }
+  String _getFrequencyLabel(AppLocalizations l10n, int minutes) {
+    String label = '';
+    if (minutes == 240) {
+      label = l10n.every4Hours;
+    } else if (minutes == 720) {
+      label = l10n.every12Hours;
+    } else if (minutes == 1440) {
+      label = l10n.onceDaily;
     }
-    return 'Widget update frequency changed';
+
+    if (label.isNotEmpty) {
+      return l10n.frequencySetTo(label);
+    }
+    return l10n.frequencyChanged;
   }
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      return const SizedBox.shrink();
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -133,8 +153,6 @@ class _WidgetSettingsState extends State<WidgetSettings> {
           onChanged: (int? value) {
             if (value != null) {
               _saveFrequency(value);
-            } else {
-              // Deselection is not supported.
             }
           },
           child: Column(
@@ -146,7 +164,7 @@ class _WidgetSettingsState extends State<WidgetSettings> {
                   vertical: 12,
                 ),
                 child: Text(
-                  'Widget Update Frequency',
+                  l10n.widgetUpdateFrequency,
                   style: TextStyle(
                     fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
                     fontWeight: FontWeight.bold,
@@ -156,22 +174,32 @@ class _WidgetSettingsState extends State<WidgetSettings> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  'Choose how often the News Glance widget updates in '
-                  'Notification Center',
+                  l10n.chooseFrequency,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
               const SizedBox(height: 12),
-              ...<Widget>[
-                for (final WidgetFrequencyOption option in _frequencyOptions)
-                  RadioListTile<int>(
-                    title: Text(option.label),
-                    value: option.minutes,
-                    enabled: !_isSaving,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  ),
-              ],
+              RadioListTile<int>(
+                title: Text(l10n.every4Hours),
+                value: 240,
+                enabled: !_isSaving,
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              ),
+              RadioListTile<int>(
+                title: Text(l10n.every12Hours),
+                value: 720,
+                enabled: !_isSaving,
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              ),
+              RadioListTile<int>(
+                title: Text(l10n.onceDaily),
+                value: 1440,
+                enabled: !_isSaving,
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              ),
               const Divider(),
             ],
           ),
@@ -180,14 +208,13 @@ class _WidgetSettingsState extends State<WidgetSettings> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Text(
-            'Conclusion Style',
+            l10n.conclusionStyle,
             style: TextStyle(
               fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-
         const SizedBox(height: 8),
         BlocBuilder<SettingsBloc, SettingsState>(
           builder: (BuildContext context, SettingsState s) {
@@ -197,21 +224,19 @@ class _WidgetSettingsState extends State<WidgetSettings> {
               onChanged: (int? value) {
                 if (value != null) {
                   _saveConclusionStyle(value);
-                } else {
-                  // Deselection is not supported.
                 }
               },
               child: Column(
                 children: <Widget>[
                   RadioListTile<int>(
-                    title: const Text('Insight'),
+                    title: Text(l10n.insight),
                     value: 0,
                     enabled: !_isSaving,
                     controlAffinity: ListTileControlAffinity.leading,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   ),
                   RadioListTile<int>(
-                    title: const Text('Conclusion'),
+                    title: Text(l10n.conclusion),
                     value: 1,
                     enabled: !_isSaving,
                     controlAffinity: ListTileControlAffinity.leading,

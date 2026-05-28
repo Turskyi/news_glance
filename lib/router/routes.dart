@@ -22,21 +22,31 @@ class AppRouter {
   Map<String, WidgetBuilder> get routeMap => <String, WidgetBuilder>{
     AppRoute.home.path: (BuildContext _) => MultiBlocProvider(
       providers: <SingleChildWidget>[
-        BlocProvider<NewsBloc>.value(
-          value: _newsBloc..add(const LoadNewsEvent()),
-        ),
-        BlocProvider<SettingsBloc>.value(
-          value: _settingsBloc..add(const LoadSettingsEvent()),
-        ),
+        BlocProvider<NewsBloc>.value(value: _newsBloc),
+        BlocProvider<SettingsBloc>.value(value: _settingsBloc),
       ],
-      child: const BlocListener<NewsBloc, NewsState>(
-        listener: _handleNewsStateChange,
-        child: HomePage(),
+      child: MultiBlocListener(
+        listeners: <SingleChildWidget>[
+          const BlocListener<NewsBloc, NewsState>(
+            listener: _handleNewsStateChange,
+          ),
+          BlocListener<SettingsBloc, SettingsState>(
+            listenWhen: _hasLocaleChanged,
+            listener: (BuildContext context, SettingsState state) {
+              _newsBloc.add(const LoadNewsEvent());
+            },
+          ),
+        ],
+        child: const HomePage(),
       ),
     ),
     AppRoute.article.path: (BuildContext _) => const ArticleScreen(),
     AppRoute.articleWeb.path: (BuildContext _) => const ArticleWebScreen(),
   };
+
+  bool _hasLocaleChanged(SettingsState previous, SettingsState current) {
+    return previous.locale != current.locale;
+  }
 
   static void _handleNewsStateChange(BuildContext _, NewsState state) {
     if (state.canUpdateHomeWidget && state is LoadedConclusionState) {

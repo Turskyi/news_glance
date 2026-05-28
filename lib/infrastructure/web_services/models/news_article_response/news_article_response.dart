@@ -12,7 +12,7 @@ class NewsArticleResponse {
     this.description = '',
     this.urlToImage = '',
     required this.url,
-    required this.source,
+    this.source,
     this.author = '',
     required this.publishedAt,
     this.content = '',
@@ -26,7 +26,7 @@ class NewsArticleResponse {
   final String description;
   final String urlToImage;
   final String url;
-  final Source source;
+  final Source? source;
   final String author;
   final String publishedAt;
   final String content;

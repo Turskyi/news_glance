@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_glance/l10n/app_localizations.dart';
 
 class EmptyNewsWidget extends StatelessWidget {
   const EmptyNewsWidget({super.key});
@@ -6,6 +7,12 @@ class EmptyNewsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+
+    if (l10n == null) {
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
+    }
+
     return SliverFillRemaining(
       child: Center(
         child: Card(
@@ -27,13 +34,13 @@ class EmptyNewsWidget extends StatelessWidget {
                 Icon(Icons.info_outline, size: 64, color: colorScheme.primary),
                 const SizedBox(height: 16),
                 Text(
-                  'No news available at the moment.',
+                  l10n.noNewsFound,
                   style: TextStyle(fontSize: 18, color: colorScheme.onSurface),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Please check back later.',
+                  l10n.pleaseCheckBackLater,
                   style: TextStyle(
                     fontSize: 16,
                     color: colorScheme.onSurfaceVariant,

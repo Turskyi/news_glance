@@ -41,10 +41,14 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
-  Future<ActionableInsight> getActionableInsight(
-    Iterable<NewsArticle> articles,
-  ) async {
-    final ConclusionRequest request = _buildConclusionRequest(articles);
+  Future<ActionableInsight> getActionableInsight(Iterable<NewsArticle> articles,
+      {
+        String? lang,
+      }) async {
+    final ConclusionRequest request = _buildConclusionRequest(
+      articles,
+      lang: lang,
+    );
 
     try {
       final ActionableInsightResponse response = await _restClient
@@ -87,10 +91,13 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
-  Future<String> getNewsConclusion(Iterable<NewsArticle> articles) async {
+  Future<String> getNewsConclusion(
+    Iterable<NewsArticle> articles, {
+    String? lang,
+  }) async {
     try {
       final ConclusionResponse response = await _restClient.getNewsConclusion(
-        _buildConclusionRequest(articles),
+        _buildConclusionRequest(articles, lang: lang),
       );
       return response.conclusion;
     } on DioException catch (e) {
@@ -118,7 +125,10 @@ class NewsRepositoryImpl implements NewsRepository {
     }
   }
 
-  ConclusionRequest _buildConclusionRequest(Iterable<NewsArticle> articles) {
+  ConclusionRequest _buildConclusionRequest(
+    Iterable<NewsArticle> articles, {
+    String? lang,
+  }) {
     return ConclusionRequest(
       articles: articles
           .take(constants.newsMax)
@@ -130,6 +140,7 @@ class NewsRepositoryImpl implements NewsRepository {
             ),
           )
           .toList(),
+      lang: lang,
     );
   }
 }

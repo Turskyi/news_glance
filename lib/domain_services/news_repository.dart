@@ -9,9 +9,13 @@ abstract interface class NewsRepository {
     String countryCode = country.internationalCode,
   });
 
-  Future<ActionableInsight> getActionableInsight(
-    Iterable<NewsArticle> articles,
-  );
+  Future<ActionableInsight> getActionableInsight(Iterable<NewsArticle> articles,
+      {
+        String? lang,
+      });
 
-  Future<String> getNewsConclusion(Iterable<NewsArticle> articles);
+  Future<String> getNewsConclusion(
+    Iterable<NewsArticle> articles, {
+    String? lang,
+  });
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_glance/application_services/settings_bloc.dart';
+import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/res/constants.dart' as constants;
 import 'package:news_glance/ui/clickable_tile.dart';
 import 'package:news_glance/ui/widget_settings.dart';
@@ -9,6 +12,10 @@ class EndDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      return const SizedBox.shrink();
+    }
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -22,7 +29,7 @@ class EndDrawer extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Menu',
+              l10n.menu,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -31,10 +38,30 @@ class EndDrawer extends StatelessWidget {
             ),
           ),
           const WidgetSettings(),
+          const Divider(),
+          BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (BuildContext context, SettingsState state) {
+              final bool isUkrainian = state.locale.languageCode == 'uk';
+              return ListTile(
+                title: Text(l10n.language),
+                trailing: Text(
+                  isUkrainian ? 'UA' : 'EN',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onTap: () {
+                  final Locale newLocale = isUkrainian
+                      ? const Locale('en')
+                      : const Locale('uk');
+                  context.read<SettingsBloc>().add(SetLocaleEvent(newLocale));
+                },
+              );
+            },
+          ),
+          const Divider(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Text(
-              'Contact Us',
+              l10n.contactUs,
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
                 fontWeight: FontWeight.bold,

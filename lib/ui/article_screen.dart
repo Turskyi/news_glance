@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_glance/domain_models/news_article.dart';
+import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/router/app_route.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -59,6 +60,14 @@ class _ArticleScreenState extends State<ArticleScreen> {
     // Extract the arguments from the current ModalRoute settings.
     final Object? args = ModalRoute.of(context)?.settings.arguments;
     String link = args is NewsArticle ? args.urlSource : '';
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+
+    if (l10n == null) {
+      return const SizedBox.shrink();
+    }
+
+    final WebViewController? controller = _controller;
+
     return DecoratedBox(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -82,10 +91,10 @@ class _ArticleScreenState extends State<ArticleScreen> {
             args is NewsArticle &&
                 args.description.isEmpty &&
                 args.articleText.isEmpty &&
-                _controller != null
+                controller != null
             ? Stack(
                 children: <Widget>[
-                  WebViewWidget(controller: _controller!),
+                  WebViewWidget(controller: controller),
                   if (_loadingProgress < 100)
                     LinearProgressIndicator(
                       value: _loadingProgress / 100.0,
@@ -125,7 +134,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            args is NewsArticle ? 'Source: ' : '',
+                            args is NewsArticle ? '${l10n.source}: ' : '',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: Theme.of(

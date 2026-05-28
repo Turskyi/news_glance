@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:news_glance/application_services/home_widget_service_impl.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/domain_services/home_widget_service.dart';
@@ -24,6 +26,22 @@ class SettingsService {
       return ConclusionUiStyle.insight;
     } else {
       return ConclusionUiStyle.values[raw];
+    }
+  }
+
+  Future<void> setLocale(Locale locale) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(storage_keys.locale, locale.languageCode);
+  }
+
+  Future<Locale> getLocale() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? languageCode = prefs.getString(storage_keys.locale);
+
+    if (languageCode == 'uk') {
+      return const Locale('uk');
+    } else {
+      return const Locale('en');
     }
   }
 }

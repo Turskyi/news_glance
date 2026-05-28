@@ -4,10 +4,14 @@ part of 'news_bloc.dart';
 abstract class NewsState {
   const NewsState();
 
-  bool get canUpdateHomeWidget =>
-      !kIsWeb &&
-      this is LoadedConclusionState &&
-      (this as LoadedConclusionState).insight.conclusion.isNotEmpty;
+  bool get canUpdateHomeWidget {
+    if (kIsWeb) {
+      return false;
+    }
+    final NewsState state = this;
+    return state is LoadedConclusionState &&
+        state.insight.conclusion.isNotEmpty;
+  }
 }
 
 class LoadingNewsState extends NewsState {

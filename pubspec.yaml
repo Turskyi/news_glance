@@ -37,17 +37,22 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   bloc: ^9.2.1
+  bloc_concurrency: ^0.3.0
   collection: ^1.19.1
   dio: ^5.9.2
   expandable: ^5.0.1
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
+  flutter_gen: ^5.14.1
+  flutter_localizations:
+    sdk: flutter
   flutter_markdown: ^0.7.7+1
   flutter_tts: ^4.2.5
   get_it: ^9.2.1
   home_widget: ^0.9.2
   injectable: ^3.0.0
+  intl: ^0.20.2
   json_annotation: ^4.12.0
   logger: ^2.7.0
   markdown: ^7.3.1
@@ -77,6 +82,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

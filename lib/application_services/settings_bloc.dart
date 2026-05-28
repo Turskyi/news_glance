@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
@@ -8,16 +10,24 @@ part 'settings_event.dart';
 part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsBloc() : super(const SettingsState(ConclusionUiStyle.insight)) {
+  SettingsBloc()
+    : super(
+        const SettingsState(
+          style: ConclusionUiStyle.insight,
+          locale: Locale('en'),
+        ),
+      ) {
     on<LoadSettingsEvent>(_onLoad);
     on<SetConclusionStyleEvent>(_onSetStyle);
+    on<SetLocaleEvent>(_onSetLocale);
   }
 
   final SettingsService _service = SettingsService();
 
   Future<void> _onLoad(LoadSettingsEvent _, Emitter<SettingsState> emit) async {
     final ConclusionUiStyle style = await _service.getConclusionUiStyle();
-    emit(SettingsState(style));
+    final Locale locale = await _service.getLocale();
+    emit(SettingsState(style: style, locale: locale));
   }
 
   Future<void> _onSetStyle(
@@ -25,6 +35,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emit,
   ) async {
     await _service.setConclusionUiStyle(event.style);
-    emit(SettingsState(event.style));
+    emit(SettingsState(style: event.style, locale: state.locale));
+  }
+
+  Future<void> _onSetLocale(
+    SetLocaleEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    await _service.setLocale(event.locale);
+    emit(SettingsState(style: state.style, locale: event.locale));
   }
 }

@@ -55,6 +55,8 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
   Widget build(BuildContext context) {
     // Extract the arguments from the current ModalRoute settings.
     final Object? args = ModalRoute.of(context)?.settings.arguments;
+    final WebViewController? controller = _controller;
+
     return DecoratedBox(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -75,11 +77,11 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
         ),
         body: DecoratedBox(
           decoration: BoxDecoration(color: Colors.blue[50]),
-          child: _controller == null
+          child: controller == null
               ? const SizedBox.shrink()
               : Stack(
                   children: <Widget>[
-                    WebViewWidget(controller: _controller!),
+                    WebViewWidget(controller: controller),
                     if (_loadingProgress < 100)
                       LinearProgressIndicator(
                         value: _loadingProgress / 100.0,

@@ -1,0 +1,44 @@
+{
+  "@@locale": "en",
+  "menu": "Menu",
+  "search": "Search",
+  "contactUs": "Contact Us",
+  "actionableInsight": "Actionable Insight",
+  "probability": "Probability",
+  "category": "Category",
+  "signalLevel": "Signal Level",
+  "noNewsFound": "No news found",
+  "language": "Language",
+  "english": "English",
+  "ukrainian": "Ukrainian",
+  "allClear": "ALL CLEAR",
+  "criticalAction": "CRITICAL ACTION",
+  "warning": "WARNING",
+  "advisory": "ADVISORY",
+  "noImmediateActionRequired": "No immediate action required",
+  "noNewsAvailable": "No news available at the moment.",
+  "pleaseCheckBackLater": "Please check back later.",
+  "widgetUpdateFrequency": "Widget Update Frequency",
+  "chooseFrequency": "Choose how often the News Glance widget updates in Notification Center",
+  "conclusionStyle": "Conclusion Style",
+  "insight": "Insight",
+  "conclusion": "Conclusion",
+  "usingInsight": "Using Insight",
+  "usingConclusion": "Using Conclusion",
+  "every4Hours": "Every 4 hours",
+  "every12Hours": "Every 12 hours",
+  "onceDaily": "Once daily (default)",
+  "frequencySetTo": "Widget update frequency set to: {label}",
+  "@frequencySetTo": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "frequencyChanged": "Widget update frequency changed",
+  "readMore": "Read More",
+  "readAloud": "Read Aloud",
+  "close": "Close",
+  "source": "Source"
+}

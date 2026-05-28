@@ -3,6 +3,7 @@ import 'package:news_glance/application_services/settings_service.dart';
 import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/actionable_insight_level.dart';
+import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/ui/markdown_preview.dart';
 import 'package:news_glance/ui/news_conclusion_section.dart';
 import 'package:news_glance/ui/signal_card_style.dart';
@@ -12,50 +13,57 @@ class SignalCard extends StatelessWidget {
 
   final ActionableInsight insight;
 
-  SignalCardStyle _getSignalStyles(ActionableInsightLevel level) {
+  SignalCardStyle _getSignalStyles(
+    AppLocalizations l10n,
+    ActionableInsightLevel level,
+  ) {
     switch (level) {
       case ActionableInsightLevel.critical:
-        return const SignalCardStyle(
-          backgroundColor: Color(0xFFFEF2F2),
-          borderColor: Color(0xFFEF4444),
-          textColor: Color(0xFF991B1B),
-          lightColor: Color(0xFFEF4444),
+        return SignalCardStyle(
+          backgroundColor: const Color(0xFFFEF2F2),
+          borderColor: const Color(0xFFEF4444),
+          textColor: const Color(0xFF991B1B),
+          lightColor: const Color(0xFFEF4444),
           icon: '🚨',
-          label: 'CRITICAL ACTION',
+          label: l10n.criticalAction,
         );
       case ActionableInsightLevel.warning:
-        return const SignalCardStyle(
-          backgroundColor: Color(0xFFFFFBEB),
-          borderColor: Color(0xFFF59E0B),
-          textColor: Color(0xFFB45309),
-          lightColor: Color(0xFFF59E0B),
+        return SignalCardStyle(
+          backgroundColor: const Color(0xFFFFFBEB),
+          borderColor: const Color(0xFFF59E0B),
+          textColor: const Color(0xFFB45309),
+          lightColor: const Color(0xFFF59E0B),
           icon: '⚠️',
-          label: 'WARNING',
+          label: l10n.warning,
         );
       case ActionableInsightLevel.advisory:
-        return const SignalCardStyle(
-          backgroundColor: Color(0xFFEFF6FF),
-          borderColor: Color(0xFF3B82F6),
-          textColor: Color(0xFF1D4ED8),
-          lightColor: Color(0xFF3B82F6),
+        return SignalCardStyle(
+          backgroundColor: const Color(0xFFEFF6FF),
+          borderColor: const Color(0xFF3B82F6),
+          textColor: const Color(0xFF1D4ED8),
+          lightColor: const Color(0xFF3B82F6),
           icon: 'ℹ️',
-          label: 'ADVISORY',
+          label: l10n.advisory,
         );
       case ActionableInsightLevel.neutral:
-        return const SignalCardStyle(
-          backgroundColor: Color(0xFFECFDF5),
-          borderColor: Color(0xFF10B981),
-          textColor: Color(0xFF047857),
-          lightColor: Color(0xFF10B981),
+        return SignalCardStyle(
+          backgroundColor: const Color(0xFFECFDF5),
+          borderColor: const Color(0xFF10B981),
+          textColor: const Color(0xFF047857),
+          lightColor: const Color(0xFF10B981),
           icon: '✅',
-          label: 'ALL CLEAR',
+          label: l10n.allClear,
         );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final SignalCardStyle styles = _getSignalStyles(insight.level);
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      return const SizedBox.shrink();
+    }
+    final SignalCardStyle styles = _getSignalStyles(l10n, insight.level);
     final bool isHighRisk =
         insight.level != ActionableInsightLevel.neutral &&
         insight.probability >= 0.8;
@@ -144,7 +152,7 @@ class SignalCard extends StatelessWidget {
                                     child: Text(
                                       '${insight.category.value} • '
                                       '${(insight.probability * 100).toInt()}% '
-                                      'Probability',
+                                      '${l10n.probability}',
                                       style: TextStyle(
                                         fontSize: 12.8,
                                         color: isHighRisk
@@ -159,7 +167,7 @@ class SignalCard extends StatelessWidget {
                               ),
                             ] else ...<Widget>[
                               Text(
-                                'No immediate action required',
+                                l10n.noImmediateActionRequired,
                                 style: TextStyle(
                                   fontSize: 12.8,
                                   color: Colors.black.withValues(alpha: 0.6),

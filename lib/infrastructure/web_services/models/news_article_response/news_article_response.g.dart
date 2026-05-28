@@ -12,7 +12,9 @@ NewsArticleResponse _$NewsArticleResponseFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String? ?? '',
       urlToImage: json['urlToImage'] as String? ?? '',
       url: json['url'] as String,
-      source: Source.fromJson(json['source'] as Map<String, dynamic>),
+      source: json['source'] == null
+          ? null
+          : Source.fromJson(json['source'] as Map<String, dynamic>),
       author: json['author'] as String? ?? '',
       publishedAt: json['publishedAt'] as String,
       content: json['content'] as String? ?? '',

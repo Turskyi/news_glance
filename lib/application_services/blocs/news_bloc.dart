@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:io' show SocketException;
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:news_glance/application_services/settings_service.dart';
@@ -25,8 +26,8 @@ part 'news_state.dart';
 @injectable
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   NewsBloc(this._newsRepository) : super(const LoadingNewsState()) {
-    on<LoadNewsEvent>(_loadNews);
-    on<RegenerateInsightEvent>(_regenerateInsight);
+    on<LoadNewsEvent>(_loadNews, transformer: restartable());
+    on<RegenerateInsightEvent>(_regenerateInsight, transformer: restartable());
   }
 
   final NewsRepository _newsRepository;
@@ -38,10 +39,18 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
   FutureOr<void> _loadNews(LoadNewsEvent event, Emitter<NewsState> emit) async {
     try {
+      final SettingsService settingsService = SettingsService();
+      final Locale locale = await settingsService.getLocale();
+      final String countryCode = locale.languageCode == 'uk'
+          ? 'ua'
+          : constants.internationalCode;
+
       final List<NewsArticle> news = await _newsRepository.getNews(
-        countryCode: constants.internationalCode,
+        countryCode: countryCode,
       );
+
       emit(LoadedNewsState(news: news));
+
       if (news.isNotEmpty) {
         final List<NewsArticle> articles = news
             .take(constants.newsMax)
@@ -49,17 +58,14 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
         try {
           // Check user-selected UI style: insight (new) or conclusion (legacy)
-          final SettingsService settingsService = SettingsService();
           final ConclusionUiStyle style = await settingsService
               .getConclusionUiStyle();
 
           ActionableInsight insight;
 
           if (style == ConclusionUiStyle.conclusion) {
-            // Call the conclusion endpoint and wrap into an actionable insight.
             final String conclusionText = await _newsRepository
-                .getNewsConclusion(articles);
-            // cache
+                .getNewsConclusion(articles, lang: locale.languageCode);
             _cachedConclusionText = conclusionText;
             _cachedActionableInsight = null;
 
@@ -70,29 +76,30 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
               category: InsightCategory.general,
             );
           } else {
-            // New behavior
-            insight = await _newsRepository.getActionableInsight(articles);
-            // cache
+            insight = await _newsRepository.getActionableInsight(
+              articles,
+              lang: locale.languageCode,
+            );
             _cachedActionableInsight = insight;
             _cachedConclusionText = null;
           }
 
-          // compute news checksum and store
-          _lastNewsHash = computeNewsHash(articles);
+          final int checksum = computeNewsHash(articles);
+          _lastNewsHash = checksum;
 
           // persist caches for this checksum
           try {
             final SharedPreferences prefs =
                 await SharedPreferences.getInstance();
-            final int checksum = _lastNewsHash!;
-            if (_cachedConclusionText != null) {
+            final String? conclusionText = _cachedConclusionText;
+            if (conclusionText != null) {
               await prefs.setString(
                 storage_keys.aiCacheConclusion(checksum),
-                _cachedConclusionText!,
+                conclusionText,
               );
             }
-            if (_cachedActionableInsight != null) {
-              final ActionableInsight cached = _cachedActionableInsight!;
+            final ActionableInsight? cached = _cachedActionableInsight;
+            if (cached != null) {
               await prefs.setString(
                 storage_keys.aiCacheInsightConclusion(checksum),
                 cached.conclusion,
@@ -110,9 +117,6 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
                 cached.category.value,
               );
             }
-
-            // store last fetch timestamp so UI can conditionally show manual
-            // refresh
             await prefs.setInt(
               storage_keys.newsLastFetchAt,
               DateTime.now().millisecondsSinceEpoch,
@@ -132,52 +136,13 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         }
       }
     } on SocketException catch (_) {
-      // Handle network errors.
       emit(
         const ErrorState(
           errorMessage:
-              'No internet connection. '
-              'Please check your network settings.',
+              'No internet connection. Please check your network settings.',
         ),
       );
-    } on DioException catch (e) {
-      //DioException includes network error, and other.
-      if (e.type == DioExceptionType.connectionError ||
-          e.type == DioExceptionType.connectionTimeout ||
-          e.type == DioExceptionType.unknown) {
-        emit(
-          const ErrorState(
-            errorMessage:
-                'Failed to connect to the server. '
-                'Please check your internet connection.',
-          ),
-        );
-      } else if (e.response != null) {
-        // Server returned an error response.
-        final int? statusCode = e.response?.statusCode;
-        String errorMessage = 'An unexpected server error occurred.';
-
-        if (statusCode != null) {
-          errorMessage = 'Server error: $statusCode.';
-        }
-
-        if (statusCode == 404) {
-          errorMessage = 'The requested resource was not found.';
-        } else if (statusCode != null && statusCode >= 500) {
-          errorMessage = 'A server error occurred. Please try again later.';
-        }
-
-        emit(ErrorState(errorMessage: errorMessage));
-      } else {
-        // Other errors.
-        emit(
-          const ErrorState(
-            errorMessage: 'An unexpected error occurred while fetching data.',
-          ),
-        );
-      }
     } catch (e) {
-      // Handle other errors.
       emit(const ErrorState(errorMessage: 'An unexpected error occurred.'));
     }
   }
@@ -194,11 +159,12 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       final int checksum = computeNewsHash(articles);
 
       // If checksum matches and cached value exists in memory, reuse it
-      if (_lastNewsHash != null && _lastNewsHash == checksum) {
+      if (_lastNewsHash == checksum) {
+        final String? conclusionText = _cachedConclusionText;
         if (event.style == ConclusionUiStyle.conclusion &&
-            _cachedConclusionText != null) {
+            conclusionText != null) {
           final ActionableInsight cached = ActionableInsight(
-            conclusion: _cachedConclusionText!,
+            conclusion: conclusionText,
             level: ActionableInsightLevel.neutral,
             probability: 0.0,
             category: InsightCategory.general,
@@ -207,13 +173,10 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           return;
         }
 
-        if (event.style == ConclusionUiStyle.insight &&
-            _cachedActionableInsight != null) {
+        final ActionableInsight? cachedInsight = _cachedActionableInsight;
+        if (event.style == ConclusionUiStyle.insight && cachedInsight != null) {
           emit(
-            LoadedConclusionState(
-              news: current.news,
-              insight: _cachedActionableInsight!,
-            ),
+            LoadedConclusionState(news: current.news, insight: cachedInsight),
           );
           return;
         }
@@ -270,9 +233,14 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       }
 
       try {
+        final SettingsService settingsService = SettingsService();
+        final Locale locale = await settingsService.getLocale();
+        final String lang = locale.languageCode;
+
         if (event.style == ConclusionUiStyle.conclusion) {
           final String conclusionText = await _newsRepository.getNewsConclusion(
             articles,
+            lang: lang,
           );
           _cachedConclusionText = conclusionText;
           _cachedActionableInsight = null;
@@ -298,7 +266,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           emit(LoadedConclusionState(news: current.news, insight: insight));
         } else {
           final ActionableInsight insight = await _newsRepository
-              .getActionableInsight(articles);
+              .getActionableInsight(articles, lang: lang);
           _cachedActionableInsight = insight;
           _cachedConclusionText = null;
           _lastNewsHash = checksum;

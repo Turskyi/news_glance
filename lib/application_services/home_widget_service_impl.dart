@@ -183,4 +183,41 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
     debugPrint('HomeWidgetService setWidgetStyle: $style.');
     return saveWidgetData<String>('widget_style', style);
   }
+
+  @override
+  Future<int> getWidgetUpdateFrequency() async {
+    try {
+      if (Platform.isMacOS) {
+        final dynamic result = await _widgetChannel
+            .invokeMethod<dynamic>('getWidgetData', <String, Object?>{
+              'key': storage_keys.widgetUpdateFrequency,
+              constants.appGroupIdArgKey: constants.appGroupId,
+            });
+        if (result == null) {
+          return constants.defaultWidgetUpdateFrequencyMinutes;
+        }
+        if (result is int) return result;
+        if (result is String) {
+          return int.tryParse(result) ??
+              constants.defaultWidgetUpdateFrequencyMinutes;
+        }
+        return constants.defaultWidgetUpdateFrequencyMinutes;
+      } else {
+        final dynamic result = await HomeWidget.getWidgetData(
+          storage_keys.widgetUpdateFrequency,
+        );
+        if (result == null) {
+          return constants.defaultWidgetUpdateFrequencyMinutes;
+        }
+        if (result is int) return result;
+        if (result is String) {
+          return int.tryParse(result) ??
+              constants.defaultWidgetUpdateFrequencyMinutes;
+        }
+        return constants.defaultWidgetUpdateFrequencyMinutes;
+      }
+    } catch (_) {
+      return constants.defaultWidgetUpdateFrequencyMinutes;
+    }
+  }
 }

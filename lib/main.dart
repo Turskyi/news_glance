@@ -23,10 +23,22 @@ import 'package:news_glance/router/routes.dart';
 void main() {
   final GetIt dependencies = di.injectDependencies();
 
+  final SettingsBloc settingsBloc = SettingsBloc()
+    ..add(const LoadSettingsEvent());
+
+  final NewsBloc newsBloc = dependencies.get<NewsBloc>()
+    ..add(const LoadNewsEvent());
+
   final AppRouter appRouter = AppRouter(
-    newsBloc: dependencies.get<NewsBloc>(),
-    settingsBloc: SettingsBloc(),
+    newsBloc: newsBloc,
+    settingsBloc: settingsBloc,
   );
 
-  runApp(NewsGlanceApp(routes: appRouter.routeMap, theme: AppTheme.light));
+  runApp(
+    NewsGlanceApp(
+      routes: appRouter.routeMap,
+      theme: AppTheme.light,
+      settingsBloc: settingsBloc,
+    ),
+  );
 }

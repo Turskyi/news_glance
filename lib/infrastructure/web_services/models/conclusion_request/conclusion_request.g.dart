@@ -9,5 +9,6 @@ part of 'conclusion_request.dart';
 Map<String, dynamic> _$ConclusionRequestToJson(ConclusionRequest instance) =>
     <String, dynamic>{
       'articles': instance.articles,
+      'lang': instance.lang,
       'hashCode': instance.hashCode,
     };
