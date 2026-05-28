@@ -21,10 +21,10 @@ import 'package:news_glance/router/routes.dart';
 /// components in the system. They don’t know about [main], and they don’t care
 /// when it changes.
 void main() {
-  di.injectDependencies();
+  final GetIt dependencies = di.injectDependencies();
 
   final AppRouter appRouter = AppRouter(
-    newsBloc: GetIt.I.get<NewsBloc>(),
+    newsBloc: dependencies.get<NewsBloc>(),
     settingsBloc: SettingsBloc(),
   );
 
