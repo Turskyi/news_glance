@@ -31,7 +31,12 @@ class AppRouter {
             listener: _handleNewsStateChange,
           ),
           BlocListener<SettingsBloc, SettingsState>(
-            listenWhen: _hasLocaleChanged,
+            listenWhen: (SettingsState previous, SettingsState current) {
+              // Only trigger when settings are fully loaded for the first time
+              // OR when the locale changes.
+              return (!previous.isLoaded && current.isLoaded) ||
+                  (previous.locale != current.locale);
+            },
             listener: (BuildContext context, SettingsState state) {
               _newsBloc.add(const LoadNewsEvent());
             },
@@ -43,10 +48,6 @@ class AppRouter {
     AppRoute.article.path: (BuildContext _) => const ArticleScreen(),
     AppRoute.articleWeb.path: (BuildContext _) => const ArticleWebScreen(),
   };
-
-  bool _hasLocaleChanged(SettingsState previous, SettingsState current) {
-    return previous.locale != current.locale;
-  }
 
   static void _handleNewsStateChange(BuildContext _, NewsState state) {
     if (state.canUpdateHomeWidget && state is LoadedConclusionState) {

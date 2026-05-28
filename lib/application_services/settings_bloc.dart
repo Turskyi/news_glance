@@ -27,7 +27,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   Future<void> _onLoad(LoadSettingsEvent _, Emitter<SettingsState> emit) async {
     final ConclusionUiStyle style = await _service.getConclusionUiStyle();
     final Locale locale = await _service.getLocale();
-    emit(SettingsState(style: style, locale: locale));
+    emit(SettingsState(style: style, locale: locale, isLoaded: true));
   }
 
   Future<void> _onSetStyle(
@@ -35,7 +35,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emit,
   ) async {
     await _service.setConclusionUiStyle(event.style);
-    emit(SettingsState(style: event.style, locale: state.locale));
+    emit(
+      SettingsState(
+        style: event.style,
+        locale: state.locale,
+        isLoaded: state.isLoaded,
+      ),
+    );
   }
 
   Future<void> _onSetLocale(
@@ -43,6 +49,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emit,
   ) async {
     await _service.setLocale(event.locale);
-    emit(SettingsState(style: state.style, locale: event.locale));
+    emit(
+      SettingsState(
+        style: state.style,
+        locale: event.locale,
+        isLoaded: state.isLoaded,
+      ),
+    );
   }
 }

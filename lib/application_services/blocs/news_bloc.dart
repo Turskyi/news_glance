@@ -26,7 +26,7 @@ part 'news_state.dart';
 @injectable
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   NewsBloc(this._newsRepository) : super(const LoadingNewsState()) {
-    on<LoadNewsEvent>(_loadNews, transformer: restartable());
+    on<LoadNewsEvent>(_loadNews, transformer: sequential());
     on<RegenerateInsightEvent>(_regenerateInsight, transformer: restartable());
   }
 
@@ -38,104 +38,119 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   String? _cachedConclusionText;
 
   FutureOr<void> _loadNews(LoadNewsEvent event, Emitter<NewsState> emit) async {
+    debugPrint('NewsBloc: [_loadNews] triggered');
     try {
       final SettingsService settingsService = SettingsService();
       final Locale locale = await settingsService.getLocale();
-      final String countryCode = locale.languageCode == 'uk'
-          ? 'ua'
-          : constants.internationalCode;
+      final String countryCode =
+      locale.languageCode == 'uk' ? 'ua' : constants.internationalCode;
 
+      debugPrint(
+          'NewsBloc: [_loadNews] fetching for countryCode: $countryCode');
       final List<NewsArticle> news = await _newsRepository.getNews(
         countryCode: countryCode,
       );
+      debugPrint(
+          'NewsBloc: [_loadNews] repository returned ${news.length} articles');
 
+      if (news.isEmpty) {
+        debugPrint(
+            'NewsBloc: [_loadNews] news is empty, emitting LoadedNewsState([])');
+        emit(const LoadedNewsState(news: <NewsArticle>[]));
+        return;
+      }
+
+      debugPrint(
+          'NewsBloc: [_loadNews] emitting intermediate LoadedNewsState with ${news
+              .length} articles');
       emit(LoadedNewsState(news: news));
 
-      if (news.isNotEmpty) {
-        final List<NewsArticle> articles = news
-            .take(constants.newsMax)
-            .toList();
+      try {
+        final ConclusionUiStyle style =
+        await settingsService.getConclusionUiStyle();
+        debugPrint('NewsBloc: [_loadNews] using style: $style for AI');
 
-        try {
-          // Check user-selected UI style: insight (new) or conclusion (legacy)
-          final ConclusionUiStyle style = await settingsService
-              .getConclusionUiStyle();
+        ActionableInsight insight;
 
-          ActionableInsight insight;
-
-          if (style == ConclusionUiStyle.conclusion) {
-            final String conclusionText = await _newsRepository
-                .getNewsConclusion(articles, lang: locale.languageCode);
-            _cachedConclusionText = conclusionText;
-            _cachedActionableInsight = null;
-
-            insight = ActionableInsight(
-              conclusion: conclusionText,
-              level: ActionableInsightLevel.neutral,
-              probability: 0.0,
-              category: InsightCategory.general,
-            );
-          } else {
-            insight = await _newsRepository.getActionableInsight(
-              articles,
-              lang: locale.languageCode,
-            );
-            _cachedActionableInsight = insight;
-            _cachedConclusionText = null;
-          }
-
-          final int checksum = computeNewsHash(articles);
-          _lastNewsHash = checksum;
-
-          // persist caches for this checksum
-          try {
-            final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-            final String? conclusionText = _cachedConclusionText;
-            if (conclusionText != null) {
-              await prefs.setString(
-                storage_keys.aiCacheConclusion(checksum),
-                conclusionText,
-              );
-            }
-            final ActionableInsight? cached = _cachedActionableInsight;
-            if (cached != null) {
-              await prefs.setString(
-                storage_keys.aiCacheInsightConclusion(checksum),
-                cached.conclusion,
-              );
-              await prefs.setString(
-                storage_keys.aiCacheInsightLevel(checksum),
-                cached.level.value,
-              );
-              await prefs.setDouble(
-                storage_keys.aiCacheInsightProbability(checksum),
-                cached.probability,
-              );
-              await prefs.setString(
-                storage_keys.aiCacheInsightCategory(checksum),
-                cached.category.value,
-              );
-            }
-            await prefs.setInt(
-              storage_keys.newsLastFetchAt,
-              DateTime.now().millisecondsSinceEpoch,
-            );
-          } catch (_) {}
-
-          emit(LoadedConclusionState(news: news, insight: insight));
-        } on BadRequestException catch (e) {
-          emit(NewsConclusionError(news: news, errorMessage: e.message));
-        } catch (e) {
-          emit(
-            NewsConclusionError(
-              news: news,
-              errorMessage: 'Unexpected error: $e',
-            ),
+        if (style == ConclusionUiStyle.conclusion) {
+          debugPrint('NewsBloc: [_loadNews] calling getNewsConclusion');
+          final String conclusionText = await _newsRepository.getNewsConclusion(
+            news,
+            lang: locale.languageCode,
           );
+          _cachedConclusionText = conclusionText;
+          _cachedActionableInsight = null;
+
+          insight = ActionableInsight(
+            conclusion: conclusionText,
+            level: ActionableInsightLevel.neutral,
+            probability: 0.0,
+            category: InsightCategory.general,
+          );
+        } else {
+          debugPrint('NewsBloc: [_loadNews] calling getActionableInsight');
+          insight = await _newsRepository.getActionableInsight(
+            news,
+            lang: locale.languageCode,
+          );
+          _cachedActionableInsight = insight;
+          _cachedConclusionText = null;
         }
+
+        final int checksum = computeNewsHash(news);
+        _lastNewsHash = checksum;
+        debugPrint(
+            'NewsBloc: [_loadNews] AI generation finished, emitting LoadedConclusionState');
+
+        // (persistence logic kept same as before but without ! operator)
+        try {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          final String? ct = _cachedConclusionText;
+          if (ct != null) {
+            await prefs.setString(storage_keys.aiCacheConclusion(checksum), ct);
+          }
+          final ActionableInsight? ci = _cachedActionableInsight;
+          if (ci != null) {
+            await prefs.setString(
+              storage_keys.aiCacheInsightConclusion(checksum),
+              ci.conclusion,
+            );
+            await prefs.setString(
+              storage_keys.aiCacheInsightLevel(checksum),
+              ci.level.value,
+            );
+            await prefs.setDouble(
+              storage_keys.aiCacheInsightProbability(checksum),
+              ci.probability,
+            );
+            await prefs.setString(
+              storage_keys.aiCacheInsightCategory(checksum),
+              ci.category.value,
+            );
+          }
+          await prefs.setInt(
+            storage_keys.newsLastFetchAt,
+            DateTime
+                .now()
+                .millisecondsSinceEpoch,
+          );
+        } catch (_) {}
+
+        emit(LoadedConclusionState(news: news, insight: insight));
+      } on BadRequestException catch (e) {
+        debugPrint('NewsBloc: [_loadNews] BadRequestException: ${e.message}');
+        emit(NewsConclusionError(news: news, errorMessage: e.message));
+      } catch (e) {
+        debugPrint('NewsBloc: [_loadNews] AI error: $e');
+        emit(
+          NewsConclusionError(
+            news: news,
+            errorMessage: 'Unexpected error: $e',
+          ),
+        );
       }
-    } on SocketException catch (_) {
+    } on SocketException catch (e) {
+      debugPrint('NewsBloc: [_loadNews] SocketException: $e');
       emit(
         const ErrorState(
           errorMessage:
@@ -143,6 +158,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         ),
       );
     } catch (e) {
+      debugPrint('NewsBloc: [_loadNews] General error: $e');
       emit(const ErrorState(errorMessage: 'An unexpected error occurred.'));
     }
   }

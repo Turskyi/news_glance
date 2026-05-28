@@ -26,8 +26,7 @@ void main() {
   final SettingsBloc settingsBloc = SettingsBloc()
     ..add(const LoadSettingsEvent());
 
-  final NewsBloc newsBloc = dependencies.get<NewsBloc>()
-    ..add(const LoadNewsEvent());
+  final NewsBloc newsBloc = dependencies.get<NewsBloc>();
 
   final AppRouter appRouter = AppRouter(
     newsBloc: newsBloc,

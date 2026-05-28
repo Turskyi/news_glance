@@ -36,7 +36,10 @@ class HomePage extends StatelessWidget {
         body: BlocConsumer<NewsBloc, NewsState>(
           listener: _blocListener,
           builder: (BuildContext context, NewsState state) {
+            debugPrint('HomePage: [_builder] state is ${state.runtimeType}');
             if (state is LoadedNewsState) {
+              debugPrint('HomePage: [_builder] state has ${state.news
+                  .length} articles');
               return Semantics(
                 label:
                     'Home screen with the title on top, and the list of '
