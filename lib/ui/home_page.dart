@@ -14,8 +14,15 @@ import 'package:news_glance/ui/signal_card.dart';
 import 'app_error_widget.dart';
 import 'empty_news_widget.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,80 +55,90 @@ class HomePage extends StatelessWidget {
                 label:
                     'Home screen with the title on top, and the list of '
                     'headlines of article news titles below.',
-                child: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: 20,
-                          top: MediaQuery.paddingOf(context).top,
-                          right: 20,
-                          bottom: 20,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  l10n?.appName ?? 'News Glance',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Theme.of(
-                                      context,
-                                    ).textTheme.displaySmall?.fontSize,
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    const RefreshButton(),
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.menu,
-                                        color: Colors.white,
-                                      ),
-                                      onPressed: Scaffold.of(
+                child: Scrollbar(
+                  controller: _scrollController,
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    slivers: <Widget>[
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            left: 20,
+                            top: MediaQuery.paddingOf(context).top,
+                            right: 20,
+                            bottom: 20,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    l10n?.appName ?? 'News Glance',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Theme.of(
                                         context,
-                                      ).openEndDrawer,
+                                      ).textTheme.displaySmall?.fontSize,
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            BlocBuilder<SettingsBloc, SettingsState>(
-                              builder: (BuildContext _, SettingsState s) {
-                                final ConclusionUiStyle style = s.style;
-                                if (state is! LoadedConclusionState) {
-                                  return const SizedBox.shrink();
-                                }
-
-                                return switch (style) {
-                                  ConclusionUiStyle.conclusion =>
-                                    NewsConclusionSection(
-                                      conclusion: state.insight.conclusion,
-                                      textColor: Colors.white,
-                                    ),
-                                  ConclusionUiStyle.insight => SignalCard(
-                                    insight: state.insight,
                                   ),
-                                  ConclusionUiStyle.summary =>
-                                    ConversationalSummaryCard(
-                                      summary: state.insight.conclusion,
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      const RefreshButton(),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.menu,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: Scaffold.of(
+                                          context,
+                                        ).openEndDrawer,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              BlocBuilder<SettingsBloc, SettingsState>(
+                                builder: (BuildContext _, SettingsState s) {
+                                  final ConclusionUiStyle style = s.style;
+                                  if (state is! LoadedConclusionState) {
+                                    return const SizedBox.shrink();
+                                  }
+
+                                  return switch (style) {
+                                    ConclusionUiStyle.conclusion =>
+                                      NewsConclusionSection(
+                                        conclusion: state.insight.conclusion,
+                                        textColor: Colors.white,
+                                      ),
+                                    ConclusionUiStyle.insight => SignalCard(
+                                      insight: state.insight,
                                     ),
-                                };
-                              },
-                            ),
-                          ],
+                                    ConclusionUiStyle.summary =>
+                                      ConversationalSummaryCard(
+                                        summary: state.insight.conclusion,
+                                      ),
+                                  };
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    state.news.isEmpty
-                        ? const EmptyNewsWidget()
-                        : NewsArticleList(news: state.news),
-                  ],
+                      state.news.isEmpty
+                          ? const EmptyNewsWidget()
+                          : SliverPadding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              sliver: NewsArticleList(news: state.news),
+                            ),
+                    ],
+                  ),
                 ),
               );
             } else if (state is ErrorState) {
@@ -133,6 +150,12 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _blocListener(BuildContext context, NewsState state) {

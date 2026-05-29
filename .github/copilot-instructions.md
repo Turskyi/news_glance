@@ -1,14 +1,3 @@
-# Copilot Instructions for News Glance
-
-## Quick Reference
-
-**Language**: Dart | **Framework**: Flutter | **Architecture**: Onion
-Architecture | **State Management**: BLoC
-
----
-
-## Build, Test & Lint Commands
-
 ### Setup & Code Generation
 
 ```bash
@@ -125,6 +114,12 @@ layers, never reversed.
 
 - **Avoid classes with only static members**: Use top-level functions and
   constants instead (per `analysis_options.yaml`)
+
+### Class Member Ordering
+
+- **Order members logically**: Sort class members in an order that reflects
+  their lifecycle or usage. For example, in a `State` class, `dispose` should
+  always come after `build`, as `build` is called before `dispose`.
 
 ### Code Style Enforcements (from analysis_options.yaml)
 
