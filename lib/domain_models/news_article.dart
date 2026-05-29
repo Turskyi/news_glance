@@ -5,6 +5,7 @@ class NewsArticle {
     required this.imageUrl,
     required this.articleText,
     required this.urlSource,
+    required this.publishedAt,
   });
 
   final String title;
@@ -12,4 +13,5 @@ class NewsArticle {
   final String articleText;
   final String imageUrl;
   final String urlSource;
+  final DateTime publishedAt;
 }

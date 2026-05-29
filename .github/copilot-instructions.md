@@ -118,8 +118,12 @@ layers, never reversed.
 ### Class Member Ordering
 
 - **Order members logically**: Sort class members in an order that reflects
-  their lifecycle or usage. For example, in a `State` class, `dispose` should
-  always come after `build`, as `build` is called before `dispose`.
+  their lifecycle or usage.
+- **Caller above callee**: Always place private methods below public methods,
+  ensuring the caller is positioned above the callee for better readability
+  (top-down approach).
+- **Lifecycle first**: In a `State` class, `dispose` should always come after
+  `build`, as `build` is called before `dispose`.
 
 ### Code Style Enforcements (from analysis_options.yaml)
 
@@ -138,7 +142,7 @@ layers, never reversed.
 - DI configuration in `lib/di/injector.dart` and auto-generated
   `injector.config.dart`
 - Initialize DI in `main()`:
-  ```dart
+  ```dart 
   final GetIt dependencies = di.injectDependencies();
   final NewsBloc newsBloc = dependencies.get<NewsBloc>();
   ```
@@ -188,4 +192,7 @@ Key files:
    getters in `AppLocalizations` usually mean `gen-l10n` hasn't been run.
 4. **Don't cast nullable to non-nullable**: Use type guards or null coalescing
    instead
-5. **Don't exceed 80 character line length**: Format and break lines early
+5. **Don't create methods that return widgets**: Prefer creating a dedicated
+   `StatelessWidget` class instead. Methods returning widgets can lead to
+   performance issues and make the widget tree harder to debug (per Flutter
+   best practices).

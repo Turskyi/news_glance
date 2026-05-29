@@ -21,9 +21,14 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
     }
     final Object? args = ModalRoute.of(context)?.settings.arguments;
     if (args is NewsArticle) {
-      _controller = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..setBackgroundColor(const Color(0x00000000))
+      final WebViewController controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted);
+
+      if (Theme.of(context).platform != TargetPlatform.macOS) {
+        controller.setBackgroundColor(const Color(0x00000000));
+      }
+
+      controller
         ..setNavigationDelegate(
           NavigationDelegate(
             onProgress: (int progress) {
@@ -48,6 +53,8 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
           ),
         )
         ..loadRequest(Uri.parse(args.urlSource));
+
+      _controller = controller;
     }
   }
 

@@ -35,6 +35,7 @@ class NewsRepositoryImpl implements NewsRepository {
           imageUrl: article.urlToImage,
           articleText: article.content,
           urlSource: article.url,
+          publishedAt: DateTime.tryParse(article.publishedAt) ?? DateTime.now(),
         ),
       );
     }

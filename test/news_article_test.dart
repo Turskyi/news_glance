@@ -10,12 +10,13 @@ void main() {
       const String articleText = 'Test Article Text';
       const String urlSource = 'https://example.com/article';
 
-      const NewsArticle article = NewsArticle(
+      NewsArticle article = NewsArticle(
         title: title,
         description: description,
         imageUrl: imageUrl,
         articleText: articleText,
         urlSource: urlSource,
+        publishedAt: DateTime.now(),
       );
 
       expect(article.title, title);

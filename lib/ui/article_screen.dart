@@ -23,9 +23,14 @@ class _ArticleScreenState extends State<ArticleScreen> {
       if (args is NewsArticle &&
           args.description.isEmpty &&
           args.articleText.isEmpty) {
-        _controller = WebViewController()
-          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..setBackgroundColor(const Color(0x00000000))
+        final WebViewController controller = WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted);
+
+        if (Theme.of(context).platform != TargetPlatform.macOS) {
+          controller.setBackgroundColor(const Color(0x00000000));
+        }
+
+        controller
           ..setNavigationDelegate(
             NavigationDelegate(
               onProgress: (int progress) {
@@ -50,6 +55,8 @@ class _ArticleScreenState extends State<ArticleScreen> {
             ),
           )
           ..loadRequest(Uri.parse(args.urlSource));
+
+        _controller = controller;
       }
     }
     super.didChangeDependencies();
