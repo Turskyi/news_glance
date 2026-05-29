@@ -32,10 +32,35 @@ class NewsArticleList extends StatelessWidget {
             ),
             child: ListTile(
               contentPadding: const EdgeInsets.only(
-                left: 20,
+                left: 12,
                 right: 8,
                 top: 8,
                 bottom: 8,
+              ),
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  article.imageUrl,
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  errorBuilder:
+                      (
+                        BuildContext context,
+                        Object error,
+                        StackTrace? stackTrace,
+                      ) {
+                        return Container(
+                          width: 80,
+                          height: 80,
+                          color: Colors.blue.shade50,
+                          child: Icon(
+                            Icons.broken_image_rounded,
+                            color: Colors.blue.shade200,
+                          ),
+                        );
+                      },
+                ),
               ),
               title: Text(
                 article.title,
