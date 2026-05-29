@@ -12,9 +12,15 @@ class SettingsService {
     await prefs.setInt(storage_keys.conclusionUiStyle, style.index);
     // Also save widget_style via home widget service for platform widgets
     const HomeWidgetService homeWidgetService = HomeWidgetServiceImpl();
-    final String widgetStyle = style == ConclusionUiStyle.insight
-        ? 'insight'
-        : 'conclusion';
+    late final String widgetStyle;
+    switch (style) {
+      case ConclusionUiStyle.insight:
+        widgetStyle = 'insight';
+      case ConclusionUiStyle.conclusion:
+        widgetStyle = 'conclusion';
+      case ConclusionUiStyle.summary:
+        widgetStyle = 'summary';
+    }
     await homeWidgetService.setWidgetStyle(widgetStyle);
   }
 

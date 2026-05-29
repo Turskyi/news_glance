@@ -83,6 +83,34 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<SummaryResponse> getNewsSummary(ConclusionRequest news) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(news.toJson());
+    final _options = _setStreamType<SummaryResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+        _dio.options,
+        'news-summary',
+        queryParameters: queryParameters,
+        data: _data,
+      )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, Object?>>(_options);
+    late SummaryResponse _value;
+    try {
+      _value = SummaryResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ConclusionResponse> getNewsConclusion(ConclusionRequest news) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

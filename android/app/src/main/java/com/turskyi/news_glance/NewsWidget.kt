@@ -98,8 +98,11 @@ internal fun updateAppWidget(
     val widgetStyle: String? =
         widgetData.getString("widget_style", "insight")
 
-    val layoutRes =
-        if (widgetStyle == "conclusion") R.layout.news_widget_conclusion else R.layout.news_widget
+    val layoutRes = when (widgetStyle) {
+        "conclusion" -> R.layout.news_widget_conclusion
+        "summary" -> R.layout.news_widget_summary
+        else -> R.layout.news_widget
+    }
 
     val views: RemoteViews = RemoteViews(context.packageName, layoutRes).apply {
         // Open App on Widget Click
@@ -140,6 +143,61 @@ internal fun updateAppWidget(
                 "News Glance\nfrom $formattedDateConclusion"
             setTextViewText(R.id.widget_timestamp, timestampTextConclusion)
             setTextColor(R.id.widget_timestamp, Color.WHITE)
+
+        } else if (widgetStyle == "summary") {
+            val summary: String? =
+                widgetData.getString("signal_conclusion", null)
+            val locale = widgetData.getString("locale", "en") ?: "en"
+
+            // Localize Summary header
+            val headerText =
+                if (locale.startsWith("uk")) "👋 ПІДСУМОК" else "👋 SUMMARY"
+            setTextViewText(R.id.summary_header, headerText)
+
+            if (summary != null) {
+                val lines = summary.split("\n")
+                var title: String? = null
+                val bodyLines = mutableListOf<String>()
+
+                for (line in lines) {
+                    if (line.startsWith("## ")) {
+                        title = line.replace("## ", "").trim()
+                    } else if (line.isNotBlank() || bodyLines.isNotEmpty()) {
+                        bodyLines.add(line)
+                    }
+                }
+
+                if (title != null) {
+                    setTextViewText(R.id.headline_title, title)
+                    setViewVisibility(
+                        R.id.headline_title,
+                        android.view.View.VISIBLE
+                    )
+                } else {
+                    setViewVisibility(
+                        R.id.headline_title,
+                        android.view.View.GONE
+                    )
+                }
+
+                setTextViewText(
+                    R.id.headline_description,
+                    bodyLines.joinToString("\n").trim()
+                )
+            } else {
+                setTextViewText(
+                    R.id.headline_description,
+                    "No summary available"
+                )
+                setViewVisibility(R.id.headline_title, android.view.View.GONE)
+            }
+
+            // branding footer (summary layout)
+            val dateFormat =
+                SimpleDateFormat("HH:mm", Locale.getDefault())
+            val formattedDate = dateFormat.format(Date())
+            val timestampText = "News Glance • $formattedDate"
+            setTextViewText(R.id.widget_timestamp, timestampText)
 
         } else {
             val signalLevel: String? =

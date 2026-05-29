@@ -36,6 +36,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   int? _lastNewsHash;
   ActionableInsight? _cachedActionableInsight;
   String? _cachedConclusionText;
+  String? _cachedSummaryText;
 
   FutureOr<void> _loadNews(LoadNewsEvent event, Emitter<NewsState> emit) async {
     debugPrint('NewsBloc: [_loadNews] triggered');
@@ -81,9 +82,26 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           );
           _cachedConclusionText = conclusionText;
           _cachedActionableInsight = null;
+          _cachedSummaryText = null;
 
           insight = ActionableInsight(
             conclusion: conclusionText,
+            level: ActionableInsightLevel.neutral,
+            probability: 0.0,
+            category: InsightCategory.general,
+          );
+        } else if (style.isSummary) {
+          debugPrint('NewsBloc: [_loadNews] calling getNewsSummary');
+          final String summaryText = await _newsRepository.getNewsSummary(
+            news,
+            lang: locale.languageCode,
+          );
+          _cachedSummaryText = summaryText;
+          _cachedConclusionText = null;
+          _cachedActionableInsight = null;
+
+          insight = ActionableInsight(
+            conclusion: summaryText,
             level: ActionableInsightLevel.neutral,
             probability: 0.0,
             category: InsightCategory.general,
@@ -96,6 +114,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           );
           _cachedActionableInsight = insight;
           _cachedConclusionText = null;
+          _cachedSummaryText = null;
         }
 
         final int checksum = computeNewsHash(news);
@@ -106,6 +125,10 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           final String? ct = _cachedConclusionText;
           if (ct != null) {
             await prefs.setString(storage_keys.aiCacheConclusion(checksum), ct);
+          }
+          final String? st = _cachedSummaryText;
+          if (st != null) {
+            await prefs.setString(storage_keys.aiCacheSummary(checksum), st);
           }
           final ActionableInsight? ci = _cachedActionableInsight;
           if (ci != null) {
@@ -182,6 +205,18 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           return;
         }
 
+        final String? summaryText = _cachedSummaryText;
+        if (event.style == ConclusionUiStyle.summary && summaryText != null) {
+          final ActionableInsight cached = ActionableInsight(
+            conclusion: summaryText,
+            level: ActionableInsightLevel.neutral,
+            probability: 0.0,
+            category: InsightCategory.general,
+          );
+          emit(LoadedConclusionState(news: current.news, insight: cached));
+          return;
+        }
+
         final ActionableInsight? cachedInsight = _cachedActionableInsight;
         if (event.style == ConclusionUiStyle.insight && cachedInsight != null) {
           emit(
@@ -200,6 +235,22 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           );
           if (stored != null && stored.isNotEmpty) {
             _cachedConclusionText = stored;
+            _lastNewsHash = checksum;
+            final ActionableInsight cached = ActionableInsight(
+              conclusion: stored,
+              level: ActionableInsightLevel.neutral,
+              probability: 0.0,
+              category: InsightCategory.general,
+            );
+            emit(LoadedConclusionState(news: current.news, insight: cached));
+            return;
+          }
+        } else if (event.style.isSummary) {
+          final String? stored = prefs.getString(
+            storage_keys.aiCacheSummary(checksum),
+          );
+          if (stored != null && stored.isNotEmpty) {
+            _cachedSummaryText = stored;
             _lastNewsHash = checksum;
             final ActionableInsight cached = ActionableInsight(
               conclusion: stored,
@@ -253,6 +304,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           );
           _cachedConclusionText = conclusionText;
           _cachedActionableInsight = null;
+          _cachedSummaryText = null;
           _lastNewsHash = checksum;
 
           // persist
@@ -273,11 +325,40 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           );
 
           emit(LoadedConclusionState(news: current.news, insight: insight));
+        } else if (event.style.isSummary) {
+          final String summaryText = await _newsRepository.getNewsSummary(
+            articles,
+            lang: lang,
+          );
+          _cachedSummaryText = summaryText;
+          _cachedConclusionText = null;
+          _cachedActionableInsight = null;
+          _lastNewsHash = checksum;
+
+          // persist
+          try {
+            final SharedPreferences prefs =
+                await SharedPreferences.getInstance();
+            await prefs.setString(
+              storage_keys.aiCacheSummary(checksum),
+              summaryText,
+            );
+          } catch (_) {}
+
+          final ActionableInsight insight = ActionableInsight(
+            conclusion: summaryText,
+            level: ActionableInsightLevel.neutral,
+            probability: 0.0,
+            category: InsightCategory.general,
+          );
+
+          emit(LoadedConclusionState(news: current.news, insight: insight));
         } else {
           final ActionableInsight insight = await _newsRepository
               .getActionableInsight(articles, lang: lang);
           _cachedActionableInsight = insight;
           _cachedConclusionText = null;
+          _cachedSummaryText = null;
           _lastNewsHash = checksum;
 
           // persist

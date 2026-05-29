@@ -242,6 +242,18 @@ abstract class AppLocalizations {
   /// **'Conclusion'**
   String get conclusion;
 
+  /// No description provided for @summary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get summary;
+
+  /// No description provided for @conversationalSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversational Summary'**
+  String get conversationalSummary;
+
   /// No description provided for @usingInsight.
   ///
   /// In en, this message translates to:
@@ -253,6 +265,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Using Conclusion'**
   String get usingConclusion;
+
+  /// No description provided for @usingSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Using Summary'**
+  String get usingSummary;
 
   /// No description provided for @every4Hours.
   ///

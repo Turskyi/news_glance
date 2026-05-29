@@ -18,4 +18,6 @@ abstract interface class NewsRepository {
     Iterable<NewsArticle> articles, {
     String? lang,
   });
+
+  Future<String> getNewsSummary(Iterable<NewsArticle> articles, {String? lang});
 }

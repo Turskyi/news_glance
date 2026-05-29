@@ -20,7 +20,8 @@ struct Provider: TimelineProvider {
             conclusion: "A concise summary of the most significant events happening around the world today.",
             probability: 0,
             category: "GENERAL",
-            style: "insight"
+            style: "insight",
+            locale: "en"
         )
     }
 
@@ -33,10 +34,10 @@ struct Provider: TimelineProvider {
             // Get the data from the user defaults to display
             let userDefaults = UserDefaults(suiteName: appGroupIdentifier)
             let widgetStyle = userDefaults?.string(forKey: "widget_style") ?? "insight"
-            let styleValue = userDefaults?.string(forKey: "widget_style") ?? "insight"
-            if styleValue == "conclusion" {
+            let locale = userDefaults?.string(forKey: "locale") ?? "en"
+
+            if widgetStyle == "conclusion" {
                 // Legacy "conclusion" style uses headline_title / headline_description
-                let title = userDefaults?.string(forKey: "headline_title") ?? ""
                 let desc = userDefaults?.string(forKey: "headline_description") ?? userDefaults?.string(forKey: "signal_conclusion") ?? "No insight available"
                 entry = SignalEntry(
                     date: Date(),
@@ -44,7 +45,19 @@ struct Provider: TimelineProvider {
                     conclusion: desc,
                     probability: 0,
                     category: "GENERAL",
-                    style: "conclusion"
+                    style: "conclusion",
+                    locale: locale
+                )
+            } else if widgetStyle == "summary" {
+                let summary = userDefaults?.string(forKey: "signal_conclusion") ?? "No summary available"
+                entry = SignalEntry(
+                    date: Date(),
+                    level: "NEUTRAL",
+                    conclusion: summary,
+                    probability: 0,
+                    category: "GENERAL",
+                    style: "summary",
+                    locale: locale
                 )
             } else {
                 let level = userDefaults?.string(forKey: "signal_level") ?? "NEUTRAL"
@@ -57,7 +70,8 @@ struct Provider: TimelineProvider {
                     conclusion: conclusion,
                     probability: probability,
                     category: category,
-                    style: "insight"
+                    style: "insight",
+                    locale: locale
                 )
             }
         }
@@ -164,10 +178,6 @@ struct NewsWidgetsEntryView: View {
                     endPoint: .bottomTrailing
                 )
 
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.windowBackgroundColor))
-                    .opacity(0)
-
                 VStack(alignment: .leading, spacing: 0) {
                     // Description fills most of the space
                     Text(entry.conclusion)
@@ -196,7 +206,57 @@ struct NewsWidgetsEntryView: View {
                         .padding(8)
                 }
             }
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        } else if entry.style == "summary" {
+            ZStack {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color(red: 0.10, green: 0.10, blue: 0.12),
+                        Color(red: 0.05, green: 0.05, blue: 0.06)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(entry.locale.hasPrefix("uk") ? "👋 Підсумок" : "👋 Summary")
+                            .font(.system(size: 11, weight: .black))
+                            .foregroundColor(.white.opacity(0.6))
+                            .tracking(1.2)
+                            .textCase(.uppercase)
+                        Spacer()
+                    }
+
+                    let (header, content) = parseMarkdown(entry.conclusion)
+
+                    if let header = header {
+                        Text(header)
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+
+                    Text(content)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.white.opacity(0.9))
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.leading)
+
+                    Spacer(minLength: 4)
+
+                    HStack {
+                        let dateFormatter: DateFormatter = {
+                            let formatter = DateFormatter()
+                            formatter.dateFormat = "HH:mm"
+                            return formatter
+                        }()
+                        Text("News Glance • \(dateFormatter.string(from: entry.date))")
+                            .font(.system(size: 8, weight: .bold))
+                            .foregroundColor(.white.opacity(0.35))
+                        Spacer()
+                    }
+                }
+                .padding(14)
+            }
         } else {
             // Default (insight) style
             let style = getSignalStyle(entry.level)
@@ -321,10 +381,10 @@ struct NewsWidgets: Widget {
 #Preview(as: .systemMedium) {
     NewsWidgets()
 } timeline: {
-    SignalEntry(date: .now, level: "CRITICAL", conclusion: "Market volatility alert: Major indices showing sharp declines", probability: 92, category: "FINANCE", style: "insight")
-    SignalEntry(date: .now, level: "WARNING", conclusion: "Flight delays reported at major airports due to weather", probability: 78, category: "TRAVEL", style: "insight")
-    SignalEntry(date: .now, level: "ADVISORY", conclusion: "Tech sector showing recovery, consider taking positions", probability: 65, category: "FINANCE", style: "insight")
-    SignalEntry(date: .now, level: "NEUTRAL", conclusion: "Markets stable, no immediate action required today", probability: 0, category: "GENERAL", style: "insight")
+    SignalEntry(date: .now, level: "CRITICAL", conclusion: "Market volatility alert: Major indices showing sharp declines", probability: 92, category: "FINANCE", style: "insight", locale: "en")
+    SignalEntry(date: .now, level: "WARNING", conclusion: "Flight delays reported at major airports due to weather", probability: 78, category: "TRAVEL", style: "insight", locale: "en")
+    SignalEntry(date: .now, level: "ADVISORY", conclusion: "Tech sector showing recovery, consider taking positions", probability: 65, category: "FINANCE", style: "insight", locale: "en")
+    SignalEntry(date: .now, level: "NEUTRAL", conclusion: "## The Vibe Check\nMarkets stable, no immediate action required today", probability: 0, category: "GENERAL", style: "summary", locale: "en")
 }
 
 // MARK: - Entry Model
@@ -335,4 +395,22 @@ struct SignalEntry: TimelineEntry {
     let probability: Int
     let category: String
     let style: String
+    let locale: String
 }
+
+func parseMarkdown(_ markdown: String) -> (String?, String) {
+    let lines = markdown.components(separatedBy: .newlines)
+    var header: String?
+    var contentLines: [String] = []
+
+    for line in lines {
+        if line.hasPrefix("## ") {
+            header = line.replacingOccurrences(of: "## ", with: "")
+        } else if !line.isEmpty || !contentLines.isEmpty {
+            contentLines.append(line)
+        }
+    }
+
+    return (header, contentLines.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines))
+}
+

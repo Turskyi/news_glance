@@ -83,10 +83,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get conclusion => 'Висновок';
 
   @override
+  String get summary => 'Підсумок';
+
+  @override
+  String get conversationalSummary => 'Дружній огляд';
+
+  @override
   String get usingInsight => 'Використовується розуміння';
 
   @override
   String get usingConclusion => 'Використовується висновок';
+
+  @override
+  String get usingSummary => 'Використовується підсумок';
 
   @override
   String get every4Hours => 'Кожні 4 години';

@@ -18,7 +18,8 @@ struct Provider: TimelineProvider {
             conclusion: "Placeholder description",
             probability: 0,
             category: "GENERAL",
-            style: "insight"
+            style: "insight",
+            locale: "en"
         )
     }
     
@@ -30,9 +31,9 @@ struct Provider: TimelineProvider {
         } else {
             let userDefaults = UserDefaults(suiteName: "group.dmytrowidget")
             let widgetStyle = userDefaults?.string(forKey: "widget_style") ?? "insight"
-            let styleValue = userDefaults?.string(forKey: "widget_style") ?? "insight"
-            if styleValue == "conclusion" {
-                let title = userDefaults?.string(forKey: "headline_title") ?? ""
+            let locale = userDefaults?.string(forKey: "locale") ?? "en"
+
+            if widgetStyle == "conclusion" {
                 let desc = userDefaults?.string(forKey: "headline_description") ?? userDefaults?.string(forKey: "signal_conclusion") ?? "No insight available"
                 entry = SignalEntry(
                     date: Date(),
@@ -40,7 +41,19 @@ struct Provider: TimelineProvider {
                     conclusion: desc,
                     probability: 0,
                     category: "GENERAL",
-                    style: "conclusion"
+                    style: "conclusion",
+                    locale: locale
+                )
+            } else if widgetStyle == "summary" {
+                let summary = userDefaults?.string(forKey: "signal_conclusion") ?? "No summary available"
+                entry = SignalEntry(
+                    date: Date(),
+                    level: "NEUTRAL",
+                    conclusion: summary,
+                    probability: 0,
+                    category: "GENERAL",
+                    style: "summary",
+                    locale: locale
                 )
             } else {
                 let level = userDefaults?.string(forKey: "signal_level") ?? "NEUTRAL"
@@ -53,7 +66,8 @@ struct Provider: TimelineProvider {
                     conclusion: conclusion,
                     probability: probability,
                     category: category,
-                    style: "insight"
+                    style: "insight",
+                    locale: locale
                 )
             }
         }
@@ -136,10 +150,6 @@ struct NewsWidgetsEntryView : View {
                     endPoint: .bottomTrailing
                 )
 
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemBackground))
-                    .opacity(0)
-
                 VStack(alignment: .leading, spacing: 0) {
                     // Description fills most of the space
                     Text(entry.conclusion)
@@ -168,7 +178,47 @@ struct NewsWidgetsEntryView : View {
                         .padding(10)
                 }
             }
-            .padding()
+        } else if entry.style == "summary" {
+            ZStack {
+                // Background with a subtle gradient and a darker shade
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color(red: 0.10, green: 0.10, blue: 0.12),
+                        Color(red: 0.05, green: 0.05, blue: 0.06)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text(entry.locale.hasPrefix("uk") ? "👋 Підсумок" : "👋 Summary")
+                            .font(.system(size: 11, weight: .black))
+                            .foregroundColor(.white.opacity(0.6))
+                            .tracking(1.2)
+                            .textCase(.uppercase)
+                        Spacer()
+                    }
+
+                    Markdown(entry.conclusion)
+                        .markdownTheme(.summaryTheme)
+
+                    Spacer(minLength: 4)
+
+                    HStack {
+                        let dateFormatter: DateFormatter = {
+                            let formatter = DateFormatter()
+                            formatter.dateFormat = "HH:mm"
+                            return formatter
+                        }()
+                        Text("News Glance • \(dateFormatter.string(from: entry.date))")
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundColor(.white.opacity(0.35))
+                        Spacer()
+                    }
+                }
+                .padding(14)
+            }
         } else {
             // Insight style (existing)
             let style = getSignalStyle(entry.level)
@@ -275,9 +325,9 @@ struct NewsWidgets: Widget {
 #Preview(as: .systemSmall) {
     NewsWidgets()
 } timeline: {
-    SignalEntry(date: .now, level: "CRITICAL", conclusion: "Urgent: Market volatility alert", probability: 92, category: "FINANCE", style: "insight")
-    SignalEntry(date: .now, level: "ADVISORY", conclusion: "Flight delays reported at major airports", probability: 75, category: "TRAVEL", style: "insight")
-    SignalEntry(date: .now, level: "NEUTRAL", conclusion: "Markets stable, no immediate action needed", probability: 0, category: "GENERAL", style: "insight")
+    SignalEntry(date: .now, level: "CRITICAL", conclusion: "Urgent: Market volatility alert", probability: 92, category: "FINANCE", style: "insight", locale: "en")
+    SignalEntry(date: .now, level: "ADVISORY", conclusion: "Flight delays reported at major airports", probability: 75, category: "TRAVEL", style: "insight", locale: "en")
+    SignalEntry(date: .now, level: "NEUTRAL", conclusion: "## The Vibe Check\nMarkets stable, no immediate action needed", probability: 0, category: "GENERAL", style: "summary", locale: "en")
 }
 
 // Signal entry with structured data
@@ -288,4 +338,20 @@ struct SignalEntry: TimelineEntry {
     let probability: Int
     let category: String
     let style: String
+    let locale: String
+}
+
+extension Theme {
+    static let summaryTheme = Theme()
+    .text {
+        ForegroundColor(.white.opacity(0.9))
+        FontSize(13)
+    }
+    .heading2 { configuration in
+        configuration.label
+            .font(.system(size: 14, weight: .bold))
+            .foregroundColor(.white)
+            .padding(.top, 4)
+            .padding(.bottom, 2)
+    }
 }

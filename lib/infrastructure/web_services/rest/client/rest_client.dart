@@ -3,6 +3,7 @@ import 'package:news_glance/infrastructure/web_services/models/actionable_insigh
 import 'package:news_glance/infrastructure/web_services/models/conclusion_request/conclusion_request.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_response/conclusion_response.dart';
 import 'package:news_glance/infrastructure/web_services/models/news_article_response/news_article_response.dart';
+import 'package:news_glance/infrastructure/web_services/models/summary_response/summary_response.dart';
 import 'package:news_glance/res/constants.dart' as country;
 import 'package:retrofit/retrofit.dart';
 
@@ -21,6 +22,9 @@ abstract class RestClient {
   Future<ActionableInsightResponse> getActionableInsight(
     @Body() ConclusionRequest news,
   );
+
+  @POST('news-summary')
+  Future<SummaryResponse> getNewsSummary(@Body() ConclusionRequest news);
 
   @POST('news-conclusion')
   Future<ConclusionResponse> getNewsConclusion(@Body() ConclusionRequest news);

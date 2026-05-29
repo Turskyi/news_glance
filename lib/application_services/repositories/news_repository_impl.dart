@@ -9,6 +9,7 @@ import 'package:news_glance/infrastructure/web_services/models/conclusion_reques
 import 'package:news_glance/infrastructure/web_services/models/conclusion_request/conclusion_request.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_response/conclusion_response.dart';
 import 'package:news_glance/infrastructure/web_services/models/news_article_response/news_article_response.dart';
+import 'package:news_glance/infrastructure/web_services/models/summary_response/summary_response.dart';
 import 'package:news_glance/infrastructure/web_services/rest/client/rest_client.dart';
 import 'package:news_glance/res/constants.dart' as constants;
 
@@ -100,6 +101,41 @@ class NewsRepositoryImpl implements NewsRepository {
         _buildConclusionRequest(articles, lang: lang),
       );
       return response.conclusion;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400) {
+        final Object? errorData = e.response?.data;
+
+        if (errorData is Map<String, Object?>? &&
+            errorData != null &&
+            errorData.containsKey('error')) {
+          final Object? errorMessage = errorData['error'];
+
+          if (errorMessage is String) {
+            throw BadRequestException(errorMessage);
+          }
+        }
+        throw Exception(
+          'Bad request: Server returned a 400 status code, '
+          'but the error message is not in the expected format.',
+        );
+      } else {
+        throw Exception('An error occurred: ${e.message}');
+      }
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  @override
+  Future<String> getNewsSummary(
+    Iterable<NewsArticle> articles, {
+    String? lang,
+  }) async {
+    try {
+      final SummaryResponse response = await _restClient.getNewsSummary(
+        _buildConclusionRequest(articles, lang: lang),
+      );
+      return response.summary;
     } on DioException catch (e) {
       if (e.response?.statusCode == 400) {
         final Object? errorData = e.response?.data;

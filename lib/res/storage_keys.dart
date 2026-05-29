@@ -30,3 +30,7 @@ String aiCacheInsightProbability(int checksum) {
 String aiCacheInsightCategory(int checksum) {
   return 'ai_cache_${checksum}_insight_category';
 }
+
+String aiCacheSummary(int checksum) {
+  return 'ai_cache_${checksum}_summary';
+}

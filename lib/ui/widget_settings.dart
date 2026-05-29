@@ -93,12 +93,21 @@ class _WidgetSettingsState extends State<WidgetSettings> {
       } catch (_) {}
 
       if (mounted) {
+        late final String label;
+        switch (selection) {
+          case 0:
+            label = l10n.usingInsight;
+          case 1:
+            label = l10n.usingConclusion;
+          case 2:
+            label = l10n.usingSummary;
+          default:
+            label = '';
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              selection == 0 ? l10n.usingInsight : l10n.usingConclusion,
-              style: const TextStyle(color: Colors.white),
-            ),
+            content: Text(label, style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 2),
           ),
@@ -238,6 +247,13 @@ class _WidgetSettingsState extends State<WidgetSettings> {
                   RadioListTile<int>(
                     title: Text(l10n.conclusion),
                     value: 1,
+                    enabled: !_isSaving,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  ),
+                  RadioListTile<int>(
+                    title: Text(l10n.summary),
+                    value: 2,
                     enabled: !_isSaving,
                     controlAffinity: ListTileControlAffinity.leading,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),

@@ -4,6 +4,7 @@ import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
+import 'package:news_glance/ui/conversational_summary_card.dart';
 import 'package:news_glance/ui/end_drawer.dart';
 import 'package:news_glance/ui/news_article_list.dart';
 import 'package:news_glance/ui/news_conclusion_section.dart';
@@ -90,22 +91,27 @@ class HomePage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 10),
                             BlocBuilder<SettingsBloc, SettingsState>(
                               builder: (BuildContext _, SettingsState s) {
                                 final ConclusionUiStyle style = s.style;
-                                if (style.isConclusion) {
-                                  return state is LoadedConclusionState
-                                      ? NewsConclusionSection(
-                                          conclusion: state.insight.conclusion,
-                                          textColor: Colors.white,
-                                        )
-                                      : const SizedBox.shrink();
-                                } else {
-                                  return state is LoadedConclusionState
-                                      ? SignalCard(insight: state.insight)
-                                      : const SizedBox.shrink();
+                                if (state is! LoadedConclusionState) {
+                                  return const SizedBox.shrink();
                                 }
+
+                                return switch (style) {
+                                  ConclusionUiStyle.conclusion =>
+                                    NewsConclusionSection(
+                                      conclusion: state.insight.conclusion,
+                                      textColor: Colors.white,
+                                    ),
+                                  ConclusionUiStyle.insight => SignalCard(
+                                    insight: state.insight,
+                                  ),
+                                  ConclusionUiStyle.summary =>
+                                    ConversationalSummaryCard(
+                                      summary: state.insight.conclusion,
+                                    ),
+                                };
                               },
                             ),
                           ],

@@ -83,10 +83,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get conclusion => 'Conclusion';
 
   @override
+  String get summary => 'Summary';
+
+  @override
+  String get conversationalSummary => 'Conversational Summary';
+
+  @override
   String get usingInsight => 'Using Insight';
 
   @override
   String get usingConclusion => 'Using Conclusion';
+
+  @override
+  String get usingSummary => 'Using Summary';
 
   @override
   String get every4Hours => 'Every 4 hours';
