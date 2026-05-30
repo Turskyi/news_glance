@@ -59,6 +59,7 @@ dependencies:
   meta: any
   nested: ^1.0.0
   retrofit: ^4.9.2
+  share_plus: ^13.1.0
   shared_preferences: ^2.5.5
   url_launcher: ^6.3.2
   webview_flutter: ^4.13.1

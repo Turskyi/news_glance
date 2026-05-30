@@ -44,5 +44,8 @@
   "readMore": "Read More",
   "readAloud": "Read Aloud",
   "close": "Close",
-  "source": "Source"
+  "source": "Source",
+  "shareBriefing": "Share briefing",
+  "briefingShared": "Briefing shared",
+  "briefingCopiedToClipboard": "Briefing copied to clipboard"
 }

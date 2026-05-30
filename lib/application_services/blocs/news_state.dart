@@ -39,6 +39,16 @@ class LoadedConclusionState extends LoadedNewsState {
   final ActionableInsight insight;
 }
 
+final class BriefingSharingSuccess extends LoadedConclusionState {
+  const BriefingSharingSuccess({
+    required super.news,
+    required super.insight,
+    required this.result,
+  });
+
+  final SharingResult result;
+}
+
 final class ErrorState extends NewsState {
   const ErrorState({this.errorMessage = 'Something went wrong'});
 

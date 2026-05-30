@@ -325,6 +325,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Source'**
   String get source;
+
+  /// No description provided for @shareBriefing.
+  ///
+  /// In en, this message translates to:
+  /// **'Share briefing'**
+  String get shareBriefing;
+
+  /// No description provided for @briefingShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Briefing shared'**
+  String get briefingShared;
+
+  /// No description provided for @briefingCopiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Briefing copied to clipboard'**
+  String get briefingCopiedToClipboard;
 }
 
 class _AppLocalizationsDelegate

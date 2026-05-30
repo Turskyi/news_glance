@@ -125,4 +125,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get source => 'Source';
+
+  @override
+  String get shareBriefing => 'Share briefing';
+
+  @override
+  String get briefingShared => 'Briefing shared';
+
+  @override
+  String get briefingCopiedToClipboard => 'Briefing copied to clipboard';
 }

@@ -12,6 +12,7 @@ import 'package:news_glance/domain_models/bad_request_exception.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
+import 'package:news_glance/domain_services/sharing_service.dart';
 import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/actionable_insight_level.dart';
 import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/insight_category.dart';
 import 'package:news_glance/res/constants.dart' as constants;
@@ -25,12 +26,15 @@ part 'news_state.dart';
 
 @injectable
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
-  NewsBloc(this._newsRepository) : super(const LoadingNewsState()) {
+  NewsBloc(this._newsRepository, this._sharingService)
+    : super(const LoadingNewsState()) {
     on<LoadNewsEvent>(_loadNews, transformer: sequential());
     on<RegenerateInsightEvent>(_regenerateInsight, transformer: restartable());
+    on<ShareBriefingEvent>(_shareBriefing);
   }
 
   final NewsRepository _newsRepository;
+  final SharingService _sharingService;
 
   // Caches keyed by the last news checksum — avoid regenerating if same news
   int? _lastNewsHash;
@@ -400,5 +404,37 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
     // If news not loaded, trigger a full load
     add(const LoadNewsEvent());
+  }
+
+  FutureOr<void> _shareBriefing(
+    ShareBriefingEvent event,
+    Emitter<NewsState> emit,
+  ) async {
+    final NewsState current = state;
+    if (current is LoadedConclusionState) {
+      final SharingResult result = await _sharingService.shareBriefing(
+        event.text,
+      );
+
+      switch (result) {
+        case SharingResult.shared:
+        case SharingResult.copiedToClipboard:
+          emit(
+            BriefingSharingSuccess(
+              news: current.news,
+              insight: current.insight,
+              result: result,
+            ),
+          );
+        case SharingResult.failed:
+          break;
+      }
+
+      // Re-emit the original state to clear the feedback state.
+      // Usually, side effects like SnackBars are better handled with a Stream
+      // or a specific action. But if we use state, we might want to revert it
+      // so the listener doesn't trigger again on rebuild.
+      emit(LoadedConclusionState(news: current.news, insight: current.insight));
+    }
   }
 }

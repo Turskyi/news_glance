@@ -14,8 +14,11 @@ import 'package:injectable/injectable.dart' as _i526;
 import 'package:news_glance/application_services/blocs/news_bloc.dart' as _i347;
 import 'package:news_glance/application_services/repositories/news_repository_impl.dart'
     as _i491;
+import 'package:news_glance/application_services/sharing_service_impl.dart'
+    as _i300;
 import 'package:news_glance/di/rest_client_module.dart' as _i108;
 import 'package:news_glance/domain_services/news_repository.dart' as _i875;
+import 'package:news_glance/domain_services/sharing_service.dart' as _i200;
 import 'package:news_glance/infrastructure/web_services/rest/client/rest_client.dart'
     as _i979;
 import 'package:news_glance/infrastructure/web_services/rest/logging_interceptor.dart'
@@ -38,8 +41,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i875.NewsRepository>(
       () => _i491.NewsRepositoryImpl(gh<_i979.RestClient>()),
     );
+    gh.lazySingleton<_i200.SharingService>(() => _i300.SharingServiceImpl());
     gh.factory<_i347.NewsBloc>(
-      () => _i347.NewsBloc(gh<_i875.NewsRepository>()),
+      () => _i347.NewsBloc(
+        gh<_i875.NewsRepository>(),
+        gh<_i200.SharingService>(),
+      ),
     );
     return this;
   }

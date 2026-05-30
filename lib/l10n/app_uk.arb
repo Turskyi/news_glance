@@ -44,5 +44,8 @@
   "readMore": "Читати далі",
   "readAloud": "Читати вголос",
   "close": "Закрити",
-  "source": "Джерело"
+  "source": "Джерело",
+  "shareBriefing": "Поділитися брифінгом",
+  "briefingShared": "Брифінг надіслано",
+  "briefingCopiedToClipboard": "Брифінг скопійовано"
 }

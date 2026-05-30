@@ -125,4 +125,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get source => 'Джерело';
+
+  @override
+  String get shareBriefing => 'Поділитися брифінгом';
+
+  @override
+  String get briefingShared => 'Брифінг надіслано';
+
+  @override
+  String get briefingCopiedToClipboard => 'Брифінг скопійовано';
 }

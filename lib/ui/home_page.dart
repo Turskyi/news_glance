@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
+import 'package:news_glance/domain_services/sharing_service.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/ui/conversational_summary_card.dart';
 import 'package:news_glance/ui/end_drawer.dart';
@@ -159,9 +160,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _blocListener(BuildContext context, NewsState state) {
+    final AppLocalizations? l10n = AppLocalizations.of(context);
     if (state is NewsConclusionError) {
       _showErrorSnackBar(context: context, errorMessage: state.errorMessage);
+    } else if (state is BriefingSharingSuccess && l10n != null) {
+      final String message = state.result == SharingResult.shared
+          ? l10n.briefingShared
+          : l10n.briefingCopiedToClipboard;
+      _showSuccessSnackBar(context: context, message: message);
     }
+  }
+
+  void _showSuccessSnackBar({
+    required BuildContext context,
+    required String message,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+      ),
+    );
   }
 
   void _showErrorSnackBar({

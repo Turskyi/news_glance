@@ -2,8 +2,10 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 
 class ConversationalSummaryCard extends StatelessWidget {
@@ -59,6 +61,13 @@ class ConversationalSummaryCard extends StatelessWidget {
                 icon: const Icon(Icons.volume_up, color: Colors.white),
                 onPressed: () => _speak(context, summary),
                 tooltip: l10n?.readAloud,
+              ),
+              IconButton(
+                icon: const Icon(Icons.share, color: Colors.white),
+                onPressed: () {
+                  context.read<NewsBloc>().add(ShareBriefingEvent(summary));
+                },
+                tooltip: l10n?.shareBriefing ?? 'Share briefing',
               ),
             ],
           ),

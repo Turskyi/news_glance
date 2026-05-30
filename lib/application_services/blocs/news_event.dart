@@ -14,3 +14,9 @@ class RegenerateInsightEvent extends NewsEvent {
 
   final ConclusionUiStyle style;
 }
+
+class ShareBriefingEvent extends NewsEvent {
+  const ShareBriefingEvent(this.text);
+
+  final String text;
+}

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/application_services/settings_service.dart';
 import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
@@ -177,6 +179,15 @@ class SignalCard extends StatelessWidget {
                             ],
                           ],
                         ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.share, color: styles.textColor),
+                        onPressed: () {
+                          context.read<NewsBloc>().add(
+                            ShareBriefingEvent(insight.conclusion),
+                          );
+                        },
+                        tooltip: l10n.shareBriefing,
                       ),
                     ],
                   ),

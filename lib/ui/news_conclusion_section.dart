@@ -2,8 +2,10 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/ui/markdown_preview.dart';
 
@@ -59,21 +61,33 @@ class NewsConclusionSection extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          if (hasOverflow)
+                          if (hasOverflow) ...<Widget>[
                             ElevatedButton(
                               onPressed: () => _showFullConclusionDialog(
                                 context,
                                 conclusion,
                               ),
                               child: Text(l10n.readMore),
-                            )
-                          else
-                            const SizedBox.shrink(),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
                           ElevatedButton(
                             onPressed: () => _speak(context, conclusion),
                             child: Text(l10n.readAloud),
+                          ),
+                          const Spacer(),
+                          Tooltip(
+                            message: l10n.shareBriefing,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                context.read<NewsBloc>().add(
+                                  ShareBriefingEvent(conclusion),
+                                );
+                              },
+                              icon: const Icon(Icons.share, size: 18),
+                              label: Text(l10n.shareBriefing),
+                            ),
                           ),
                         ],
                       ),
