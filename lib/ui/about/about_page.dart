@@ -45,10 +45,7 @@ class _AboutPageState extends State<AboutPage> {
                 ),
                 icon: Container(
                   padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
+                  decoration: const BoxDecoration(shape: BoxShape.circle),
                   child: Image.asset(
                     'assets/images/news_glance_logo.png',
                     fit: BoxFit.contain,
