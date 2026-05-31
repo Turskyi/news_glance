@@ -39,7 +39,7 @@ class AppErrorWidget extends StatelessWidget {
               ),
               const SizedBox(width: 8.0),
               Flexible(
-                child: Text(
+                child: SelectableText(
                   errorMessage,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyLarge?.copyWith(

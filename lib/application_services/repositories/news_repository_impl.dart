@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/bad_request_exception.dart';
@@ -23,21 +24,31 @@ class NewsRepositoryImpl implements NewsRepository {
   Future<List<NewsArticle>> getNews({
     String countryCode = constants.internationalCode,
   }) async {
+    debugPrint('NewsRepositoryImpl: [getNews] started for $countryCode');
     final List<NewsArticle> articles = <NewsArticle>[];
-    final List<NewsArticleResponse> response = await _restClient.getNews(
-      countryCode: countryCode,
-    );
-    for (final NewsArticleResponse article in response) {
-      articles.add(
-        NewsArticle(
-          title: article.title,
-          description: article.description,
-          imageUrl: article.urlToImage,
-          articleText: article.content,
-          urlSource: article.url,
-          publishedAt: DateTime.tryParse(article.publishedAt) ?? DateTime.now(),
-        ),
+    try {
+      final List<NewsArticleResponse> response = await _restClient.getNews(
+        countryCode: countryCode,
       );
+      debugPrint(
+        'NewsRepositoryImpl: [getNews] received ${response.length} articles',
+      );
+      for (final NewsArticleResponse article in response) {
+        articles.add(
+          NewsArticle(
+            title: article.title,
+            description: article.description,
+            imageUrl: article.urlToImage,
+            articleText: article.content,
+            urlSource: article.url,
+            publishedAt:
+                DateTime.tryParse(article.publishedAt) ?? DateTime.now(),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('NewsRepositoryImpl: [getNews] error: $e');
+      rethrow;
     }
     return articles;
   }

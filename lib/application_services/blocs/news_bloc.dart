@@ -28,7 +28,11 @@ part 'news_state.dart';
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   NewsBloc(this._newsRepository, this._sharingService)
     : super(const LoadingNewsState()) {
-    on<LoadNewsEvent>(_loadNews, transformer: sequential());
+    debugPrint('NewsBloc: initialized');
+    on<LoadNewsEvent>((LoadNewsEvent event, Emitter<NewsState> emit) {
+      debugPrint('NewsBloc: [LoadNewsEvent] received');
+      return _loadNews(event, emit);
+    }, transformer: sequential());
     on<RegenerateInsightEvent>(_regenerateInsight, transformer: restartable());
     on<ShareBriefingEvent>(_shareBriefing);
   }

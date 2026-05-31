@@ -17,6 +17,9 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
 
   @override
   Future<void> setAppGroupId(String appGroupId) {
+    if (kIsWeb) {
+      return Future<void>.value();
+    }
     if (Platform.isMacOS) {
       debugPrint(
         'HomeWidgetService setAppGroupId: macOS channel call '
@@ -33,6 +36,9 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
 
   @override
   Future<bool?> saveWidgetData<T>(String id, T? data) {
+    if (kIsWeb) {
+      return Future<bool?>.value(false);
+    }
     if (Platform.isMacOS) {
       debugPrint(
         'HomeWidgetService saveWidgetData: macOS channel call '
@@ -57,6 +63,9 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
     String? iOSName,
     String? qualifiedAndroidName,
   }) {
+    if (kIsWeb) {
+      return Future<bool?>.value(false);
+    }
     if (Platform.isMacOS) {
       debugPrint('HomeWidgetService updateWidget: macOS channel call.');
       return _widgetChannel.invokeMethod<bool>(constants.updateWidgetMethod);
@@ -187,6 +196,9 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
   @override
   Future<int> getWidgetUpdateFrequency() async {
     try {
+      if (kIsWeb) {
+        return constants.defaultWidgetUpdateFrequencyMinutes;
+      }
       if (Platform.isMacOS) {
         final dynamic result = await _widgetChannel
             .invokeMethod<dynamic>('getWidgetData', <String, Object?>{
