@@ -12,13 +12,13 @@ class AboutHeader extends StatelessWidget {
     final AppLocalizations? l10n = AppLocalizations.of(context);
     return Column(
       children: <Widget>[
-        const SizedBox(height: 24),
+        const SizedBox(height: 12),
         Container(
           width: 120,
           height: 120,
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white,
             boxShadow: <BoxShadow>[
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.1),
@@ -27,20 +27,12 @@ class AboutHeader extends StatelessWidget {
               ),
             ],
           ),
-          child: ShaderMask(
-            shaderCallback: (Rect bounds) => const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
-            ).createShader(bounds),
-            child: const Icon(
-              Icons.auto_awesome,
-              size: 60,
-              color: Colors.white,
-            ),
+          child: Image.asset(
+            'assets/images/news_glance_logo.png',
+            fit: BoxFit.contain,
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 12),
         Text(
           appName,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
