@@ -8,6 +8,10 @@
 - **File Structure:** Every class must reside in its own dedicated file.
 - **Member Ordering:** Sort class members in a logical order (Constants, Fields,
   Constructor, Public Methods, Private Methods).
+  - Ensure the **caller is always above the callee**.
+  - Place **public methods above private methods**.
+  - Lifecycle methods should follow their execution order (e.g., `initState`
+    above `build`, and **`dispose` always below `build`**).
 - **Control Flow:** Prefer explicit `else` blocks for clarity.
 - **Comments:** Never remove existing comments.
 - **Safety:** Do not use assertions (`!`) or explicit casting (`as`). Use safe

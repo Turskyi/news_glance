@@ -18,21 +18,13 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
+  final ScrollController _scrollController = ScrollController();
   String _version = '...';
 
   @override
   void initState() {
     super.initState();
     _loadAppVersion();
-  }
-
-  Future<void> _loadAppVersion() async {
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    if (mounted) {
-      setState(() {
-        _version = packageInfo.version;
-      });
-    }
   }
 
   @override
@@ -64,72 +56,102 @@ class _AboutPageState extends State<AboutPage> {
           ),
         ),
         child: SafeArea(
-          child: Center(
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 800),
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                children: <Widget>[
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 100),
-                    child: AboutHeader(appName: appName, version: _version),
-                  ),
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 200),
-                    child: AboutInfoCard(
-                      title: l10n?.whatIsNewsGlance ?? '',
-                      content: l10n?.whatIsNewsGlanceContent ?? '',
+          child: Scrollbar(
+            controller: _scrollController,
+            child: ListView(
+              controller: _scrollController,
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                Center(
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      children: <Widget>[
+                        FadeInUp(
+                          delay: const Duration(milliseconds: 100),
+                          child: AboutHeader(
+                            appName: appName,
+                            version: _version,
+                          ),
+                        ),
+                        FadeInUp(
+                          delay: const Duration(milliseconds: 200),
+                          child: AboutInfoCard(
+                            title: l10n?.whatIsNewsGlance ?? '',
+                            content: l10n?.whatIsNewsGlanceContent ?? '',
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        FadeInUp(
+                          delay: const Duration(milliseconds: 300),
+                          child: AboutInfoCard(
+                            title: l10n?.whyItExists ?? '',
+                            content: l10n?.whyItExistsContent ?? '',
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const FadeInUp(
+                          delay: Duration(milliseconds: 400),
+                          child: HowItWorksSection(),
+                        ),
+                        const SizedBox(height: 16),
+                        const FadeInUp(
+                          delay: Duration(milliseconds: 500),
+                          child: ExampleBriefingCard(),
+                        ),
+                        const SizedBox(height: 24),
+                        const FadeInUp(
+                          delay: Duration(milliseconds: 600),
+                          child: KeyFeaturesSection(),
+                        ),
+                        const SizedBox(height: 24),
+                        FadeInUp(
+                          delay: const Duration(milliseconds: 700),
+                          child: AboutInfoCard(
+                            title: l10n?.transparency ?? '',
+                            content: l10n?.transparencyContent ?? '',
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        FadeInUp(
+                          delay: const Duration(milliseconds: 800),
+                          child: AboutInfoCard(
+                            title: l10n?.privacy ?? '',
+                            content: l10n?.privacyContent ?? '',
+                          ),
+                        ),
+                        FadeInUp(
+                          delay: const Duration(milliseconds: 900),
+                          child: AboutFooter(
+                            appName: appName,
+                            version: _version,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 300),
-                    child: AboutInfoCard(
-                      title: l10n?.whyItExists ?? '',
-                      content: l10n?.whyItExistsContent ?? '',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const FadeInUp(
-                    delay: Duration(milliseconds: 400),
-                    child: HowItWorksSection(),
-                  ),
-                  const SizedBox(height: 16),
-                  const FadeInUp(
-                    delay: Duration(milliseconds: 500),
-                    child: ExampleBriefingCard(),
-                  ),
-                  const SizedBox(height: 24),
-                  const FadeInUp(
-                    delay: Duration(milliseconds: 600),
-                    child: KeyFeaturesSection(),
-                  ),
-                  const SizedBox(height: 24),
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 700),
-                    child: AboutInfoCard(
-                      title: l10n?.transparency ?? '',
-                      content: l10n?.transparencyContent ?? '',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 800),
-                    child: AboutInfoCard(
-                      title: l10n?.privacy ?? '',
-                      content: l10n?.privacyContent ?? '',
-                    ),
-                  ),
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 900),
-                    child: AboutFooter(appName: appName, version: _version),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadAppVersion() async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    if (mounted) {
+      setState(() {
+        _version = packageInfo.version;
+      });
+    }
   }
 }
