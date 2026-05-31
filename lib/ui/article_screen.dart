@@ -59,14 +59,13 @@ class _ArticleScreenState extends State<ArticleScreen> {
         _controller = controller;
       }
     }
-    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     // Extract the arguments from the current ModalRoute settings.
     final Object? args = ModalRoute.of(context)?.settings.arguments;
-    String link = args is NewsArticle ? args.urlSource : '';
+    final String link = args is NewsArticle ? args.urlSource : '';
     final AppLocalizations? l10n = AppLocalizations.of(context);
 
     if (l10n == null) {
@@ -74,6 +73,16 @@ class _ArticleScreenState extends State<ArticleScreen> {
     }
 
     final WebViewController? controller = _controller;
+
+    final VoidCallback? onUrlTap = link.isEmpty
+        ? null
+        : () {
+            Navigator.pushNamed(
+              context,
+              AppRoute.articleWeb.path,
+              arguments: args,
+            );
+          };
 
     return DecoratedBox(
       decoration: const BoxDecoration(
@@ -128,15 +137,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                     Text(args is NewsArticle ? args.articleText : ''),
                     const SizedBox(height: 16.0),
                     GestureDetector(
-                      onTap: link.isEmpty
-                          ? null
-                          : () {
-                              Navigator.pushNamed(
-                                context,
-                                AppRoute.articleWeb.path,
-                                arguments: args,
-                              );
-                            },
+                      onTap: onUrlTap,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -149,8 +150,9 @@ class _ArticleScreenState extends State<ArticleScreen> {
                               ).textTheme.titleLarge?.fontSize,
                             ),
                           ),
-                          Text(
-                            args is NewsArticle ? args.urlSource : '',
+                          SelectableText(
+                            link,
+                            onTap: onUrlTap,
                             style: const TextStyle(
                               color: Colors.blue,
                               decoration: TextDecoration.underline,
