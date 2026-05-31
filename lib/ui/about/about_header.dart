@@ -18,11 +18,7 @@ class AboutHeader extends StatelessWidget {
           height: 120,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
-            ),
+            color: Colors.white,
             boxShadow: <BoxShadow>[
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.1),
@@ -31,7 +27,18 @@ class AboutHeader extends StatelessWidget {
               ),
             ],
           ),
-          child: const Icon(Icons.auto_awesome, size: 60, color: Colors.white),
+          child: ShaderMask(
+            shaderCallback: (Rect bounds) => const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
+            ).createShader(bounds),
+            child: const Icon(
+              Icons.auto_awesome,
+              size: 60,
+              color: Colors.white,
+            ),
+          ),
         ),
         const SizedBox(height: 24),
         Text(
@@ -39,6 +46,7 @@ class AboutHeader extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontFamily: 'Chewy',
+            color: Colors.white,
           ),
         ),
         const SizedBox(height: 8),
@@ -46,14 +54,16 @@ class AboutHeader extends StatelessWidget {
           l10n?.tagline ?? '',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: Theme.of(context).colorScheme.primary,
+            color: Colors.white.withValues(alpha: 0.9),
             fontStyle: FontStyle.italic,
           ),
         ),
         const SizedBox(height: 8),
         Text(
           l10n?.version(version) ?? '',
-          style: Theme.of(context).textTheme.bodySmall,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Colors.white.withValues(alpha: 0.7),
+          ),
         ),
         const SizedBox(height: 32),
       ],

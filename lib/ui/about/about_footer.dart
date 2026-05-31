@@ -16,12 +16,16 @@ class AboutFooter extends StatelessWidget {
         children: <Widget>[
           Text(
             '$appName ${l10n?.version(version) ?? ''}',
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.white.withValues(alpha: 0.7),
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             l10n?.copyright(DateTime.now().year, appName) ?? '',
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.white.withValues(alpha: 0.7),
+            ),
           ),
         ],
       ),

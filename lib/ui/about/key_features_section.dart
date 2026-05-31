@@ -14,9 +14,10 @@ class KeyFeaturesSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
           child: Text(
             l10n?.keyFeatures ?? '',
-            style: Theme.of(
-              context,
-            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
         _buildFeature(
@@ -57,19 +58,18 @@ class KeyFeaturesSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Theme.of(
-                context,
-              ).colorScheme.secondary.withValues(alpha: 0.1),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(
-              icon,
-              size: 20,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
+            child: Icon(icon, size: 20, color: Colors.white),
           ),
           const SizedBox(width: 16),
-          Text(text, style: Theme.of(context).textTheme.bodyLarge),
+          Text(
+            text,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(color: Colors.white),
+          ),
         ],
       ),
     );
