@@ -47,5 +47,56 @@
   "source": "Source",
   "shareBriefing": "Share briefing",
   "briefingShared": "Briefing shared",
-  "briefingCopiedToClipboard": "Briefing copied to clipboard"
+  "briefingCopiedToClipboard": "Briefing copied to clipboard",
+  "aboutApp": "About {appName}",
+  "@aboutApp": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "tagline": "AI-powered daily situational awareness.",
+  "version": "Version {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "whatIsNewsGlance": "What Is News Glance?",
+  "whatIsNewsGlanceContent": "News Glance helps you understand what today's major world events may mean in practice.\n\nRather than simply showing headlines, News Glance uses AI to identify important patterns across multiple international stories and generate a concise daily briefing.",
+  "whyItExists": "Why It Exists",
+  "whyItExistsContent": "The idea behind News Glance was inspired by real-world situations where important warning signals appeared across many separate news stories, but were difficult to interpret collectively.\n\nNews Glance attempts to connect those signals and answer a simple question:\n\n'Is there anything I should pay attention to today beyond simply staying informed?'",
+  "howItWorks": "How It Works",
+  "step1": "1. Collect important international news.",
+  "step2": "2. Analyze stories collectively using AI.",
+  "step3": "3. Generate a short plain-language briefing.",
+  "exampleBriefing": "Example Briefing",
+  "dailyHeadsUp": "Daily Heads-Up",
+  "exampleBriefingContent": "✈️ Rising regional instability may affect travel plans. If you have non-essential travel scheduled to affected areas, consider monitoring official advisories.",
+  "illustrativeExample": "This is an illustrative example, not advice.",
+  "keyFeatures": "Key Features",
+  "featureAiBriefing": "AI-generated daily briefing",
+  "featureGlobalMonitoring": "Global news monitoring",
+  "featureReadingExperience": "Article reading experience",
+  "featureHomeWidget": "Home screen widget",
+  "featureShareableInsights": "Shareable insights",
+  "featureOriginalSources": "Optional access to original sources",
+  "transparency": "Transparency",
+  "transparencyContent": "News Glance is designed to help users stay informed and aware of emerging situations.\n\nAI-generated briefings may be incomplete or incorrect and should not be considered professional, financial, legal, medical, or safety advice.",
+  "privacy": "Privacy",
+  "privacyContent": "News Glance does not require user accounts and does not collect personal information for app functionality.\n\nExternal websites and services may be governed by their own privacy policies.",
+  "copyright": "© {year} {appName}",
+  "@copyright": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "appName": {
+        "type": "String"
+      }
+    }
+  }
 }

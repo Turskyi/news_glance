@@ -134,4 +134,96 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get briefingCopiedToClipboard => 'Брифінг скопійовано';
+
+  @override
+  String aboutApp(String appName) {
+    return 'Про $appName';
+  }
+
+  @override
+  String get tagline => 'Ситуаційна обізнаність на базі ШІ.';
+
+  @override
+  String version(String version) {
+    return 'Версія $version';
+  }
+
+  @override
+  String get whatIsNewsGlance => 'Що таке News Glance?';
+
+  @override
+  String get whatIsNewsGlanceContent =>
+      'News Glance допомагає зрозуміти, що можуть означати головні світові події на практиці.\n\nЗамість того, щоб просто показувати заголовки, News Glance використовує ШІ для виявлення важливих закономірностей у багатьох міжнародних історіях і створює стислий щоденний брифінг.';
+
+  @override
+  String get whyItExists => 'Чому він існує';
+
+  @override
+  String get whyItExistsContent =>
+      'Ідея News Glance була натхненна реальними ситуаціями, коли важливі сигнали застереження з\'являлися в багатьох окремих новинах, але їх було важко інтерпретувати разом.\n\nNews Glance намагається поєднати ці сигнали та відповісти на просте запитання:\n\n\'Чи є щось, на що мені варто звернути увагу сьогодні, крім того, щоб просто бути поінформованим?\'';
+
+  @override
+  String get howItWorks => 'Як це працює';
+
+  @override
+  String get step1 => '1. Збір важливих міжнародних новин.';
+
+  @override
+  String get step2 => '2. Колективний аналіз історій за допомогою ШІ.';
+
+  @override
+  String get step3 => '3. Створення короткого брифінгу простою мовою.';
+
+  @override
+  String get exampleBriefing => 'Приклад брифінгу';
+
+  @override
+  String get dailyHeadsUp => 'Щоденне застереження';
+
+  @override
+  String get exampleBriefingContent =>
+      '✈️ Зростання регіональної нестабільності може вплинути на плани подорожей. Якщо у вас заплановані необов\'язкові поїздки до уражених регіонів, розгляньте можливість моніторингу офіційних рекомендацій.';
+
+  @override
+  String get illustrativeExample => 'Це ілюстративний приклад, а не порада.';
+
+  @override
+  String get keyFeatures => 'Ключові особливості';
+
+  @override
+  String get featureAiBriefing => 'Щоденний брифінг від ШІ';
+
+  @override
+  String get featureGlobalMonitoring => 'Моніторинг світових новин';
+
+  @override
+  String get featureReadingExperience => 'Зручне читання статей';
+
+  @override
+  String get featureHomeWidget => 'Віджет для головного екрана';
+
+  @override
+  String get featureShareableInsights => 'Можливість ділитися аналітикою';
+
+  @override
+  String get featureOriginalSources => 'Доступ до оригінальних джерел';
+
+  @override
+  String get transparency => 'Прозорість';
+
+  @override
+  String get transparencyContent =>
+      'News Glance створений, щоб допомогти користувачам залишатися поінформованими та обізнаними про ситуації, що розвиваються.\n\nБрифінги, створені ШІ, можуть бути неповними або неправильними і не повинні вважатися професійними, фінансовими, юридичними, медичними порадами або порадами щодо безпеки.';
+
+  @override
+  String get privacy => 'Конфіденційність';
+
+  @override
+  String get privacyContent =>
+      'News Glance не потребує облікових записів і не збирає особисту інформацію для роботи програми.\n\nЗовнішні вебсайти та служби можуть керуватися власною політикою конфіденційності.';
+
+  @override
+  String copyright(int year, String appName) {
+    return '© $year $appName';
+  }
 }

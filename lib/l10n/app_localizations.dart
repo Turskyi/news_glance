@@ -343,6 +343,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Briefing copied to clipboard'**
   String get briefingCopiedToClipboard;
+
+  /// No description provided for @aboutApp.
+  ///
+  /// In en, this message translates to:
+  /// **'About {appName}'**
+  String aboutApp(String appName);
+
+  /// No description provided for @tagline.
+  ///
+  /// In en, this message translates to:
+  /// **'AI-powered daily situational awareness.'**
+  String get tagline;
+
+  /// No description provided for @version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String version(String version);
+
+  /// No description provided for @whatIsNewsGlance.
+  ///
+  /// In en, this message translates to:
+  /// **'What Is News Glance?'**
+  String get whatIsNewsGlance;
+
+  /// No description provided for @whatIsNewsGlanceContent.
+  ///
+  /// In en, this message translates to:
+  /// **'News Glance helps you understand what today\'s major world events may mean in practice.\n\nRather than simply showing headlines, News Glance uses AI to identify important patterns across multiple international stories and generate a concise daily briefing.'**
+  String get whatIsNewsGlanceContent;
+
+  /// No description provided for @whyItExists.
+  ///
+  /// In en, this message translates to:
+  /// **'Why It Exists'**
+  String get whyItExists;
+
+  /// No description provided for @whyItExistsContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The idea behind News Glance was inspired by real-world situations where important warning signals appeared across many separate news stories, but were difficult to interpret collectively.\n\nNews Glance attempts to connect those signals and answer a simple question:\n\n\'Is there anything I should pay attention to today beyond simply staying informed?\''**
+  String get whyItExistsContent;
+
+  /// No description provided for @howItWorks.
+  ///
+  /// In en, this message translates to:
+  /// **'How It Works'**
+  String get howItWorks;
+
+  /// No description provided for @step1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Collect important international news.'**
+  String get step1;
+
+  /// No description provided for @step2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Analyze stories collectively using AI.'**
+  String get step2;
+
+  /// No description provided for @step3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Generate a short plain-language briefing.'**
+  String get step3;
+
+  /// No description provided for @exampleBriefing.
+  ///
+  /// In en, this message translates to:
+  /// **'Example Briefing'**
+  String get exampleBriefing;
+
+  /// No description provided for @dailyHeadsUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Heads-Up'**
+  String get dailyHeadsUp;
+
+  /// No description provided for @exampleBriefingContent.
+  ///
+  /// In en, this message translates to:
+  /// **'✈️ Rising regional instability may affect travel plans. If you have non-essential travel scheduled to affected areas, consider monitoring official advisories.'**
+  String get exampleBriefingContent;
+
+  /// No description provided for @illustrativeExample.
+  ///
+  /// In en, this message translates to:
+  /// **'This is an illustrative example, not advice.'**
+  String get illustrativeExample;
+
+  /// No description provided for @keyFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Key Features'**
+  String get keyFeatures;
+
+  /// No description provided for @featureAiBriefing.
+  ///
+  /// In en, this message translates to:
+  /// **'AI-generated daily briefing'**
+  String get featureAiBriefing;
+
+  /// No description provided for @featureGlobalMonitoring.
+  ///
+  /// In en, this message translates to:
+  /// **'Global news monitoring'**
+  String get featureGlobalMonitoring;
+
+  /// No description provided for @featureReadingExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Article reading experience'**
+  String get featureReadingExperience;
+
+  /// No description provided for @featureHomeWidget.
+  ///
+  /// In en, this message translates to:
+  /// **'Home screen widget'**
+  String get featureHomeWidget;
+
+  /// No description provided for @featureShareableInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Shareable insights'**
+  String get featureShareableInsights;
+
+  /// No description provided for @featureOriginalSources.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional access to original sources'**
+  String get featureOriginalSources;
+
+  /// No description provided for @transparency.
+  ///
+  /// In en, this message translates to:
+  /// **'Transparency'**
+  String get transparency;
+
+  /// No description provided for @transparencyContent.
+  ///
+  /// In en, this message translates to:
+  /// **'News Glance is designed to help users stay informed and aware of emerging situations.\n\nAI-generated briefings may be incomplete or incorrect and should not be considered professional, financial, legal, medical, or safety advice.'**
+  String get transparencyContent;
+
+  /// No description provided for @privacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get privacy;
+
+  /// No description provided for @privacyContent.
+  ///
+  /// In en, this message translates to:
+  /// **'News Glance does not require user accounts and does not collect personal information for app functionality.\n\nExternal websites and services may be governed by their own privacy policies.'**
+  String get privacyContent;
+
+  /// No description provided for @copyright.
+  ///
+  /// In en, this message translates to:
+  /// **'© {year} {appName}'**
+  String copyright(int year, String appName);
 }
 
 class _AppLocalizationsDelegate

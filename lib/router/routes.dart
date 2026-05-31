@@ -9,6 +9,7 @@ import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/domain_services/home_widget_service.dart';
 import 'package:news_glance/router/app_route.dart';
+import 'package:news_glance/ui/about/about_page.dart';
 import 'package:news_glance/ui/article_screen.dart';
 import 'package:news_glance/ui/article_web_screen.dart';
 import 'package:news_glance/ui/home_page.dart';
@@ -47,6 +48,7 @@ class AppRouter {
     ),
     AppRoute.article.path: (BuildContext _) => const ArticleScreen(),
     AppRoute.articleWeb.path: (BuildContext _) => const ArticleWebScreen(),
+    AppRoute.about.path: (BuildContext _) => const AboutPage(),
   };
 
   static void _handleNewsStateChange(BuildContext _, NewsState state) {

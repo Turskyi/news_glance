@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/res/constants.dart' as constants;
+import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/ui/clickable_tile.dart';
 import 'package:news_glance/ui/widget_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -55,6 +56,15 @@ class EndDrawer extends StatelessWidget {
                   context.read<SettingsBloc>().add(SetLocaleEvent(newLocale));
                 },
               );
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: Text(l10n.aboutApp(l10n.appName)),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(AppRoute.about.path);
             },
           ),
           const Divider(),

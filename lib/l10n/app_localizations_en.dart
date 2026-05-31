@@ -134,4 +134,97 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get briefingCopiedToClipboard => 'Briefing copied to clipboard';
+
+  @override
+  String aboutApp(String appName) {
+    return 'About $appName';
+  }
+
+  @override
+  String get tagline => 'AI-powered daily situational awareness.';
+
+  @override
+  String version(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get whatIsNewsGlance => 'What Is News Glance?';
+
+  @override
+  String get whatIsNewsGlanceContent =>
+      'News Glance helps you understand what today\'s major world events may mean in practice.\n\nRather than simply showing headlines, News Glance uses AI to identify important patterns across multiple international stories and generate a concise daily briefing.';
+
+  @override
+  String get whyItExists => 'Why It Exists';
+
+  @override
+  String get whyItExistsContent =>
+      'The idea behind News Glance was inspired by real-world situations where important warning signals appeared across many separate news stories, but were difficult to interpret collectively.\n\nNews Glance attempts to connect those signals and answer a simple question:\n\n\'Is there anything I should pay attention to today beyond simply staying informed?\'';
+
+  @override
+  String get howItWorks => 'How It Works';
+
+  @override
+  String get step1 => '1. Collect important international news.';
+
+  @override
+  String get step2 => '2. Analyze stories collectively using AI.';
+
+  @override
+  String get step3 => '3. Generate a short plain-language briefing.';
+
+  @override
+  String get exampleBriefing => 'Example Briefing';
+
+  @override
+  String get dailyHeadsUp => 'Daily Heads-Up';
+
+  @override
+  String get exampleBriefingContent =>
+      '✈️ Rising regional instability may affect travel plans. If you have non-essential travel scheduled to affected areas, consider monitoring official advisories.';
+
+  @override
+  String get illustrativeExample =>
+      'This is an illustrative example, not advice.';
+
+  @override
+  String get keyFeatures => 'Key Features';
+
+  @override
+  String get featureAiBriefing => 'AI-generated daily briefing';
+
+  @override
+  String get featureGlobalMonitoring => 'Global news monitoring';
+
+  @override
+  String get featureReadingExperience => 'Article reading experience';
+
+  @override
+  String get featureHomeWidget => 'Home screen widget';
+
+  @override
+  String get featureShareableInsights => 'Shareable insights';
+
+  @override
+  String get featureOriginalSources => 'Optional access to original sources';
+
+  @override
+  String get transparency => 'Transparency';
+
+  @override
+  String get transparencyContent =>
+      'News Glance is designed to help users stay informed and aware of emerging situations.\n\nAI-generated briefings may be incomplete or incorrect and should not be considered professional, financial, legal, medical, or safety advice.';
+
+  @override
+  String get privacy => 'Privacy';
+
+  @override
+  String get privacyContent =>
+      'News Glance does not require user accounts and does not collect personal information for app functionality.\n\nExternal websites and services may be governed by their own privacy policies.';
+
+  @override
+  String copyright(int year, String appName) {
+    return '© $year $appName';
+  }
 }
