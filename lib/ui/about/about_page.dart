@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/res/constants.dart' as constants;
+import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/ui/about/about_footer.dart';
 import 'package:news_glance/ui/about/about_header.dart';
 import 'package:news_glance/ui/about/about_info_card.dart';
@@ -35,6 +37,25 @@ class _AboutPageState extends State<AboutPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        leading: kIsWeb
+            ? IconButton(
+                onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                  AppRoute.home.path,
+                  (Route<dynamic> route) => false,
+                ),
+                icon: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(
+                    'assets/images/news_glance_logo.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              )
+            : null,
         title: Text(
           l10n?.aboutApp(appName) ?? '',
           style: const TextStyle(
