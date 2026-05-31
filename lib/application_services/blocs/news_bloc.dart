@@ -14,21 +14,23 @@ import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
 import 'package:news_glance/domain_services/sharing_service.dart';
+import 'package:news_glance/domain_services/use_cases/compute_news_checksum.dart';
 import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/actionable_insight_level.dart';
 import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/insight_category.dart';
 import 'package:news_glance/res/constants.dart' as constants;
 import 'package:news_glance/res/storage_keys.dart' as storage_keys;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'news_helpers.dart';
-
 part 'news_event.dart';
 part 'news_state.dart';
 
 @injectable
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
-  NewsBloc(this._newsRepository, this._sharingService)
-    : super(const LoadingNewsState()) {
+  NewsBloc(
+    this._newsRepository,
+    this._sharingService,
+    this._computeNewsChecksum,
+  ) : super(const LoadingNewsState()) {
     debugPrint('NewsBloc: initialized');
     on<LoadNewsEvent>((LoadNewsEvent event, Emitter<NewsState> emit) {
       debugPrint('NewsBloc: [LoadNewsEvent] received');
@@ -40,6 +42,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
   final NewsRepository _newsRepository;
   final SharingService _sharingService;
+  final ComputeNewsChecksum _computeNewsChecksum;
 
   // Caches keyed by the last news checksum — avoid regenerating if same news
   int? _lastNewsHash;
@@ -126,7 +129,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           _cachedSummaryText = null;
         }
 
-        final int checksum = computeNewsHash(news);
+        final int checksum = _computeNewsChecksum(news);
         _lastNewsHash = checksum;
 
         try {
@@ -213,7 +216,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       final List<NewsArticle> articles = current.news
           .take(constants.newsMax)
           .toList();
-      final int checksum = computeNewsHash(articles);
+      final int checksum = _computeNewsChecksum(articles);
 
       // If checksum matches and cached value exists in memory, reuse it
       if (_lastNewsHash == checksum) {

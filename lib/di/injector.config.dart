@@ -15,10 +15,12 @@ import 'package:news_glance/application_services/blocs/news_bloc.dart' as _i347;
 import 'package:news_glance/application_services/repositories/news_repository_impl.dart'
     as _i491;
 import 'package:news_glance/application_services/sharing_service_impl.dart'
-    as _i300;
+    as _i610;
 import 'package:news_glance/di/rest_client_module.dart' as _i108;
 import 'package:news_glance/domain_services/news_repository.dart' as _i875;
-import 'package:news_glance/domain_services/sharing_service.dart' as _i200;
+import 'package:news_glance/domain_services/sharing_service.dart' as _i0;
+import 'package:news_glance/domain_services/use_cases/compute_news_checksum.dart'
+    as _i200;
 import 'package:news_glance/infrastructure/web_services/rest/client/rest_client.dart'
     as _i979;
 import 'package:news_glance/infrastructure/web_services/rest/logging_interceptor.dart'
@@ -32,20 +34,22 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final restClientModule = _$RestClientModule();
+    gh.factory<_i200.ComputeNewsChecksum>(() => _i200.ComputeNewsChecksum());
     gh.factory<_i890.LoggingInterceptor>(
       () => const _i890.LoggingInterceptor(),
     );
+    gh.lazySingleton<_i0.SharingService>(() => _i610.SharingServiceImpl());
     gh.factory<_i979.RestClient>(
       () => restClientModule.getRestClient(gh<_i890.LoggingInterceptor>()),
     );
     gh.factory<_i875.NewsRepository>(
       () => _i491.NewsRepositoryImpl(gh<_i979.RestClient>()),
     );
-    gh.lazySingleton<_i200.SharingService>(() => _i300.SharingServiceImpl());
     gh.factory<_i347.NewsBloc>(
       () => _i347.NewsBloc(
         gh<_i875.NewsRepository>(),
-        gh<_i200.SharingService>(),
+        gh<_i0.SharingService>(),
+        gh<_i200.ComputeNewsChecksum>(),
       ),
     );
     return this;
