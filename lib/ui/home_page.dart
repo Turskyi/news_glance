@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
+import 'package:news_glance/domain_services/briefing_persistence.dart';
 import 'package:news_glance/domain_services/sharing_service.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/ui/conversational_summary_card.dart';
@@ -16,7 +17,9 @@ import 'app_error_widget.dart';
 import 'empty_news_widget.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({required this.persistence, super.key});
+
+  final BriefingPersistence persistence;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -89,7 +92,9 @@ class _HomePageState extends State<HomePage> {
                                   Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      const RefreshButton(),
+                                      RefreshButton(
+                                        persistence: widget.persistence,
+                                      ),
                                       IconButton(
                                         icon: const Icon(
                                           Icons.menu,

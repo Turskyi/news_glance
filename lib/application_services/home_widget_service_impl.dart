@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:injectable/injectable.dart';
 import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_services/home_widget_service.dart';
 import 'package:news_glance/res/constants.dart' as constants;
 import 'package:news_glance/res/storage_keys.dart' as storage_keys;
 
+@LazySingleton(as: HomeWidgetService)
 class HomeWidgetServiceImpl implements HomeWidgetService {
   const HomeWidgetServiceImpl();
 

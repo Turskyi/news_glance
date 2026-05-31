@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
+import 'package:news_glance/domain_models/app_locale.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/ui/markdown_preview.dart';
 
@@ -123,7 +124,9 @@ class NewsConclusionSection extends StatelessWidget {
       // Web uses browser's native TTS configuration.
     }
 
-    final String ttsLanguage = languageCode == 'uk' ? 'uk-UA' : 'en-US';
+    final String ttsLanguage = AppLocale.fromLanguageCode(
+      languageCode,
+    ).ttsLanguage;
 
     await flutterTts.setLanguage(ttsLanguage);
     await flutterTts.setPitch(1.0);

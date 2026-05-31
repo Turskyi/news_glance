@@ -1,17 +1,20 @@
-import 'dart:ui';
-
-import 'package:news_glance/application_services/home_widget_service_impl.dart';
+import 'package:injectable/injectable.dart';
+import 'package:news_glance/domain_models/app_locale.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/domain_services/home_widget_service.dart';
-import 'package:news_glance/res/storage_keys.dart' as storage_keys;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:news_glance/domain_services/settings_persistence.dart';
 
+@injectable
 class SettingsService {
+  const SettingsService(this._persistence, this._homeWidgetService);
+
+  final SettingsPersistence _persistence;
+  final HomeWidgetService _homeWidgetService;
+
   Future<void> setConclusionUiStyle(ConclusionUiStyle style) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(storage_keys.conclusionUiStyle, style.index);
+    await _persistence.saveConclusionUiStyle(style);
+
     // Also save widget_style via home widget service for platform widgets
-    const HomeWidgetService homeWidgetService = HomeWidgetServiceImpl();
     late final String widgetStyle;
     switch (style) {
       case ConclusionUiStyle.insight:
@@ -21,33 +24,20 @@ class SettingsService {
       case ConclusionUiStyle.summary:
         widgetStyle = 'summary';
     }
-    await homeWidgetService.setWidgetStyle(widgetStyle);
+    await _homeWidgetService.setWidgetStyle(widgetStyle);
   }
 
   Future<ConclusionUiStyle> getConclusionUiStyle() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int? raw = prefs.getInt(storage_keys.conclusionUiStyle);
-
-    if (raw == null || raw < 0 || raw >= ConclusionUiStyle.values.length) {
-      return ConclusionUiStyle.insight;
-    } else {
-      return ConclusionUiStyle.values[raw];
-    }
+    final ConclusionUiStyle? style = await _persistence.getConclusionUiStyle();
+    return style ?? ConclusionUiStyle.insight;
   }
 
-  Future<void> setLocale(Locale locale) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(storage_keys.locale, locale.languageCode);
+  Future<void> setLocale(AppLocale locale) async {
+    await _persistence.saveLocale(locale);
   }
 
-  Future<Locale> getLocale() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? languageCode = prefs.getString(storage_keys.locale);
-
-    if (languageCode == 'uk') {
-      return const Locale('uk');
-    } else {
-      return const Locale('en');
-    }
+  Future<AppLocale> getLocale() async {
+    final AppLocale? locale = await _persistence.getLocale();
+    return locale ?? AppLocale.english;
   }
 }

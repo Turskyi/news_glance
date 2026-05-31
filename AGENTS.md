@@ -16,6 +16,30 @@
 - **Comments:** Never remove existing comments.
 - **Safety:** Do not use assertions (`!`) or explicit casting (`as`). Use safe
   null-handling and type checks.
+- **Magic Values:** If a hardcoded string or integer representing the same
+  concept repeats more than once, it is considered a magic value and must be
+  extracted into an `enum` or a global constant in an appropriate location.
+- **FutureBuilder:** The `future` passed to a `FutureBuilder` must never be
+  created during the `build` method. It must be obtained earlier (e.g., in
+  `initState`) to avoid restarting the asynchronous task on every rebuild.
+
+## Architecture & Persistence
+
+- **Dependency Inversion:** Framework-specific implementations (e.g.,
+  `SharedPreferences`, `Drift`, `PackageInfo`) must be encapsulated in the
+  `infrastructure` layer and accessed via `abstract interface` classes defined
+  in the `domain_services` layer.
+- **Dependency Injection:** Prefer constructor-based dependency injection (DI)
+  with Dependency Inversion Principle (DIP) over the Service Locator pattern
+  (`GetIt.I`). Dependencies should be passed down from the highest level
+  possible.
+- **Use Case Location:** Use cases (Interactors) represent business logic and
+  must reside in the `domain_services` layer, never in the
+  `application_services` layer.
+- **Bloc Isolation:** BLoCs must never depend on framework-specific
+  implementations directly. They must only interact with `domain_services` or
+  `application_services`. There is a regression test in
+  `test/bloc_architecture_test.dart` to enforce this.
 
 ## Modern UI & Aesthetics
 

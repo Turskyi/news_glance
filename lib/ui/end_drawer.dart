@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
+import 'package:news_glance/domain_models/app_locale.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/res/constants.dart' as constants;
 import 'package:news_glance/router/app_route.dart';
@@ -42,17 +43,17 @@ class EndDrawer extends StatelessWidget {
           const Divider(),
           BlocBuilder<SettingsBloc, SettingsState>(
             builder: (BuildContext context, SettingsState state) {
-              final bool isUkrainian = state.locale.languageCode == 'uk';
               return ListTile(
                 title: Text(l10n.language),
                 trailing: Text(
-                  isUkrainian ? 'UA' : 'EN',
+                  state.locale.displayCode,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 onTap: () {
-                  final Locale newLocale = isUkrainian
-                      ? const Locale('en')
-                      : const Locale('uk');
+                  final AppLocale newLocale = state.locale.isUkrainian
+                      ? AppLocale.english
+                      : AppLocale.ukrainian;
+
                   context.read<SettingsBloc>().add(SetLocaleEvent(newLocale));
                 },
               );

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io' show SocketException;
-import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -9,17 +8,17 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:news_glance/application_services/settings_service.dart';
 import 'package:news_glance/domain_models/actionable_insight.dart';
+import 'package:news_glance/domain_models/app_locale.dart';
 import 'package:news_glance/domain_models/bad_request_exception.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/domain_models/news_article.dart';
+import 'package:news_glance/domain_services/briefing_persistence.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
 import 'package:news_glance/domain_services/sharing_service.dart';
 import 'package:news_glance/domain_services/use_cases/compute_news_checksum.dart';
 import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/actionable_insight_level.dart';
 import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/insight_category.dart';
 import 'package:news_glance/res/constants.dart' as constants;
-import 'package:news_glance/res/storage_keys.dart' as storage_keys;
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'news_event.dart';
 part 'news_state.dart';
@@ -30,6 +29,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
     this._newsRepository,
     this._sharingService,
     this._computeNewsChecksum,
+    this._briefingPersistence,
+    this._settingsService,
   ) : super(const LoadingNewsState()) {
     debugPrint('NewsBloc: initialized');
     on<LoadNewsEvent>((LoadNewsEvent event, Emitter<NewsState> emit) {
@@ -43,6 +44,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final NewsRepository _newsRepository;
   final SharingService _sharingService;
   final ComputeNewsChecksum _computeNewsChecksum;
+  final BriefingPersistence _briefingPersistence;
+  final SettingsService _settingsService;
 
   // Caches keyed by the last news checksum — avoid regenerating if same news
   int? _lastNewsHash;
@@ -53,9 +56,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   FutureOr<void> _loadNews(LoadNewsEvent event, Emitter<NewsState> emit) async {
     debugPrint('NewsBloc: [_loadNews] triggered');
     try {
-      final SettingsService settingsService = SettingsService();
-      final Locale locale = await settingsService.getLocale();
-      final String countryCode = locale.languageCode == 'uk'
+      final AppLocale locale = await _settingsService.getLocale();
+      final String countryCode = locale.isUkrainian
           ? 'ua'
           : constants.internationalCode;
 
@@ -80,7 +82,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       emit(LoadedNewsState(news: news));
 
       try {
-        final ConclusionUiStyle style = await settingsService
+        final ConclusionUiStyle style = await _settingsService
             .getConclusionUiStyle();
         debugPrint('NewsBloc: [_loadNews] using style: $style for AI');
 
@@ -133,38 +135,28 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         _lastNewsHash = checksum;
 
         try {
-          final SharedPreferences prefs = await SharedPreferences.getInstance();
           final String? ct = _cachedConclusionText;
           if (ct != null) {
-            await prefs.setString(storage_keys.aiCacheConclusion(checksum), ct);
+            await _briefingPersistence.saveConclusion(
+              checksum: checksum,
+              text: ct,
+            );
           }
           final String? st = _cachedSummaryText;
           if (st != null) {
-            await prefs.setString(storage_keys.aiCacheSummary(checksum), st);
+            await _briefingPersistence.saveSummary(
+              checksum: checksum,
+              text: st,
+            );
           }
           final ActionableInsight? ci = _cachedActionableInsight;
           if (ci != null) {
-            await prefs.setString(
-              storage_keys.aiCacheInsightConclusion(checksum),
-              ci.conclusion,
-            );
-            await prefs.setString(
-              storage_keys.aiCacheInsightLevel(checksum),
-              ci.level.value,
-            );
-            await prefs.setDouble(
-              storage_keys.aiCacheInsightProbability(checksum),
-              ci.probability,
-            );
-            await prefs.setString(
-              storage_keys.aiCacheInsightCategory(checksum),
-              ci.category.value,
+            await _briefingPersistence.saveInsight(
+              checksum: checksum,
+              insight: ci,
             );
           }
-          await prefs.setInt(
-            storage_keys.newsLastFetchAt,
-            DateTime.now().millisecondsSinceEpoch,
-          );
+          await _briefingPersistence.saveLastFetchTime(DateTime.now());
         } catch (_) {}
 
         emit(LoadedConclusionState(news: news, insight: insight));
@@ -218,6 +210,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           .toList();
       final int checksum = _computeNewsChecksum(articles);
 
+      final AppLocale locale = await _settingsService.getLocale();
+      final String lang = locale.languageCode;
+
       // If checksum matches and cached value exists in memory, reuse it
       if (_lastNewsHash == checksum) {
         final String? conclusionText = _cachedConclusionText;
@@ -254,12 +249,11 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         }
       }
 
-      // If not cached in memory, try SharedPreferences
+      // If not cached in memory, try persistence
       try {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
         if (event.style.isConclusion) {
-          final String? stored = prefs.getString(
-            storage_keys.aiCacheConclusion(checksum),
+          final String? stored = await _briefingPersistence.getConclusion(
+            checksum,
           );
           if (stored != null && stored.isNotEmpty) {
             _cachedConclusionText = stored;
@@ -274,8 +268,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
             return;
           }
         } else if (event.style.isSummary) {
-          final String? stored = prefs.getString(
-            storage_keys.aiCacheSummary(checksum),
+          final String? stored = await _briefingPersistence.getSummary(
+            checksum,
           );
           if (stored != null && stored.isNotEmpty) {
             _cachedSummaryText = stored;
@@ -290,26 +284,10 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
             return;
           }
         } else {
-          final String? conclusion = prefs.getString(
-            storage_keys.aiCacheInsightConclusion(checksum),
-          );
-          final String? levelStr = prefs.getString(
-            storage_keys.aiCacheInsightLevel(checksum),
-          );
-          final double? prob = prefs.getDouble(
-            storage_keys.aiCacheInsightProbability(checksum),
-          );
-          final String? categoryStr = prefs.getString(
-            storage_keys.aiCacheInsightCategory(checksum),
-          );
+          final ActionableInsight? cached = await _briefingPersistence
+              .getInsight(checksum);
 
-          if (conclusion != null && conclusion.isNotEmpty) {
-            final ActionableInsight cached = ActionableInsight(
-              conclusion: conclusion,
-              level: ActionableInsightLevel.fromString(levelStr ?? 'NEUTRAL'),
-              probability: prob ?? 0.0,
-              category: InsightCategory.fromString(categoryStr ?? 'GENERAL'),
-            );
+          if (cached != null) {
             _cachedActionableInsight = cached;
             _lastNewsHash = checksum;
             emit(LoadedConclusionState(news: current.news, insight: cached));
@@ -317,14 +295,10 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           }
         }
       } catch (_) {
-        // ignore prefs errors and fall through to live regeneration
+        // ignore persistence errors and fall through to live regeneration
       }
 
       try {
-        final SettingsService settingsService = SettingsService();
-        final Locale locale = await settingsService.getLocale();
-        final String lang = locale.languageCode;
-
         if (event.style.isConclusion) {
           final String conclusionText = await _newsRepository.getNewsConclusion(
             articles,
@@ -337,11 +311,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
           // persist
           try {
-            final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-            await prefs.setString(
-              storage_keys.aiCacheConclusion(checksum),
-              conclusionText,
+            await _briefingPersistence.saveConclusion(
+              checksum: checksum,
+              text: conclusionText,
             );
           } catch (_) {}
 
@@ -365,11 +337,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
           // persist
           try {
-            final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-            await prefs.setString(
-              storage_keys.aiCacheSummary(checksum),
-              summaryText,
+            await _briefingPersistence.saveSummary(
+              checksum: checksum,
+              text: summaryText,
             );
           } catch (_) {}
 
@@ -391,23 +361,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
           // persist
           try {
-            final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-            await prefs.setString(
-              storage_keys.aiCacheInsightConclusion(checksum),
-              insight.conclusion,
-            );
-            await prefs.setString(
-              storage_keys.aiCacheInsightLevel(checksum),
-              insight.level.value,
-            );
-            await prefs.setDouble(
-              storage_keys.aiCacheInsightProbability(checksum),
-              insight.probability,
-            );
-            await prefs.setString(
-              storage_keys.aiCacheInsightCategory(checksum),
-              insight.category.value,
+            await _briefingPersistence.saveInsight(
+              checksum: checksum,
+              insight: insight,
             );
           } catch (_) {}
 

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
+import 'package:news_glance/application_services/settings_service.dart';
 import 'package:news_glance/di/injector.dart' as di;
+import 'package:news_glance/domain_services/briefing_persistence.dart';
+import 'package:news_glance/domain_services/home_widget_service.dart';
 import 'package:news_glance/news_glance_app.dart';
 import 'package:news_glance/res/app_theme.dart';
 import 'package:news_glance/router/routes.dart';
@@ -23,7 +26,7 @@ import 'package:news_glance/router/routes.dart';
 void main() {
   final GetIt dependencies = di.injectDependencies();
 
-  final SettingsBloc settingsBloc = SettingsBloc()
+  final SettingsBloc settingsBloc = dependencies.get<SettingsBloc>()
     ..add(const LoadSettingsEvent());
 
   final NewsBloc newsBloc = dependencies.get<NewsBloc>();
@@ -31,6 +34,9 @@ void main() {
   final AppRouter appRouter = AppRouter(
     newsBloc: newsBloc,
     settingsBloc: settingsBloc,
+    homeWidgetService: dependencies.get<HomeWidgetService>(),
+    settingsService: dependencies.get<SettingsService>(),
+    persistence: dependencies.get<BriefingPersistence>(),
   );
 
   runApp(

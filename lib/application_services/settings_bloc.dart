@@ -1,7 +1,7 @@
-import 'dart:ui';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
+import 'package:news_glance/domain_models/app_locale.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 
 import 'settings_service.dart';
@@ -9,12 +9,13 @@ import 'settings_service.dart';
 part 'settings_event.dart';
 part 'settings_state.dart';
 
+@injectable
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsBloc()
+  SettingsBloc(this._service)
     : super(
         const SettingsState(
           style: ConclusionUiStyle.insight,
-          locale: Locale('en'),
+          locale: AppLocale.english,
         ),
       ) {
     on<LoadSettingsEvent>(_onLoad);
@@ -22,12 +23,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SetLocaleEvent>(_onSetLocale);
   }
 
-  final SettingsService _service = SettingsService();
+  final SettingsService _service;
 
   Future<void> _onLoad(LoadSettingsEvent _, Emitter<SettingsState> emit) async {
     debugPrint('SettingsBloc: [_onLoad] started');
     final ConclusionUiStyle style = await _service.getConclusionUiStyle();
-    final Locale locale = await _service.getLocale();
+    final AppLocale locale = await _service.getLocale();
     debugPrint(
       'SettingsBloc: [_onLoad] settings fetched, emitting isLoaded: true',
     );

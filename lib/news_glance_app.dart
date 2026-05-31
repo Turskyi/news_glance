@@ -30,7 +30,7 @@ class NewsGlanceApp extends StatelessWidget {
             initialRoute: AppRoute.home.path,
             routes: _routes,
             theme: _theme,
-            locale: state.locale,
+            locale: state.locale.value,
             localizationsDelegates: const <LocalizationsDelegate<Object>>[
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,

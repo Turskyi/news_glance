@@ -3,38 +3,36 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
+import 'package:news_glance/domain_services/briefing_persistence.dart';
 import 'package:news_glance/res/constants.dart' as constants;
-import 'package:news_glance/res/storage_keys.dart' as storage_keys;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RefreshButton extends StatefulWidget {
-  const RefreshButton({super.key});
+  const RefreshButton({required this.persistence, super.key});
+
+  final BriefingPersistence persistence;
 
   @override
   State<RefreshButton> createState() => _RefreshButtonState();
 }
 
 class _RefreshButtonState extends State<RefreshButton> {
-  late Future<int?> _lastFetchFuture;
+  late Future<DateTime?> _lastFetchFuture;
   StreamSubscription<NewsState>? _newsSub;
 
   @override
   void initState() {
     super.initState();
-    _lastFetchFuture = SharedPreferences.getInstance().then(
-      (SharedPreferences p) => p.getInt(storage_keys.newsLastFetchAt),
-    );
+    _lastFetchFuture = widget.persistence.getLastFetchTime();
 
     // Subscribe to NewsBloc stream to refresh the cached future when news
     // are loaded so the button visibility updates immediately.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final NewsBloc bloc = context.read<NewsBloc>();
-        _newsSub = bloc.stream.listen((_) async {
-          // Re-read the last fetch time from preferences and trigger rebuild
-          final Future<int?> newFuture = SharedPreferences.getInstance().then(
-            (SharedPreferences p) => p.getInt(storage_keys.newsLastFetchAt),
-          );
+        _newsSub = bloc.stream.listen((NewsState _) async {
+          // Re-read the last fetch time from persistence and trigger rebuild
+          final Future<DateTime?> newFuture = widget.persistence
+              .getLastFetchTime();
           setState(() {
             _lastFetchFuture = newFuture;
           });
@@ -53,20 +51,20 @@ class _RefreshButtonState extends State<RefreshButton> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<int?>(
+    return FutureBuilder<DateTime?>(
       future: _lastFetchFuture,
-      builder: (BuildContext context, AsyncSnapshot<int?> snap) {
+      builder: (BuildContext context, AsyncSnapshot<DateTime?> snap) {
         // Only show button when future has completed successfully
         if (snap.connectionState != ConnectionState.done ||
-            (!snap.hasData && snap.data == null)) {
+            (snap.data == null && !snap.hasData)) {
           return const SizedBox.shrink();
         }
 
-        final int? last = snap.data;
-        final int now = DateTime.now().millisecondsSinceEpoch;
+        final DateTime? last = snap.data;
+        final DateTime now = DateTime.now();
         final bool canRefresh =
             last == null ||
-            (now - last) >= (constants.manualRefreshMinMinutes * 60 * 1000);
+            now.difference(last).inMinutes >= constants.manualRefreshMinMinutes;
         if (canRefresh) {
           return TextButton.icon(
             onPressed: () => _handleRefresh(context),

@@ -9,6 +9,6 @@ class SettingsState {
   });
 
   final ConclusionUiStyle style;
-  final Locale locale;
+  final AppLocale locale;
   final bool isLoaded;
 }

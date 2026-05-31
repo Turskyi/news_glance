@@ -18,5 +18,5 @@ class SetConclusionStyleEvent extends SettingsEvent {
 class SetLocaleEvent extends SettingsEvent {
   const SetLocaleEvent(this.locale);
 
-  final Locale locale;
+  final AppLocale locale;
 }
