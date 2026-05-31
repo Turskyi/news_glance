@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:news_glance/application_services/settings_service.dart';
@@ -169,9 +170,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         emit(NewsConclusionError(news: news, errorMessage: e.message));
       } catch (e) {
         debugPrint('NewsBloc: [_loadNews] AI error: $e');
-        emit(
-          NewsConclusionError(news: news, errorMessage: 'Unexpected error: $e'),
-        );
+        final String errorMessage = _mapErrorToMessage(e);
+        emit(NewsConclusionError(news: news, errorMessage: errorMessage));
       }
     } on SocketException catch (e) {
       debugPrint('NewsBloc: [_loadNews] SocketException: $e');
@@ -183,8 +183,25 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       );
     } catch (e) {
       debugPrint('NewsBloc: [_loadNews] General error: $e');
-      emit(const ErrorState(errorMessage: 'An unexpected error occurred.'));
+      final String errorMessage = _mapErrorToMessage(e);
+      emit(ErrorState(errorMessage: errorMessage));
     }
+  }
+
+  String _mapErrorToMessage(Object error) {
+    if (error is DioException) {
+      if (kIsWeb && error.message?.contains('XMLHttpRequest onError') == true) {
+        return 'Network error: This might be a CORS issue (a security '
+            'restriction that prevents the browser from accessing the server) '
+            'or the server is unreachable.';
+      }
+      if (error.type == DioExceptionType.connectionTimeout ||
+          error.type == DioExceptionType.receiveTimeout) {
+        return 'Connection timed out. Please try again later.';
+      }
+      return 'Network error: ${error.message}';
+    }
+    return 'An unexpected error occurred.';
   }
 
   FutureOr<void> _regenerateInsight(
@@ -396,11 +413,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       } on BadRequestException catch (e) {
         emit(NewsConclusionError(news: current.news, errorMessage: e.message));
       } catch (e) {
+        final String errorMessage = _mapErrorToMessage(e);
         emit(
-          NewsConclusionError(
-            news: current.news,
-            errorMessage: 'Unexpected error: $e',
-          ),
+          NewsConclusionError(news: current.news, errorMessage: errorMessage),
         );
       }
       return;

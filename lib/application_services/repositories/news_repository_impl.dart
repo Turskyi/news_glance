@@ -95,10 +95,10 @@ class NewsRepositoryImpl implements NewsRepository {
             'but the error message is not in the expected format.',
           );
         } else {
-          throw Exception('An error occurred: ${e.message}');
+          rethrow;
         }
       } catch (e) {
-        throw Exception('An unexpected error occurred: $e');
+        rethrow;
       }
     }
   }
@@ -131,10 +131,10 @@ class NewsRepositoryImpl implements NewsRepository {
           'but the error message is not in the expected format.',
         );
       } else {
-        throw Exception('An error occurred: ${e.message}');
+        rethrow;
       }
     } catch (e) {
-      throw Exception('An unexpected error occurred: $e');
+      rethrow;
     }
   }
 
@@ -166,10 +166,10 @@ class NewsRepositoryImpl implements NewsRepository {
           'but the error message is not in the expected format.',
         );
       } else {
-        throw Exception('An error occurred: ${e.message}');
+        rethrow;
       }
     } catch (e) {
-      throw Exception('An unexpected error occurred: $e');
+      rethrow;
     }
   }
 
