@@ -50,6 +50,7 @@
   "searchQueryLabel": "Enter your search query",
   "searchPlaceholder": "e.g. Technology, AI, Space...",
   "searchButtonText": "Search",
+  "refresh": "Refresh",
   "recentSearches": "Recent Searches",
   "noResultsFound": "No results found.",
   "searchError": "An error occurred while searching.",

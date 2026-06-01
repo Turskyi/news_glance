@@ -121,7 +121,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get readAloud => 'Читати вголос';
 
   @override
-  String get close => 'Закрити';
+  String get close => '🗑 Очистити історію';
 
   @override
   String get source => 'Джерело';
@@ -140,6 +140,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get searchButtonText => 'Пошук';
+
+  @override
+  String get refresh => 'Оновити';
 
   @override
   String get recentSearches => 'Останні пошуки';

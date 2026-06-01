@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 
 class EmptyNewsWidget extends StatelessWidget {
-  const EmptyNewsWidget({super.key});
+  const EmptyNewsWidget({this.onRefresh, super.key});
+
+  final VoidCallback? onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +14,8 @@ class EmptyNewsWidget extends StatelessWidget {
     if (l10n == null) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
     }
+
+    final VoidCallback? refreshCallback = onRefresh;
 
     return SliverFillRemaining(
       child: Center(
@@ -47,6 +51,14 @@ class EmptyNewsWidget extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
+                if (refreshCallback != null) ...<Widget>[
+                  const SizedBox(height: 24),
+                  FilledButton.icon(
+                    onPressed: refreshCallback,
+                    icon: const Icon(Icons.refresh),
+                    label: Text(l10n.refresh),
+                  ),
+                ],
               ],
             ),
           ),

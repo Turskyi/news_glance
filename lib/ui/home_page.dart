@@ -146,7 +146,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       state.news.isEmpty
-                          ? const EmptyNewsWidget()
+                          ? EmptyNewsWidget(
+                              onRefresh: () => context.read<NewsBloc>().add(
+                                const LoadNewsEvent(),
+                              ),
+                            )
                           : SliverPadding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,

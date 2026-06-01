@@ -134,7 +134,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                     if (args is NewsArticle && args.imageUrl.isNotEmpty)
                       Center(child: Image.network(args.imageUrl)),
                     if (args is NewsArticle) const SizedBox(height: 20.0),
-                    Text(args is NewsArticle ? args.articleText : ''),
+                    SelectableText(args is NewsArticle ? args.articleText : ''),
                     const SizedBox(height: 16.0),
                     GestureDetector(
                       onTap: onUrlTap,

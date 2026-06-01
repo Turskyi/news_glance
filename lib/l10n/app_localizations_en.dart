@@ -142,6 +142,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchButtonText => 'Search';
 
   @override
+  String get refresh => 'Refresh';
+
+  @override
   String get recentSearches => 'Recent Searches';
 
   @override

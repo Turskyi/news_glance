@@ -50,6 +50,7 @@
   "searchQueryLabel": "Введіть запит для пошуку",
   "searchPlaceholder": "напр. Технології, ШІ, Космос...",
   "searchButtonText": "Пошук",
+  "refresh": "Оновити",
   "recentSearches": "Останні пошуки",
   "noResultsFound": "Результатів не знайдено.",
   "searchError": "Під час пошуку сталася помилка.",
