@@ -164,7 +164,8 @@ class SignalCard extends StatelessWidget {
     );
   }
 
-  SignalCardStyle _getSignalStyles(BuildContext context,
+  SignalCardStyle _getSignalStyles(
+    BuildContext context,
     AppLocalizations l10n,
     ActionableInsightLevel level,
   ) {
