@@ -130,6 +130,27 @@ class AppLocalizationsUk extends AppLocalizations {
   String get shareBriefing => 'Поділитися брифінгом';
 
   @override
+  String get searchNews => 'News Glance Пошук';
+
+  @override
+  String get searchQueryLabel => 'Введіть запит для пошуку';
+
+  @override
+  String get searchPlaceholder => 'напр. Технології, ШІ, Космос...';
+
+  @override
+  String get searchButtonText => 'Пошук';
+
+  @override
+  String get recentSearches => 'Останні пошуки';
+
+  @override
+  String get noResultsFound => 'Результатів не знайдено.';
+
+  @override
+  String get searchError => 'Під час пошуку сталася помилка.';
+
+  @override
   String get briefingShared => 'Брифінг надіслано';
 
   @override

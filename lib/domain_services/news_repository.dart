@@ -9,6 +9,8 @@ abstract interface class NewsRepository {
     String countryCode = country.internationalCode,
   });
 
+  Future<List<NewsArticle>> searchNews(String query);
+
   Future<ActionableInsight> getActionableInsight(
     Iterable<NewsArticle> articles, {
     String? lang,

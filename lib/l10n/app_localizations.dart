@@ -317,7 +317,7 @@ abstract class AppLocalizations {
   /// No description provided for @close.
   ///
   /// In en, this message translates to:
-  /// **'Close'**
+  /// **'🗑 Clear History'**
   String get close;
 
   /// No description provided for @source.
@@ -331,6 +331,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Share briefing'**
   String get shareBriefing;
+
+  /// No description provided for @searchNews.
+  ///
+  /// In en, this message translates to:
+  /// **'News Glance Search'**
+  String get searchNews;
+
+  /// No description provided for @searchQueryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your search query'**
+  String get searchQueryLabel;
+
+  /// No description provided for @searchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Technology, AI, Space...'**
+  String get searchPlaceholder;
+
+  /// No description provided for @searchButtonText.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchButtonText;
+
+  /// No description provided for @recentSearches.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Searches'**
+  String get recentSearches;
+
+  /// No description provided for @noResultsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found.'**
+  String get noResultsFound;
+
+  /// No description provided for @searchError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while searching.'**
+  String get searchError;
 
   /// No description provided for @briefingShared.
   ///

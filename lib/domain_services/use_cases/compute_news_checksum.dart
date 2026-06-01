@@ -9,6 +9,7 @@ class ComputeNewsChecksum {
           (NewsArticle a) => (a.urlSource.isNotEmpty ? a.urlSource : a.title),
         )
         .join('|');
-    return joined.hashCode;
+    // We add a 'global' salt to strictly partition Home briefings from Search.
+    return Object.hash('global', joined);
   }
 }

@@ -54,6 +54,37 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
+  Future<List<NewsArticle>> searchNews(String query) async {
+    debugPrint('NewsRepositoryImpl: [searchNews] started for $query');
+    final List<NewsArticle> articles = <NewsArticle>[];
+    try {
+      final List<NewsArticleResponse> response = await _restClient.searchNews(
+        query: query,
+      );
+      debugPrint(
+        'NewsRepositoryImpl: [searchNews] received ${response.length} articles',
+      );
+      for (final NewsArticleResponse article in response) {
+        articles.add(
+          NewsArticle(
+            title: article.title,
+            description: article.description,
+            imageUrl: article.urlToImage,
+            articleText: article.content,
+            urlSource: article.url,
+            publishedAt:
+                DateTime.tryParse(article.publishedAt) ?? DateTime.now(),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('NewsRepositoryImpl: [searchNews] error: $e');
+      rethrow;
+    }
+    return articles;
+  }
+
+  @override
   Future<ActionableInsight> getActionableInsight(
     Iterable<NewsArticle> articles, {
     String? lang,

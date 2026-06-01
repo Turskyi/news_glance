@@ -22,6 +22,14 @@
 - **FutureBuilder:** The `future` passed to a `FutureBuilder` must never be
   created during the `build` method. It must be obtained earlier (e.g., in
   `initState`) to avoid restarting the asynchronous task on every rebuild.
+- **No Widget Helper Methods:** Never create helper methods that return widgets
+  (e.g., `Widget _buildHeader()`). Instead, create a dedicated
+  `StatelessWidget` or `StatefulWidget`. This ensures proper lifecycle
+  management, performance optimizations (like `const` usage), and better
+  debugging via the Flutter Inspector.
+- **Color Opacity:** Never use `withOpacity` as it is deprecated in newer
+  Flutter
+  versions. Use `withValues(alpha: ...)` or `withAlpha` instead.
 
 ## Architecture & Persistence
 

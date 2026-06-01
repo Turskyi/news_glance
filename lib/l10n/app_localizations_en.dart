@@ -121,13 +121,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get readAloud => 'Read Aloud';
 
   @override
-  String get close => 'Close';
+  String get close => '🗑 Clear History';
 
   @override
   String get source => 'Source';
 
   @override
   String get shareBriefing => 'Share briefing';
+
+  @override
+  String get searchNews => 'News Glance Search';
+
+  @override
+  String get searchQueryLabel => 'Enter your search query';
+
+  @override
+  String get searchPlaceholder => 'e.g. Technology, AI, Space...';
+
+  @override
+  String get searchButtonText => 'Search';
+
+  @override
+  String get recentSearches => 'Recent Searches';
+
+  @override
+  String get noResultsFound => 'No results found.';
+
+  @override
+  String get searchError => 'An error occurred while searching.';
 
   @override
   String get briefingShared => 'Briefing shared';

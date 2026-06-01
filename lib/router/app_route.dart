@@ -2,7 +2,8 @@ enum AppRoute {
   home('/'),
   article('/article'),
   articleWeb('/article_web'),
-  about('/about');
+  about('/about'),
+  search('/search');
 
   const AppRoute(this.path);
 

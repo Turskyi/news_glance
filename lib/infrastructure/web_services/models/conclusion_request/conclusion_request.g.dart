@@ -10,4 +10,5 @@ Map<String, dynamic> _$ConclusionRequestToJson(ConclusionRequest instance) =>
     <String, dynamic>{
       'articles': instance.articles.map((e) => e.toJson()).toList(),
       'lang': instance.lang,
+      'query': instance.query,
     };

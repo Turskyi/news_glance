@@ -18,6 +18,11 @@ abstract class RestClient {
     @Query('country') String countryCode = country.internationalCode,
   });
 
+  @GET('search-news')
+  Future<List<NewsArticleResponse>> searchNews({
+    @Query('q') required String query,
+  });
+
   @POST('actionable-insight')
   Future<ActionableInsightResponse> getActionableInsight(
     @Body() ConclusionRequest news,

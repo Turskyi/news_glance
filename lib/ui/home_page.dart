@@ -6,6 +6,7 @@ import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/domain_services/briefing_persistence.dart';
 import 'package:news_glance/domain_services/sharing_service.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
+import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/ui/conversational_summary_card.dart';
 import 'package:news_glance/ui/end_drawer.dart';
 import 'package:news_glance/ui/news_article_list.dart';
@@ -94,6 +95,15 @@ class _HomePageState extends State<HomePage> {
                                     children: <Widget>[
                                       RefreshButton(
                                         persistence: widget.persistence,
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.search,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () => Navigator.of(
+                                          context,
+                                        ).pushNamed(AppRoute.search.path),
                                       ),
                                       IconButton(
                                         icon: const Icon(

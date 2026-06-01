@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
+import 'package:news_glance/application_services/blocs/search_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/application_services/settings_service.dart';
 import 'package:news_glance/di/injector.dart' as di;
@@ -30,9 +31,11 @@ void main() {
     ..add(const LoadSettingsEvent());
 
   final NewsBloc newsBloc = dependencies.get<NewsBloc>();
+  final SearchBloc searchBloc = dependencies.get<SearchBloc>();
 
   final AppRouter appRouter = AppRouter(
     newsBloc: newsBloc,
+    searchBloc: searchBloc,
     settingsBloc: settingsBloc,
     homeWidgetService: dependencies.get<HomeWidgetService>(),
     settingsService: dependencies.get<SettingsService>(),
