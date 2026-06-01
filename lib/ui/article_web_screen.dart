@@ -63,13 +63,18 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
     // Extract the arguments from the current ModalRoute settings.
     final Object? args = ModalRoute.of(context)?.settings.arguments;
     final WebViewController? controller = _controller;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return DecoratedBox(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-          colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
+          colors: <Color>[
+            colorScheme.primary,
+            colorScheme.primaryContainer,
+            colorScheme.secondary,
+          ],
         ),
       ),
       child: Scaffold(
@@ -80,10 +85,14 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
           titleTextStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: DecoratedBox(
-          decoration: BoxDecoration(color: Colors.blue[50]),
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
           child: controller == null
               ? const SizedBox.shrink()
               : Stack(
@@ -94,7 +103,7 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
                         value: _loadingProgress / 100.0,
                         backgroundColor: Colors.transparent,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          Theme.of(context).colorScheme.primary,
+                          colorScheme.primary,
                         ),
                       ),
                   ],

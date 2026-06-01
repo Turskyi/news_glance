@@ -18,6 +18,8 @@ class _NewsArticleListTileState extends State<NewsArticleListTile> {
   @override
   Widget build(BuildContext context) {
     final bool showImage = widget.article.imageUrl.isNotEmpty && !_imageError;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
 
     return Card(
       elevation: 4,
@@ -29,7 +31,10 @@ class _NewsArticleListTileState extends State<NewsArticleListTile> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: <Color>[Colors.blue.shade50, Colors.purple.shade50],
+            colors: <Color>[
+              colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+              colorScheme.surfaceContainerHighest.withValues(alpha: 0.1),
+            ],
           ),
         ),
         child: ListTile(
@@ -61,7 +66,7 @@ class _NewsArticleListTileState extends State<NewsArticleListTile> {
           title: Text(
             widget.article.title,
             style: TextStyle(
-              color: Colors.blue[900],
+              color: colorScheme.onSurface,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
@@ -74,7 +79,7 @@ class _NewsArticleListTileState extends State<NewsArticleListTile> {
                 child: Text(
                   widget.article.description,
                   style: TextStyle(
-                    color: Colors.blue[800]?.withValues(alpha: 0.8),
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
                     fontSize: 13,
                   ),
                   maxLines: 2,
@@ -87,13 +92,13 @@ class _NewsArticleListTileState extends State<NewsArticleListTile> {
                   Icon(
                     Icons.access_time_rounded,
                     size: 12,
-                    color: Colors.blue[400],
+                    color: colorScheme.outline,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     formatTimeAgo(widget.article.publishedAt),
                     style: TextStyle(
-                      color: Colors.blue[400],
+                      color: colorScheme.outline,
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
                     ),
@@ -104,7 +109,7 @@ class _NewsArticleListTileState extends State<NewsArticleListTile> {
           ),
           trailing: Icon(
             Icons.chevron_right_rounded,
-            color: Colors.blue[300],
+            color: colorScheme.outline,
             size: 24,
           ),
           onTap: () => Navigator.pushNamed(

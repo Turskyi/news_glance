@@ -18,7 +18,11 @@ class SignalCard extends StatelessWidget {
     if (l10n == null) {
       return const SizedBox.shrink();
     }
-    final SignalCardStyle styles = _getSignalStyles(l10n, insight.level);
+    final SignalCardStyle styles = _getSignalStyles(
+      context,
+      l10n,
+      insight.level,
+    );
     final bool isHighRisk =
         insight.level != ActionableInsightLevel.neutral &&
         insight.probability >= 0.8;
@@ -45,7 +49,7 @@ class SignalCard extends StatelessWidget {
                         width: 72,
                         height: 72,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.surface,
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
@@ -112,7 +116,9 @@ class SignalCard extends StatelessWidget {
                                         fontSize: 12.8,
                                         color: isHighRisk
                                             ? const Color(0xFFE11D48)
-                                            : const Color(0xFF64748B),
+                                            : styles.textColor.withValues(
+                                                alpha: 0.7,
+                                              ),
                                         fontWeight: FontWeight.w600,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -125,7 +131,9 @@ class SignalCard extends StatelessWidget {
                                 l10n.noImmediateActionRequired,
                                 style: TextStyle(
                                   fontSize: 12.8,
-                                  color: Colors.black.withValues(alpha: 0.6),
+                                  color: styles.textColor.withValues(
+                                    alpha: 0.6,
+                                  ),
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -156,43 +164,52 @@ class SignalCard extends StatelessWidget {
     );
   }
 
-  SignalCardStyle _getSignalStyles(
+  SignalCardStyle _getSignalStyles(BuildContext context,
     AppLocalizations l10n,
     ActionableInsightLevel level,
   ) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     switch (level) {
       case ActionableInsightLevel.critical:
         return SignalCardStyle(
-          backgroundColor: const Color(0xFFFEF2F2),
+          backgroundColor: isDark
+              ? const Color(0xFF450A0A)
+              : const Color(0xFFFEF2F2),
           borderColor: const Color(0xFFEF4444),
-          textColor: const Color(0xFF991B1B),
+          textColor: isDark ? const Color(0xFFFECACA) : const Color(0xFF991B1B),
           lightColor: const Color(0xFFEF4444),
           icon: '🚨',
           label: l10n.criticalAction,
         );
       case ActionableInsightLevel.warning:
         return SignalCardStyle(
-          backgroundColor: const Color(0xFFFFFBEB),
+          backgroundColor: isDark
+              ? const Color(0xFF451A03)
+              : const Color(0xFFFFFBEB),
           borderColor: const Color(0xFFF59E0B),
-          textColor: const Color(0xFFB45309),
+          textColor: isDark ? const Color(0xFFFEF3C7) : const Color(0xFFB45309),
           lightColor: const Color(0xFFF59E0B),
           icon: '⚠️',
           label: l10n.warning,
         );
       case ActionableInsightLevel.advisory:
         return SignalCardStyle(
-          backgroundColor: const Color(0xFFEFF6FF),
+          backgroundColor: isDark
+              ? const Color(0xFF172554)
+              : const Color(0xFFEFF6FF),
           borderColor: const Color(0xFF3B82F6),
-          textColor: const Color(0xFF1D4ED8),
+          textColor: isDark ? const Color(0xFFDBEAFE) : const Color(0xFF1D4ED8),
           lightColor: const Color(0xFF3B82F6),
           icon: 'ℹ️',
           label: l10n.advisory,
         );
       case ActionableInsightLevel.neutral:
         return SignalCardStyle(
-          backgroundColor: const Color(0xFFECFDF5),
+          backgroundColor: isDark
+              ? const Color(0xFF064E3B)
+              : const Color(0xFFECFDF5),
           borderColor: const Color(0xFF10B981),
-          textColor: const Color(0xFF047857),
+          textColor: isDark ? const Color(0xFFD1FAE5) : const Color(0xFF047857),
           lightColor: const Color(0xFF10B981),
           icon: '✅',
           label: l10n.allClear,

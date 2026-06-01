@@ -33,6 +33,7 @@ class _AboutPageState extends State<AboutPage> {
   Widget build(BuildContext context) {
     final AppLocalizations? l10n = AppLocalizations.of(context);
     final String appName = l10n?.appName ?? constants.appName;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -66,11 +67,15 @@ class _AboutPageState extends State<AboutPage> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
+            colors: <Color>[
+              colorScheme.primary,
+              colorScheme.primaryContainer,
+              colorScheme.secondary,
+            ],
           ),
         ),
         child: SafeArea(

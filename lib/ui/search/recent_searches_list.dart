@@ -29,7 +29,7 @@ class RecentSearchesList extends StatelessWidget {
             Text(
               l10n?.recentSearches ?? 'Recent Searches',
               style: textTheme.titleMedium?.copyWith(
-                color: colorScheme.onPrimary,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -40,7 +40,7 @@ class RecentSearchesList extends StatelessWidget {
               child: Text(
                 l10n?.close ?? 'Clear',
                 style: textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onPrimary.withValues(alpha: 0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                 ),
               ),
             ),
@@ -53,17 +53,13 @@ class RecentSearchesList extends StatelessWidget {
             return ActionChip(
               label: Text(query),
               onPressed: () => onTap(query),
-              backgroundColor: colorScheme.primaryContainer.withValues(
-                alpha: 0.8,
-              ),
-              side: BorderSide(
-                color: colorScheme.onPrimary.withValues(alpha: 0.3),
-              ),
+              backgroundColor: colorScheme.surface,
+              side: BorderSide(color: colorScheme.outlineVariant),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
               labelStyle: textTheme.labelLarge?.copyWith(
-                color: colorScheme.onPrimary,
+                color: colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
             );

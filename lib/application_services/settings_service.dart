@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:news_glance/domain_models/app_locale.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
@@ -39,5 +40,14 @@ class SettingsService {
   Future<AppLocale> getLocale() async {
     final AppLocale? locale = await _persistence.getLocale();
     return locale ?? AppLocale.english;
+  }
+
+  Future<void> setThemeMode(ThemeMode themeMode) async {
+    await _persistence.saveThemeMode(themeMode);
+  }
+
+  Future<ThemeMode> getThemeMode() async {
+    final ThemeMode? themeMode = await _persistence.getThemeMode();
+    return themeMode ?? ThemeMode.system;
   }
 }

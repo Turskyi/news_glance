@@ -14,7 +14,7 @@ class ClickableTile extends StatelessWidget {
         title,
         style: TextStyle(
           fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-          color: Colors.blue,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
       onTap: onTap,

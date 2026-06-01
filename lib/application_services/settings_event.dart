@@ -20,3 +20,9 @@ class SetLocaleEvent extends SettingsEvent {
 
   final AppLocale locale;
 }
+
+class SettingsThemeChanged extends SettingsEvent {
+  const SettingsThemeChanged(this.themeMode);
+
+  final ThemeMode themeMode;
+}

@@ -18,16 +18,21 @@ class EndDrawer extends StatelessWidget {
     if (l10n == null) {
       return const SizedBox.shrink();
     }
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
+                colors: <Color>[
+                  colorScheme.primary,
+                  colorScheme.primaryContainer,
+                  colorScheme.secondary,
+                ],
               ),
             ),
             child: Text(
@@ -40,6 +45,46 @@ class EndDrawer extends StatelessWidget {
             ),
           ),
           const WidgetSettings(),
+          const Divider(),
+          BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (BuildContext context, SettingsState state) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    const Text('Theme'),
+                    SegmentedButton<ThemeMode>(
+                      segments: const <ButtonSegment<ThemeMode>>[
+                        ButtonSegment<ThemeMode>(
+                          value: ThemeMode.system,
+                          icon: Icon(Icons.brightness_auto),
+                        ),
+                        ButtonSegment<ThemeMode>(
+                          value: ThemeMode.light,
+                          icon: Icon(Icons.light_mode),
+                        ),
+                        ButtonSegment<ThemeMode>(
+                          value: ThemeMode.dark,
+                          icon: Icon(Icons.dark_mode),
+                        ),
+                      ],
+                      selected: <ThemeMode>{state.themeMode},
+                      onSelectionChanged: (Set<ThemeMode> newSelection) {
+                        context.read<SettingsBloc>().add(
+                          SettingsThemeChanged(newSelection.first),
+                        );
+                      },
+                      showSelectedIcon: false,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
           const Divider(),
           BlocBuilder<SettingsBloc, SettingsState>(
             builder: (BuildContext context, SettingsState state) {

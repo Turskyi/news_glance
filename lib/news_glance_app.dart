@@ -10,12 +10,14 @@ class NewsGlanceApp extends StatelessWidget {
   const NewsGlanceApp({
     required this._routes,
     required this._theme,
+    required this._darkTheme,
     required this._settingsBloc,
     super.key,
   });
 
   final Map<String, WidgetBuilder> _routes;
   final ThemeData _theme;
+  final ThemeData _darkTheme;
   final SettingsBloc _settingsBloc;
 
   @override
@@ -30,6 +32,8 @@ class NewsGlanceApp extends StatelessWidget {
             initialRoute: AppRoute.home.path,
             routes: _routes,
             theme: _theme,
+            darkTheme: _darkTheme,
+            themeMode: state.themeMode,
             locale: state.locale.value,
             localizationsDelegates: const <LocalizationsDelegate<Object>>[
               AppLocalizations.delegate,

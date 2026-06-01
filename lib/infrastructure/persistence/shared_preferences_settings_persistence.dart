@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:news_glance/domain_models/app_locale.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
@@ -47,5 +48,23 @@ class SharedPreferencesSettingsPersistence implements SettingsPersistence {
     }
 
     return null;
+  }
+
+  @override
+  Future<void> saveThemeMode(ThemeMode themeMode) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(storage_keys.themeMode, themeMode.name);
+  }
+
+  @override
+  Future<ThemeMode?> getThemeMode() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? raw = prefs.getString(storage_keys.themeMode);
+
+    if (raw == null) {
+      return null;
+    }
+
+    return ThemeMode.values.byName(raw);
   }
 }

@@ -46,6 +46,7 @@ void main() {
     NewsGlanceApp(
       routes: appRouter.routeMap,
       theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
       settingsBloc: settingsBloc,
     ),
   );

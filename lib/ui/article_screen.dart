@@ -67,6 +67,8 @@ class _ArticleScreenState extends State<ArticleScreen> {
     final Object? args = ModalRoute.of(context)?.settings.arguments;
     final String link = args is NewsArticle ? args.urlSource : '';
     final AppLocalizations? l10n = AppLocalizations.of(context);
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
 
     if (l10n == null) {
       return const SizedBox.shrink();
@@ -85,11 +87,15 @@ class _ArticleScreenState extends State<ArticleScreen> {
           };
 
     return DecoratedBox(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-          colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
+          colors: <Color>[
+            colorScheme.primary,
+            colorScheme.primaryContainer,
+            colorScheme.secondary,
+          ],
         ),
       ),
       child: Scaffold(
@@ -100,8 +106,9 @@ class _ArticleScreenState extends State<ArticleScreen> {
           titleTextStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            // color: Colors.black,
+            color: Colors.white,
           ),
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         body:
             args is NewsArticle &&
@@ -116,25 +123,28 @@ class _ArticleScreenState extends State<ArticleScreen> {
                       value: _loadingProgress / 100.0,
                       backgroundColor: Colors.transparent,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).colorScheme.primary,
+                        colorScheme.primary,
                       ),
                     ),
                 ],
               )
             : DecoratedBox(
-                decoration: BoxDecoration(color: Colors.blue[50]),
+                decoration: BoxDecoration(color: theme.scaffoldBackgroundColor),
                 child: ListView(
                   padding: const EdgeInsets.all(16.0),
                   children: <Widget>[
                     Text(
                       args is NewsArticle ? args.description : '',
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: theme.textTheme.titleMedium,
                     ),
                     const SizedBox(height: 20.0),
                     if (args is NewsArticle && args.imageUrl.isNotEmpty)
                       Center(child: Image.network(args.imageUrl)),
                     if (args is NewsArticle) const SizedBox(height: 20.0),
-                    SelectableText(args is NewsArticle ? args.articleText : ''),
+                    SelectableText(
+                      args is NewsArticle ? args.articleText : '',
+                      style: theme.textTheme.bodyMedium,
+                    ),
                     const SizedBox(height: 16.0),
                     GestureDetector(
                       onTap: onUrlTap,
@@ -145,16 +155,14 @@ class _ArticleScreenState extends State<ArticleScreen> {
                             args is NewsArticle ? '${l10n.source}: ' : '',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: Theme.of(
-                                context,
-                              ).textTheme.titleLarge?.fontSize,
+                              fontSize: theme.textTheme.titleLarge?.fontSize,
                             ),
                           ),
                           SelectableText(
                             link,
                             onTap: onUrlTap,
-                            style: const TextStyle(
-                              color: Colors.blue,
+                            style: TextStyle(
+                              color: colorScheme.primary,
                               decoration: TextDecoration.underline,
                             ),
                           ),

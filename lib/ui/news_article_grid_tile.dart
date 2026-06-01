@@ -19,6 +19,7 @@ class _NewsArticleGridTileState extends State<NewsArticleGridTile> {
   @override
   Widget build(BuildContext context) {
     final bool showImage = widget.article.imageUrl.isNotEmpty && !_imageError;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Card(
       elevation: 4,
@@ -30,7 +31,10 @@ class _NewsArticleGridTileState extends State<NewsArticleGridTile> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: <Color>[Colors.blue.shade50, Colors.purple.shade50],
+            colors: <Color>[
+              colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+              colorScheme.surfaceContainerHighest.withValues(alpha: 0.1),
+            ],
           ),
         ),
         child: InkWell(

@@ -21,27 +21,25 @@ class SearchField extends StatelessWidget {
       children: <Widget>[
         TextField(
           controller: controller,
-          style: textTheme.bodyLarge?.copyWith(color: colorScheme.onPrimary),
+          style: textTheme.bodyLarge?.copyWith(color: Colors.white),
           decoration: InputDecoration(
             hintText:
                 l10n?.searchPlaceholder ?? 'e.g. Technology, AI, Space...',
             hintStyle: textTheme.bodyLarge?.copyWith(
-              color: colorScheme.onPrimary.withValues(alpha: 0.7),
+              color: Colors.white.withValues(alpha: 0.7),
             ),
             labelText: l10n?.searchQueryLabel ?? 'Enter your search query',
-            labelStyle: textTheme.labelMedium?.copyWith(
-              color: colorScheme.onPrimary,
-            ),
-            prefixIcon: Icon(Icons.search, color: colorScheme.onPrimary),
+            labelStyle: textTheme.labelMedium?.copyWith(color: Colors.white),
+            prefixIcon: const Icon(Icons.search, color: Colors.white),
             suffixIcon: IconButton(
-              icon: Icon(Icons.clear, color: colorScheme.onPrimary),
+              icon: const Icon(Icons.clear, color: Colors.white),
               onPressed: controller.clear,
             ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: colorScheme.onPrimary),
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: colorScheme.onPrimary, width: 2),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 2),
             ),
           ),
           onSubmitted: onSubmitted,

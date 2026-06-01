@@ -17,14 +17,15 @@ class ConversationalSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? l10n = AppLocalizations.of(context);
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.12),
+        color: colorScheme.onSurface.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+        border: Border.all(color: colorScheme.onSurface.withValues(alpha: 0.2)),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -41,7 +42,7 @@ class ConversationalSummaryCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: colorScheme.onSurface.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
                 child: const Text('👋', style: TextStyle(fontSize: 20)),
@@ -50,8 +51,8 @@ class ConversationalSummaryCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   l10n?.conversationalSummary ?? 'Summary',
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: colorScheme.onSurface,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.2,
                     fontSize: 14,
@@ -59,12 +60,12 @@ class ConversationalSummaryCard extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.volume_up, color: Colors.white),
+                icon: Icon(Icons.volume_up, color: colorScheme.onSurface),
                 onPressed: () => _speak(context, summary),
                 tooltip: l10n?.readAloud,
               ),
               IconButton(
-                icon: const Icon(Icons.share, color: Colors.white),
+                icon: Icon(Icons.share, color: colorScheme.onSurface),
                 onPressed: () {
                   context.read<NewsBloc>().add(ShareBriefingEvent(summary));
                 },
@@ -76,17 +77,17 @@ class ConversationalSummaryCard extends StatelessWidget {
           MarkdownBody(
             data: summary,
             styleSheet: MarkdownStyleSheet(
-              p: const TextStyle(
-                color: Colors.white,
+              p: TextStyle(
+                color: colorScheme.onSurface,
                 fontSize: 16,
                 height: 1.5,
               ),
-              h1: const TextStyle(color: Colors.white, fontSize: 22),
-              h2: const TextStyle(color: Colors.white, fontSize: 20),
-              h3: const TextStyle(color: Colors.white, fontSize: 18),
-              listBullet: const TextStyle(color: Colors.white),
-              strong: const TextStyle(
-                color: Colors.white,
+              h1: TextStyle(color: colorScheme.onSurface, fontSize: 22),
+              h2: TextStyle(color: colorScheme.onSurface, fontSize: 20),
+              h3: TextStyle(color: colorScheme.onSurface, fontSize: 18),
+              listBullet: TextStyle(color: colorScheme.onSurface),
+              strong: TextStyle(
+                color: colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
             ),

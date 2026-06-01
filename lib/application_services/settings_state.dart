@@ -5,10 +5,12 @@ class SettingsState {
   const SettingsState({
     required this.style,
     required this.locale,
+    this.themeMode = ThemeMode.system,
     this.isLoaded = false,
   });
 
   final ConclusionUiStyle style;
   final AppLocale locale;
+  final ThemeMode themeMode;
   final bool isLoaded;
 }

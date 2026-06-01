@@ -14,20 +14,19 @@ class SearchBriefingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     if (state.insight == null &&
         state.errorMessage == null &&
         state.articles.isNotEmpty) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.0),
         child: Center(
           child: SizedBox(
             width: 24,
             height: 24,
             child: CircularProgressIndicator(
-              color: colorScheme.onPrimary,
+              color: Colors.white,
               strokeWidth: 2,
             ),
           ),
@@ -39,7 +38,7 @@ class SearchBriefingSection extends StatelessWidget {
         child: Text(
           state.errorMessage!,
           style: textTheme.bodyMedium?.copyWith(
-            color: colorScheme.onPrimary.withValues(alpha: 0.7),
+            color: Colors.white.withValues(alpha: 0.7),
             fontStyle: FontStyle.italic,
           ),
         ),
@@ -53,7 +52,7 @@ class SearchBriefingSection extends StatelessWidget {
           return switch (style) {
             ConclusionUiStyle.conclusion => NewsConclusionSection(
               conclusion: state.insight!.conclusion,
-              textColor: colorScheme.onPrimary,
+              textColor: Colors.white,
             ),
             ConclusionUiStyle.insight => SignalCard(insight: state.insight!),
             ConclusionUiStyle.summary => ConversationalSummaryCard(

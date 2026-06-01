@@ -13,6 +13,7 @@ class ArticleTextContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -20,7 +21,7 @@ class ArticleTextContent extends StatelessWidget {
         Text(
           article.title,
           style: TextStyle(
-            color: Colors.blue[900],
+            color: colorScheme.onSurface,
             fontWeight: FontWeight.bold,
             fontSize: isExpanded ? 18 : 14,
             height: 1.2,
@@ -32,7 +33,7 @@ class ArticleTextContent extends StatelessWidget {
         Text(
           article.description,
           style: TextStyle(
-            color: Colors.blue[800]?.withValues(alpha: 0.8),
+            color: colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
             fontSize: isExpanded ? 13 : 12,
           ),
           maxLines: isExpanded ? 3 : 2,
@@ -44,7 +45,7 @@ class ArticleTextContent extends StatelessWidget {
             child: Text(
               article.articleText,
               style: TextStyle(
-                color: Colors.blue[800]?.withValues(alpha: 0.5),
+                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                 fontSize: 12,
                 fontStyle: FontStyle.italic,
               ),

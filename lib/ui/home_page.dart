@@ -93,6 +93,50 @@ class _HomePageState extends State<HomePage> {
                                   Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
+                                      BlocBuilder<SettingsBloc, SettingsState>(
+                                        builder:
+                                            (
+                                              BuildContext context,
+                                              SettingsState state,
+                                            ) {
+                                              return IconButton(
+                                                icon: AnimatedSwitcher(
+                                                  duration: const Duration(
+                                                    milliseconds: 300,
+                                                  ),
+                                                  child: Icon(
+                                                    state.themeMode.isSystem
+                                                        ? Icons.brightness_auto
+                                                        : state.themeMode ==
+                                                              ThemeMode.dark
+                                                        ? Icons.dark_mode
+                                                        : Icons.light_mode,
+                                                    key: ValueKey<ThemeMode>(
+                                                      state.themeMode,
+                                                    ),
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  final ThemeMode nextMode =
+                                                      state.themeMode ==
+                                                          ThemeMode.system
+                                                      ? ThemeMode.light
+                                                      : state.themeMode ==
+                                                            ThemeMode.light
+                                                      ? ThemeMode.dark
+                                                      : ThemeMode.system;
+                                                  context
+                                                      .read<SettingsBloc>()
+                                                      .add(
+                                                        SettingsThemeChanged(
+                                                          nextMode,
+                                                        ),
+                                                      );
+                                                },
+                                              );
+                                            },
+                                      ),
                                       RefreshButton(
                                         persistence: widget.persistence,
                                       ),

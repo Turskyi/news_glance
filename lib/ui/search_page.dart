@@ -49,11 +49,11 @@ class _SearchPageState extends State<SearchPage> {
           title: Text(
             l10n?.searchNews ?? 'Search News',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: colorScheme.onPrimary,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),
-          iconTheme: IconThemeData(color: colorScheme.onPrimary),
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: BlocBuilder<SearchBloc, SearchState>(
           builder: (BuildContext context, SearchState state) {
