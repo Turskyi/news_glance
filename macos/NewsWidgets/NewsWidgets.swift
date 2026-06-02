@@ -334,7 +334,7 @@ struct NewsWidgetsEntryView: View {
                                 weight: .regular
                             )
                         )
-                        .lineLimit(family == .systemSmall ? 2 : (family == .systemMedium ? 3 : 5))
+                        .lineLimit(family == .systemSmall ? 3 : (family == .systemMedium ? 6 : 10))
                         .foregroundColor(style.textColor)
                         .fixedSize(horizontal: false, vertical: true)
 

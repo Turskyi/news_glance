@@ -48,6 +48,8 @@
   implementations directly. They must only interact with `domain_services` or
   `application_services`. There is a regression test in
   `test/bloc_architecture_test.dart` to enforce this.
+- **State Management:** Use Bloc (`SettingsBloc`/`NewsBloc`) instead of Cubit for
+  cross-component state that drives UI and side effects.
 
 ## Modern UI & Aesthetics
 
@@ -60,6 +62,32 @@
   progress bars, or localized indicators).
 - **Transitions:** Prefer concise and elegant UI transitions.
 
+## Project-Specific Guardrails
+
+- **Caching:** Cache AI outputs per news checksum and persist to
+  `SharedPreferences` using keys managed in `lib/res/storage_keys.dart`.
+- **Fetch Optimization:** Avoid unnecessary re-fetches. When switching UI styles,
+  do not re-download news; only regenerate AI outputs when missing or when the
+  news set changed.
+- **Widget Integration:** Widget integration must read `widget_style` from app
+  group/shared prefs and render matching style ("insight" or "conclusion").
+- **Widget Payloads:** When writing widget payloads, include `widget_style` and
+  (optionally) the news checksum so the widget can access cached AI text.
+- **Static Members:** Avoid creating classes that contain only static methods.
+  Use top-level constants and functions instead.
+
+## Implementation Map
+
+- **Settings Management:** `lib/application_services/settings_bloc.dart` &
+  `lib/application_services/settings_service.dart`
+- **News Logic:** `lib/application_services/blocs/news_bloc.dart` (Loading,
+  Regeneration, Caching).
+- **Checksums:** `lib/application_services/blocs/news_helpers.dart`.
+- **Storage Keys:** `lib/res/storage_keys.dart`.
+- **Native Widgets:**
+    - Android: `android/app/src/main/java/com/turskyi/news_glance/NewsWidget.kt`
+    - iOS/macOS: `.../NewsWidgets/NewsWidgets.swift`
+
 ## Naming Conventions (Clean Code)
 
 - Follow "Clean Code" by Robert C. Martin.
@@ -71,3 +99,5 @@
     - `Info`
     - `Utils`
 - Use descriptive, intention-revealing names.
+
+# This file should never exceed 200 lines of code, meaning, this line should never be below line number 200. If we need to add something to this file, we simply have to remove something less critical.

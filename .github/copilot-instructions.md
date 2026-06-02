@@ -89,7 +89,7 @@ layers, never reversed.
 ### BLoC Patterns (Both news bloc and settings bloc)
 
 - **Bloc over Cubit**: Use `Bloc<Event, State>` for cross-component state
-  driving UI and side effects (as per `AI_GUARDRAILS.md`)
+  driving UI and side effects (as per `AGENTS.md`)
   ```
 
 ### Caching Strategy (AI-aware)
@@ -164,7 +164,7 @@ layers, never reversed.
 
 ## Important Files & Guardrails
 
-See `AI_GUARDRAILS.md` for:
+See `AGENTS.md` for:
 
 - Enforced BLoC usage for cross-component state
 - Cache invalidation rules

@@ -47,7 +47,7 @@ class NewsConclusionSection extends StatelessWidget {
                         context,
                       ).textTheme.titleMedium?.copyWith(color: effectiveColor),
                     ),
-                    maxLines: 5,
+                    maxLines: 10,
                     textDirection: TextDirection.ltr,
                   )..layout(maxWidth: constraints.maxWidth);
 

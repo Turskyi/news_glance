@@ -281,7 +281,7 @@ struct NewsWidgetsEntryView : View {
 
                     Text(entry.conclusion)
                         .font(.system(size: 12, weight: .regular))
-                        .lineLimit(4)
+                        .lineLimit(10)
                         .foregroundColor(style.textColor)
 
                     Spacer(minLength: 0)
