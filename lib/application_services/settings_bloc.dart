@@ -22,6 +22,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SetConclusionStyleEvent>(_onSetStyle);
     on<SetLocaleEvent>(_onSetLocale);
     on<SettingsThemeChanged>(_onSetThemeMode);
+    on<SetOnboardingCompletedEvent>(_onSetOnboardingCompleted);
   }
 
   final SettingsService _service;
@@ -31,6 +32,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     final ConclusionUiStyle style = await _service.getConclusionUiStyle();
     final AppLocale locale = await _service.getLocale();
     final ThemeMode themeMode = await _service.getThemeMode();
+    final bool isOnboardingCompleted = await _service.isOnboardingCompleted();
     debugPrint(
       'SettingsBloc: [_onLoad] settings fetched, emitting isLoaded: true',
     );
@@ -39,6 +41,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         style: style,
         locale: locale,
         themeMode: themeMode,
+        isOnboardingCompleted: isOnboardingCompleted,
         isLoaded: true,
       ),
     );
@@ -54,6 +57,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         style: event.style,
         locale: state.locale,
         themeMode: state.themeMode,
+        isOnboardingCompleted: state.isOnboardingCompleted,
         isLoaded: state.isLoaded,
       ),
     );
@@ -69,6 +73,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         style: state.style,
         locale: event.locale,
         themeMode: state.themeMode,
+        isOnboardingCompleted: state.isOnboardingCompleted,
         isLoaded: state.isLoaded,
       ),
     );
@@ -84,6 +89,23 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         style: state.style,
         locale: state.locale,
         themeMode: event.themeMode,
+        isOnboardingCompleted: state.isOnboardingCompleted,
+        isLoaded: state.isLoaded,
+      ),
+    );
+  }
+
+  Future<void> _onSetOnboardingCompleted(
+    SetOnboardingCompletedEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    await _service.setOnboardingCompleted(event.completed);
+    emit(
+      SettingsState(
+        style: state.style,
+        locale: state.locale,
+        themeMode: state.themeMode,
+        isOnboardingCompleted: event.completed,
         isLoaded: state.isLoaded,
       ),
     );

@@ -287,4 +287,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String copyright(int year, String appName) {
     return '© $year $appName';
   }
+
+  @override
+  String get onboardingTitle1 => 'AI-Powered Briefings';
+
+  @override
+  String get onboardingBody1 =>
+      'News Glance analyzes multiple international news stories and generates an AI-powered briefing designed to help you quickly understand what matters today.';
+
+  @override
+  String get onboardingTitle2 => 'See the Bigger Picture';
+
+  @override
+  String get onboardingBody2 =>
+      'Individual headlines can be noisy and disconnected. News Glance looks across multiple stories and attempts to identify broader patterns, emerging situations, and practical takeaways.';
+
+  @override
+  String get onboardingTitle3 => 'Choose Your Briefing Style';
+
+  @override
+  String get onboardingBody3 =>
+      'News Glance offers three ways to understand the news:\n\n• Insight - concise signal-oriented briefing\n\n• Conclusion - practical takeaway based on current events\n\n• Summary - a longer, conversational overview of today\'s developments\n\nYou can switch between styles at any time from the menu.';
+
+  @override
+  String get getStarted => 'Get Started';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get onboarding => 'Onboarding';
 }

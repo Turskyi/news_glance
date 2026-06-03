@@ -37,10 +37,16 @@ class NewsGlanceApp extends StatelessWidget {
       ],
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (BuildContext context, SettingsState state) {
+          if (!state.isLoaded) {
+            return const SizedBox.shrink();
+          }
+
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: constants.appName,
-            initialRoute: AppRoute.home.path,
+            initialRoute: state.isOnboardingCompleted
+                ? AppRoute.home.path
+                : AppRoute.onboarding.path,
             routes: _routes,
             theme: _theme,
             darkTheme: _darkTheme,

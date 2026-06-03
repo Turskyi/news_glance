@@ -26,3 +26,9 @@ class SettingsThemeChanged extends SettingsEvent {
 
   final ThemeMode themeMode;
 }
+
+class SetOnboardingCompletedEvent extends SettingsEvent {
+  const SetOnboardingCompletedEvent({required this.completed});
+
+  final bool completed;
+}

@@ -625,6 +625,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'© {year} {appName}'**
   String copyright(int year, String appName);
+
+  /// No description provided for @onboardingTitle1.
+  ///
+  /// In en, this message translates to:
+  /// **'AI-Powered Briefings'**
+  String get onboardingTitle1;
+
+  /// No description provided for @onboardingBody1.
+  ///
+  /// In en, this message translates to:
+  /// **'News Glance analyzes multiple international news stories and generates an AI-powered briefing designed to help you quickly understand what matters today.'**
+  String get onboardingBody1;
+
+  /// No description provided for @onboardingTitle2.
+  ///
+  /// In en, this message translates to:
+  /// **'See the Bigger Picture'**
+  String get onboardingTitle2;
+
+  /// No description provided for @onboardingBody2.
+  ///
+  /// In en, this message translates to:
+  /// **'Individual headlines can be noisy and disconnected. News Glance looks across multiple stories and attempts to identify broader patterns, emerging situations, and practical takeaways.'**
+  String get onboardingBody2;
+
+  /// No description provided for @onboardingTitle3.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Your Briefing Style'**
+  String get onboardingTitle3;
+
+  /// No description provided for @onboardingBody3.
+  ///
+  /// In en, this message translates to:
+  /// **'News Glance offers three ways to understand the news:\n\n• Insight - concise signal-oriented briefing\n\n• Conclusion - practical takeaway based on current events\n\n• Summary - a longer, conversational overview of today\'s developments\n\nYou can switch between styles at any time from the menu.'**
+  String get onboardingBody3;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Onboarding'**
+  String get onboarding;
 }
 
 class _AppLocalizationsDelegate

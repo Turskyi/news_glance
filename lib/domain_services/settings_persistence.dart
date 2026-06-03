@@ -14,4 +14,8 @@ abstract interface class SettingsPersistence {
   Future<void> saveThemeMode(ThemeMode themeMode);
 
   Future<ThemeMode?> getThemeMode();
+
+  Future<void> saveOnboardingCompleted(bool completed);
+
+  Future<bool> isOnboardingCompleted();
 }

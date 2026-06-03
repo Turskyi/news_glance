@@ -67,4 +67,16 @@ class SharedPreferencesSettingsPersistence implements SettingsPersistence {
 
     return ThemeMode.values.byName(raw);
   }
+
+  @override
+  Future<void> saveOnboardingCompleted(bool completed) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(storage_keys.onboardingCompleted, completed);
+  }
+
+  @override
+  Future<bool> isOnboardingCompleted() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(storage_keys.onboardingCompleted) ?? false;
+  }
 }

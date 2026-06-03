@@ -287,4 +287,37 @@ class AppLocalizationsUk extends AppLocalizations {
   String copyright(int year, String appName) {
     return '© $year $appName';
   }
+
+  @override
+  String get onboardingTitle1 => 'Брифінги на базі ШІ';
+
+  @override
+  String get onboardingBody1 =>
+      'News Glance аналізує кілька міжнародних новин і створює брифінг на базі ШІ, щоб допомогти вам швидко зрозуміти, що важливо сьогодні.';
+
+  @override
+  String get onboardingTitle2 => 'Бачте ширшу картину';
+
+  @override
+  String get onboardingBody2 =>
+      'Окремі заголовки можуть бути шумними та розрізненими. News Glance аналізує кілька історій і намагається виявити ширші закономірності, ситуації, що виникають, та практичні висновки.';
+
+  @override
+  String get onboardingTitle3 => 'Оберіть свій стиль брифінгу';
+
+  @override
+  String get onboardingBody3 =>
+      'News Glance пропонує три способи розуміння новин:\n\n• Розуміння - лаконічний брифінг, орієнтований на сигнали\n\n• Висновок - практичний підсумок на основі поточних подій\n\n• Підсумок - довший, розмовний огляд подій дня\n\nВи можете змінити стиль у будь-який час у меню.';
+
+  @override
+  String get getStarted => 'Почати';
+
+  @override
+  String get skip => 'Пропустити';
+
+  @override
+  String get next => 'Далі';
+
+  @override
+  String get onboarding => 'Знайомство';
 }

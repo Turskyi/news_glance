@@ -15,6 +15,7 @@ import 'package:news_glance/router/search_route_wrapper.dart';
 import 'package:news_glance/ui/about/about_page.dart';
 import 'package:news_glance/ui/article_screen.dart';
 import 'package:news_glance/ui/article_web_screen.dart';
+import 'package:news_glance/ui/onboarding/onboarding_screen.dart';
 
 class AppRouter {
   const AppRouter({
@@ -49,6 +50,7 @@ class AppRouter {
     AppRoute.article.path: (BuildContext _) => const ArticleScreen(),
     AppRoute.articleWeb.path: (BuildContext _) => const ArticleWebScreen(),
     AppRoute.about.path: (BuildContext _) => const AboutPage(),
+    AppRoute.onboarding.path: (BuildContext _) => const OnboardingScreen(),
     AppRoute.search.path: (BuildContext _) => SearchRouteWrapper(
       searchBloc: searchBloc,
       settingsBloc: settingsBloc,

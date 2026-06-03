@@ -118,5 +118,15 @@
         "type": "String"
       }
     }
-  }
+  },
+  "onboardingTitle1": "AI-Powered Briefings",
+  "onboardingBody1": "News Glance analyzes multiple international news stories and generates an AI-powered briefing designed to help you quickly understand what matters today.",
+  "onboardingTitle2": "See the Bigger Picture",
+  "onboardingBody2": "Individual headlines can be noisy and disconnected. News Glance looks across multiple stories and attempts to identify broader patterns, emerging situations, and practical takeaways.",
+  "onboardingTitle3": "Choose Your Briefing Style",
+  "onboardingBody3": "News Glance offers three ways to understand the news:\n\n• Insight - concise signal-oriented briefing\n\n• Conclusion - practical takeaway based on current events\n\n• Summary - a longer, conversational overview of today's developments\n\nYou can switch between styles at any time from the menu.",
+  "getStarted": "Get Started",
+  "skip": "Skip",
+  "next": "Next",
+  "onboarding": "Onboarding"
 }

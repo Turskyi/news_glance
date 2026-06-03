@@ -2,6 +2,7 @@ const String newsLastFetchAt = 'news_last_fetch_at';
 const String conclusionUiStyle = 'conclusion_ui_style';
 const String locale = 'locale';
 const String themeMode = 'theme_mode';
+const String onboardingCompleted = 'onboarding_completed';
 const String widgetUpdateFrequency = 'news_glance_widget_update_frequency';
 
 /// Home Widget Keys

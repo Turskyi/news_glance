@@ -50,4 +50,12 @@ class SettingsService {
     final ThemeMode? themeMode = await _persistence.getThemeMode();
     return themeMode ?? ThemeMode.system;
   }
+
+  Future<void> setOnboardingCompleted(bool completed) async {
+    await _persistence.saveOnboardingCompleted(completed);
+  }
+
+  Future<bool> isOnboardingCompleted() async {
+    return _persistence.isOnboardingCompleted();
+  }
 }

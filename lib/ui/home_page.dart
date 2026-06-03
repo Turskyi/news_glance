@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                             left: 20,
                             top: MediaQuery.paddingOf(context).top,
                             right: 20,
-                            bottom: 20,
+                            bottom: 8,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,21 +118,9 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                 ),
                                                 onPressed: () {
-                                                  final ThemeMode nextMode =
-                                                      state.themeMode ==
-                                                          ThemeMode.system
-                                                      ? ThemeMode.light
-                                                      : state.themeMode ==
-                                                            ThemeMode.light
-                                                      ? ThemeMode.dark
-                                                      : ThemeMode.system;
-                                                  context
-                                                      .read<SettingsBloc>()
-                                                      .add(
-                                                        SettingsThemeChanged(
-                                                          nextMode,
-                                                        ),
-                                                      );
+                                                  _cycleThemeMode(
+                                                    state.themeMode,
+                                                  );
                                                 },
                                               );
                                             },
@@ -145,9 +133,7 @@ class _HomePageState extends State<HomePage> {
                                           Icons.search,
                                           color: Colors.white,
                                         ),
-                                        onPressed: () => Navigator.of(
-                                          context,
-                                        ).pushNamed(AppRoute.search.path),
+                                        onPressed: _navigateToSearch,
                                       ),
                                       IconButton(
                                         icon: const Icon(
@@ -194,6 +180,7 @@ class _HomePageState extends State<HomePage> {
                           : SliverPadding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
+                                vertical: 12,
                               ),
                               sliver: NewsArticleList(news: state.news),
                             ),
@@ -218,8 +205,21 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  Future<Object?> _navigateToSearch() {
+    return Navigator.of(context).pushNamed(AppRoute.search.path);
+  }
+
+  void _cycleThemeMode(ThemeMode themeMode) {
+    final ThemeMode nextMode = themeMode.isSystem
+        ? ThemeMode.light
+        : themeMode.isLight
+        ? ThemeMode.dark
+        : ThemeMode.system;
+    return context.read<SettingsBloc>().add(SettingsThemeChanged(nextMode));
+  }
+
   void _loadNews() {
-    context.read<NewsBloc>().add(const LoadNewsEvent());
+    return context.read<NewsBloc>().add(const LoadNewsEvent());
   }
 
   void _blocListener(BuildContext context, NewsState state) {
@@ -234,11 +234,12 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _showSuccessSnackBar({
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+  _showSuccessSnackBar({
     required BuildContext context,
     required String message,
   }) {
-    ScaffoldMessenger.of(context).showSnackBar(
+    return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         duration: const Duration(seconds: 2),
@@ -247,11 +248,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showErrorSnackBar({
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _showErrorSnackBar({
     required BuildContext context,
     required String errorMessage,
   }) {
-    ScaffoldMessenger.of(context).showSnackBar(
+    return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(errorMessage),
         duration: const Duration(seconds: 3),

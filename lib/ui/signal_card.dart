@@ -20,157 +20,161 @@ class SignalCard extends StatelessWidget {
     final AppLocalizations? l10n = AppLocalizations.of(context);
     if (l10n == null) {
       return const SizedBox.shrink();
-    }
-    final SignalCardStyle styles = _getSignalStyles(
-      context,
-      l10n,
-      insight.level,
-    );
-    final bool isHighRisk =
-        insight.level != ActionableInsightLevel.neutral &&
-        insight.probability >= 0.8;
+    } else {
+      final SignalCardStyle styles = _getSignalStyles(
+        context,
+        l10n,
+        insight.level,
+      );
+      final bool isHighRisk =
+          insight.level != ActionableInsightLevel.neutral &&
+          insight.probability >= 0.8;
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 500),
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(opacity: animation, child: child);
-      },
-      child: insight.conclusion.trim().isNotEmpty
-          ? Container(
-              decoration: BoxDecoration(
-                color: styles.backgroundColor,
-                border: Border.all(color: styles.borderColor, width: 2),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.05),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
+      return AnimatedSwitcher(
+        duration: const Duration(milliseconds: 500),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        child: insight.conclusion.trim().isNotEmpty
+            ? Container(
+                decoration: BoxDecoration(
+                  color: styles.backgroundColor,
+                  border: Border.all(color: styles.borderColor, width: 2),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 24,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          width: 72,
+                          height: 72,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              styles.icon,
+                              style: const TextStyle(fontSize: 44),
                             ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            styles.icon,
-                            style: const TextStyle(fontSize: 44),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Container(
-                                  width: 9.6,
-                                  height: 9.6,
-                                  decoration: BoxDecoration(
-                                    color: styles.lightColor,
-                                    shape: BoxShape.circle,
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                        color: styles.lightColor.withValues(
-                                          alpha: 0.6,
-                                        ),
-                                        blurRadius: 8,
-                                        spreadRadius: 2,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(width: 9.6),
-                                Text(
-                                  styles.label,
-                                  style: TextStyle(
-                                    color: styles.textColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800,
-                                    letterSpacing: 2.4,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 5.6),
-                            if (insight.level !=
-                                ActionableInsightLevel.neutral) ...<Widget>[
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
                               Row(
                                 children: <Widget>[
-                                  Expanded(
-                                    child: Text(
-                                      '${insight.category.value} • '
-                                      '${(insight.probability * 100).toInt()}% '
-                                      '${l10n.probability}',
-                                      style: TextStyle(
-                                        fontSize: 12.8,
-                                        color: isHighRisk
-                                            ? const Color(0xFFE11D48)
-                                            : styles.textColor.withValues(
-                                                alpha: 0.7,
-                                              ),
-                                        fontWeight: FontWeight.w600,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                  Container(
+                                    width: 9.6,
+                                    height: 9.6,
+                                    decoration: BoxDecoration(
+                                      color: styles.lightColor,
+                                      shape: BoxShape.circle,
+                                      boxShadow: <BoxShadow>[
+                                        BoxShadow(
+                                          color: styles.lightColor.withValues(
+                                            alpha: 0.6,
+                                          ),
+                                          blurRadius: 8,
+                                          spreadRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 9.6),
+                                  Text(
+                                    styles.label,
+                                    style: TextStyle(
+                                      color: styles.textColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w800,
+                                      letterSpacing: 2.4,
                                     ),
                                   ),
                                 ],
                               ),
-                            ] else ...<Widget>[
-                              Text(
-                                l10n.noImmediateActionRequired,
-                                style: TextStyle(
-                                  fontSize: 12.8,
-                                  color: styles.textColor.withValues(
-                                    alpha: 0.6,
-                                  ),
-                                  fontWeight: FontWeight.w500,
+                              const SizedBox(height: 5.6),
+                              if (insight.level !=
+                                  ActionableInsightLevel.neutral) ...<Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Text(
+                                        '${insight.category.value} • '
+                                        '${(insight.probability * 100).toInt()}'
+                                        '% ${l10n.probability}',
+                                        style: TextStyle(
+                                          fontSize: 12.8,
+                                          color: isHighRisk
+                                              ? const Color(0xFFE11D48)
+                                              : styles.textColor.withValues(
+                                                  alpha: 0.7,
+                                                ),
+                                          fontWeight: FontWeight.w600,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
+                              ] else ...<Widget>[
+                                Text(
+                                  l10n.noImmediateActionRequired,
+                                  style: TextStyle(
+                                    fontSize: 12.8,
+                                    color: styles.textColor.withValues(
+                                      alpha: 0.6,
+                                    ),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
-                      ),
-                      SaveBriefingButton(
-                        insight: insight,
-                        type: ConclusionUiStyle.insight,
-                        searchQuery: searchQuery,
-                        color: styles.textColor,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.share, color: styles.textColor),
-                        onPressed: () {
-                          context.read<NewsBloc>().add(
-                            ShareBriefingEvent(insight.conclusion),
-                          );
-                        },
-                        tooltip: l10n.shareBriefing,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 28),
-                  MarkdownPreview(
-                    text: insight.conclusion.trim(),
-                    color: styles.textColor,
-                  ),
-                ],
-              ),
-            )
-          : const SizedBox.shrink(),
-    );
+                        SaveBriefingButton(
+                          insight: insight,
+                          type: ConclusionUiStyle.insight,
+                          searchQuery: searchQuery,
+                          color: styles.textColor,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.share, color: styles.textColor),
+                          onPressed: () {
+                            context.read<NewsBloc>().add(
+                              ShareBriefingEvent(insight.conclusion),
+                            );
+                          },
+                          tooltip: l10n.shareBriefing,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 28),
+                    MarkdownPreview(
+                      text: insight.conclusion.trim(),
+                      color: styles.textColor,
+                    ),
+                  ],
+                ),
+              )
+            : const SizedBox.shrink(),
+      );
+    }
   }
 
   SignalCardStyle _getSignalStyles(

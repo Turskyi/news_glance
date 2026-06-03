@@ -20,7 +20,7 @@ class NewsArticleList extends StatelessWidget {
           crossAxisSpacing: 16,
           childAspectRatio: 1.1,
         ),
-        delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+        delegate: SliverChildBuilderDelegate((BuildContext _, int index) {
           return NewsArticleGridTile(article: news[index]);
         }, childCount: news.length),
       );
