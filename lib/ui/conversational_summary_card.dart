@@ -26,15 +26,42 @@ class ConversationalSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final String summary = insight.conclusion;
     final AppLocalizations? l10n = AppLocalizations.of(context);
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final bool isLight = theme.brightness == Brightness.light;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: colorScheme.onSurface.withValues(alpha: 0.12),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isLight
+              ? <Color>[
+                  Colors.white.withValues(alpha: 0.9),
+                  Color.lerp(
+                    Colors.white,
+                    colorScheme.primary,
+                    0.1,
+                  )!.withValues(alpha: 0.9),
+                  Color.lerp(
+                    Colors.white,
+                    colorScheme.secondary,
+                    0.1,
+                  )!.withValues(alpha: 0.9),
+                ]
+              : <Color>[
+                  colorScheme.onSurface.withValues(alpha: 0.15),
+                  colorScheme.onSurface.withValues(alpha: 0.05),
+                ],
+        ),
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: colorScheme.onSurface.withValues(alpha: 0.2)),
+        border: Border.all(
+          color: isLight
+              ? colorScheme.primary.withValues(alpha: 0.2)
+              : colorScheme.onSurface.withValues(alpha: 0.2),
+        ),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
