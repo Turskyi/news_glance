@@ -6,22 +6,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
+import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/app_locale.dart';
+import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/ui/markdown_preview.dart';
+import 'package:news_glance/ui/save_briefing_button.dart';
 
 class NewsConclusionSection extends StatelessWidget {
   const NewsConclusionSection({
-    required this.conclusion,
+    required this.insight,
     this.textColor,
+    this.searchQuery,
     super.key,
   });
 
-  final String conclusion;
+  final ActionableInsight insight;
   final Color? textColor;
+  final String? searchQuery;
 
   @override
   Widget build(BuildContext context) {
+    final String conclusion = insight.conclusion;
     final Color effectiveColor =
         textColor ?? Theme.of(context).colorScheme.onSurface;
     final AppLocalizations? l10n = AppLocalizations.of(context);
@@ -78,6 +84,12 @@ class NewsConclusionSection extends StatelessWidget {
                             child: Text(l10n.readAloud),
                           ),
                           const Spacer(),
+                          SaveBriefingButton(
+                            insight: insight,
+                            type: ConclusionUiStyle.conclusion,
+                            searchQuery: searchQuery,
+                            color: effectiveColor,
+                          ),
                           Tooltip(
                             message: l10n.shareBriefing,
                             child: ElevatedButton.icon(

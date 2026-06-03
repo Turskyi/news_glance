@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/domain_models/actionable_insight.dart';
+import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/actionable_insight_level.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/ui/markdown_preview.dart';
+import 'package:news_glance/ui/save_briefing_button.dart';
 import 'package:news_glance/ui/signal_card_style.dart';
 
 class SignalCard extends StatelessWidget {
-  const SignalCard({required this.insight, super.key});
+  const SignalCard({required this.insight, this.searchQuery, super.key});
 
   final ActionableInsight insight;
+  final String? searchQuery;
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +143,12 @@ class SignalCard extends StatelessWidget {
                             ],
                           ],
                         ),
+                      ),
+                      SaveBriefingButton(
+                        insight: insight,
+                        type: ConclusionUiStyle.insight,
+                        searchQuery: searchQuery,
+                        color: styles.textColor,
                       ),
                       IconButton(
                         icon: Icon(Icons.share, color: styles.textColor),

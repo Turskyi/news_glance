@@ -56,6 +56,13 @@
   "searchError": "Під час пошуку сталася помилка.",
   "briefingShared": "Брифінг надіслано",
   "briefingCopiedToClipboard": "Брифінг скопійовано",
+  "saveBriefing": "Зберегти брифінг",
+  "briefingSaved": "Брифінг збережено",
+  "savedInsights": "Збережені аналітичні дані",
+  "noSavedInsights": "Поки що немає збережених даних.",
+  "delete": "Видалити",
+  "confirmDelete": "Ви впевнені, що хочете видалити цей брифінг?",
+  "cancel": "Скасувати",
   "aboutApp": "Про {appName}",
   "@aboutApp": {
     "placeholders": {

@@ -167,22 +167,22 @@ class _HomePageState extends State<HomePage> {
                                   final ConclusionUiStyle style = s.style;
                                   if (state is! LoadedConclusionState) {
                                     return const SizedBox.shrink();
+                                  } else {
+                                    return switch (style) {
+                                      ConclusionUiStyle.conclusion =>
+                                        NewsConclusionSection(
+                                          insight: state.insight,
+                                          textColor: Colors.white,
+                                        ),
+                                      ConclusionUiStyle.insight => SignalCard(
+                                        insight: state.insight,
+                                      ),
+                                      ConclusionUiStyle.summary =>
+                                        ConversationalSummaryCard(
+                                          insight: state.insight,
+                                        ),
+                                    };
                                   }
-
-                                  return switch (style) {
-                                    ConclusionUiStyle.conclusion =>
-                                      NewsConclusionSection(
-                                        conclusion: state.insight.conclusion,
-                                        textColor: Colors.white,
-                                      ),
-                                    ConclusionUiStyle.insight => SignalCard(
-                                      insight: state.insight,
-                                    ),
-                                    ConclusionUiStyle.summary =>
-                                      ConversationalSummaryCard(
-                                        summary: state.insight.conclusion,
-                                      ),
-                                  };
                                 },
                               ),
                             ],
@@ -190,11 +190,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       state.news.isEmpty
-                          ? EmptyNewsWidget(
-                              onRefresh: () => context.read<NewsBloc>().add(
-                                const LoadNewsEvent(),
-                              ),
-                            )
+                          ? EmptyNewsWidget(onRefresh: _loadNews)
                           : SliverPadding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
@@ -220,6 +216,10 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _loadNews() {
+    context.read<NewsBloc>().add(const LoadNewsEvent());
   }
 
   void _blocListener(BuildContext context, NewsState state) {

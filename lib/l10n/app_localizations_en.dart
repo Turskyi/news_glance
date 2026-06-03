@@ -160,6 +160,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get briefingCopiedToClipboard => 'Briefing copied to clipboard';
 
   @override
+  String get saveBriefing => 'Save briefing';
+
+  @override
+  String get briefingSaved => 'Briefing saved';
+
+  @override
+  String get savedInsights => 'Saved Insights';
+
+  @override
+  String get noSavedInsights => 'No saved insights yet.';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get confirmDelete => 'Are you sure you want to delete this briefing?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
   String aboutApp(String appName) {
     return 'About $appName';
   }

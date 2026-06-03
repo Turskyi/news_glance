@@ -8,10 +8,10 @@
 - **File Structure:** Every class must reside in its own dedicated file.
 - **Member Ordering:** Sort class members in a logical order (Constants, Fields,
   Constructor, Public Methods, Private Methods).
-  - Ensure the **caller is always above the callee**.
-  - Place **public methods above private methods**.
-  - Lifecycle methods should follow their execution order (e.g., `initState`
-    above `build`, and **`dispose` always below `build`**).
+    - Ensure the **caller is always above the callee**.
+    - Place **public methods above private methods**.
+    - Lifecycle methods should follow their execution order (e.g., `initState`
+      above `build`, and **`dispose` always below `build`**).
 - **Control Flow:** Prefer explicit `else` blocks for clarity.
 - **Comments:** Never remove existing comments.
 - **Safety:** Do not use assertions (`!`) or explicit casting (`as`). Use safe
@@ -48,7 +48,8 @@
   implementations directly. They must only interact with `domain_services` or
   `application_services`. There is a regression test in
   `test/bloc_architecture_test.dart` to enforce this.
-- **State Management:** Use Bloc (`SettingsBloc`/`NewsBloc`) instead of Cubit for
+- **State Management:** Use Bloc (`SettingsBloc`/`NewsBloc`) instead of Cubit
+  for
   cross-component state that drives UI and side effects.
 
 ## Modern UI & Aesthetics
@@ -66,7 +67,8 @@
 
 - **Caching:** Cache AI outputs per news checksum and persist to
   `SharedPreferences` using keys managed in `lib/res/storage_keys.dart`.
-- **Fetch Optimization:** Avoid unnecessary re-fetches. When switching UI styles,
+- **Fetch Optimization:** Avoid unnecessary re-fetches. When switching UI
+  styles,
   do not re-download news; only regenerate AI outputs when missing or when the
   news set changed.
 - **Widget Integration:** Widget integration must read `widget_style` from app

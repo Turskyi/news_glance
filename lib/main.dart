@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
+import 'package:news_glance/application_services/blocs/saved_briefings_bloc.dart';
 import 'package:news_glance/application_services/blocs/search_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/application_services/settings_service.dart';
@@ -32,10 +33,14 @@ void main() {
 
   final NewsBloc newsBloc = dependencies.get<NewsBloc>();
   final SearchBloc searchBloc = dependencies.get<SearchBloc>();
+  final SavedBriefingsBloc savedBriefingsBloc =
+      dependencies.get<SavedBriefingsBloc>()
+        ..add(const LoadSavedBriefingsEvent());
 
   final AppRouter appRouter = AppRouter(
     newsBloc: newsBloc,
     searchBloc: searchBloc,
+    savedBriefingsBloc: savedBriefingsBloc,
     settingsBloc: settingsBloc,
     homeWidgetService: dependencies.get<HomeWidgetService>(),
     settingsService: dependencies.get<SettingsService>(),
@@ -48,6 +53,7 @@ void main() {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       settingsBloc: settingsBloc,
+      savedBriefingsBloc: savedBriefingsBloc,
     ),
   );
 }

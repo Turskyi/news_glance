@@ -6,16 +6,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
+import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/app_locale.dart';
+import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
+import 'package:news_glance/ui/save_briefing_button.dart';
 
 class ConversationalSummaryCard extends StatelessWidget {
-  const ConversationalSummaryCard({required this.summary, super.key});
+  const ConversationalSummaryCard({
+    required this.insight,
+    this.searchQuery,
+    super.key,
+  });
 
-  final String summary;
+  final ActionableInsight insight;
+  final String? searchQuery;
 
   @override
   Widget build(BuildContext context) {
+    final String summary = insight.conclusion;
     final AppLocalizations? l10n = AppLocalizations.of(context);
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
@@ -63,6 +72,12 @@ class ConversationalSummaryCard extends StatelessWidget {
                 icon: Icon(Icons.volume_up, color: colorScheme.onSurface),
                 onPressed: () => _speak(context, summary),
                 tooltip: l10n?.readAloud,
+              ),
+              SaveBriefingButton(
+                insight: insight,
+                type: ConclusionUiStyle.summary,
+                searchQuery: searchQuery,
+                color: colorScheme.onSurface,
               ),
               IconButton(
                 icon: Icon(Icons.share, color: colorScheme.onSurface),

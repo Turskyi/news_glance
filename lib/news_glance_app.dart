@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:nested/nested.dart';
+import 'package:news_glance/application_services/blocs/saved_briefings_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/res/constants.dart' as constants;
@@ -12,6 +14,7 @@ class NewsGlanceApp extends StatelessWidget {
     required this._theme,
     required this._darkTheme,
     required this._settingsBloc,
+    required this._savedBriefingsBloc,
     super.key,
   });
 
@@ -19,11 +22,15 @@ class NewsGlanceApp extends StatelessWidget {
   final ThemeData _theme;
   final ThemeData _darkTheme;
   final SettingsBloc _settingsBloc;
+  final SavedBriefingsBloc _savedBriefingsBloc;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SettingsBloc>.value(
-      value: _settingsBloc,
+    return MultiBlocProvider(
+      providers: <SingleChildWidget>[
+        BlocProvider<SettingsBloc>.value(value: _settingsBloc),
+        BlocProvider<SavedBriefingsBloc>.value(value: _savedBriefingsBloc),
+      ],
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (BuildContext context, SettingsState state) {
           return MaterialApp(

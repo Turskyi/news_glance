@@ -12,6 +12,8 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:news_glance/application_services/blocs/news_bloc.dart' as _i347;
+import 'package:news_glance/application_services/blocs/saved_briefings_bloc.dart'
+    as _i720;
 import 'package:news_glance/application_services/blocs/search_bloc.dart'
     as _i998;
 import 'package:news_glance/application_services/home_widget_service_impl.dart'
@@ -28,6 +30,8 @@ import 'package:news_glance/domain_services/briefing_persistence.dart'
     as _i1009;
 import 'package:news_glance/domain_services/home_widget_service.dart' as _i182;
 import 'package:news_glance/domain_services/news_repository.dart' as _i875;
+import 'package:news_glance/domain_services/saved_briefing_persistence.dart'
+    as _i846;
 import 'package:news_glance/domain_services/search_persistence.dart' as _i457;
 import 'package:news_glance/domain_services/settings_persistence.dart' as _i300;
 import 'package:news_glance/domain_services/sharing_service.dart' as _i0;
@@ -37,6 +41,8 @@ import 'package:news_glance/domain_services/use_cases/compute_search_briefing_ch
     as _i985;
 import 'package:news_glance/infrastructure/persistence/shared_preferences_briefing_persistence.dart'
     as _i378;
+import 'package:news_glance/infrastructure/persistence/shared_preferences_saved_briefing_persistence.dart'
+    as _i813;
 import 'package:news_glance/infrastructure/persistence/shared_preferences_search_persistence.dart'
     as _i614;
 import 'package:news_glance/infrastructure/persistence/shared_preferences_settings_persistence.dart'
@@ -71,6 +77,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i457.SearchPersistence>(
       () => _i614.SharedPreferencesSearchPersistence(),
     );
+    gh.lazySingleton<_i846.SavedBriefingPersistence>(
+      () => _i813.SharedPreferencesSavedBriefingPersistence(),
+    );
     gh.lazySingleton<_i1009.BriefingPersistence>(
       () => _i378.SharedPreferencesBriefingPersistence(),
     );
@@ -81,6 +90,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i473.SettingsService(
         gh<_i300.SettingsPersistence>(),
         gh<_i182.HomeWidgetService>(),
+      ),
+    );
+    gh.factory<_i720.SavedBriefingsBloc>(
+      () => _i720.SavedBriefingsBloc(
+        gh<_i846.SavedBriefingPersistence>(),
+        gh<_i0.SharingService>(),
       ),
     );
     gh.factory<_i196.SettingsBloc>(

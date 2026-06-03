@@ -62,11 +62,11 @@ class _RestClient implements RestClient {
     final _options = _setStreamType<List<NewsArticleResponse>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
-        _dio.options,
-        'search-news',
-        queryParameters: queryParameters,
-        data: _data,
-      )
+            _dio.options,
+            'search-news',
+            queryParameters: queryParameters,
+            data: _data,
+          )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<List<dynamic>>(_options);
@@ -75,8 +75,8 @@ class _RestClient implements RestClient {
       _value = _result.data!
           .map(
             (dynamic i) =>
-            NewsArticleResponse.fromJson(i as Map<String, dynamic>),
-      )
+                NewsArticleResponse.fromJson(i as Map<String, dynamic>),
+          )
           .toList();
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
@@ -87,7 +87,8 @@ class _RestClient implements RestClient {
 
   @override
   Future<ActionableInsightResponse> getActionableInsight(
-      ConclusionRequest news,) async {
+    ConclusionRequest news,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -96,11 +97,11 @@ class _RestClient implements RestClient {
     final _options = _setStreamType<ActionableInsightResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
-        _dio.options,
-        'actionable-insight',
-        queryParameters: queryParameters,
-        data: _data,
-      )
+            _dio.options,
+            'actionable-insight',
+            queryParameters: queryParameters,
+            data: _data,
+          )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, Object?>>(_options);
@@ -124,11 +125,11 @@ class _RestClient implements RestClient {
     final _options = _setStreamType<SummaryResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
-        _dio.options,
-        'news-summary',
-        queryParameters: queryParameters,
-        data: _data,
-      )
+            _dio.options,
+            'news-summary',
+            queryParameters: queryParameters,
+            data: _data,
+          )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, Object?>>(_options);

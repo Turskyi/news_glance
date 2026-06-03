@@ -392,6 +392,48 @@ abstract class AppLocalizations {
   /// **'Briefing copied to clipboard'**
   String get briefingCopiedToClipboard;
 
+  /// No description provided for @saveBriefing.
+  ///
+  /// In en, this message translates to:
+  /// **'Save briefing'**
+  String get saveBriefing;
+
+  /// No description provided for @briefingSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Briefing saved'**
+  String get briefingSaved;
+
+  /// No description provided for @savedInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Insights'**
+  String get savedInsights;
+
+  /// No description provided for @noSavedInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved insights yet.'**
+  String get noSavedInsights;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @confirmDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this briefing?'**
+  String get confirmDelete;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
   /// No description provided for @aboutApp.
   ///
   /// In en, this message translates to:

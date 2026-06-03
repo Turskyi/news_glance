@@ -160,6 +160,27 @@ class AppLocalizationsUk extends AppLocalizations {
   String get briefingCopiedToClipboard => 'Брифінг скопійовано';
 
   @override
+  String get saveBriefing => 'Зберегти брифінг';
+
+  @override
+  String get briefingSaved => 'Брифінг збережено';
+
+  @override
+  String get savedInsights => 'Збережені аналітичні дані';
+
+  @override
+  String get noSavedInsights => 'Поки що немає збережених даних.';
+
+  @override
+  String get delete => 'Видалити';
+
+  @override
+  String get confirmDelete => 'Ви впевнені, що хочете видалити цей брифінг?';
+
+  @override
+  String get cancel => 'Скасувати';
+
+  @override
   String aboutApp(String appName) {
     return 'Про $appName';
   }

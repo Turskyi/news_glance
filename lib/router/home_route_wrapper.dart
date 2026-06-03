@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nested/nested.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
+import 'package:news_glance/application_services/blocs/saved_briefings_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/application_services/settings_service.dart';
 import 'package:news_glance/domain_models/actionable_insight.dart';
@@ -14,6 +15,7 @@ class HomeRouteWrapper extends StatefulWidget {
   const HomeRouteWrapper({
     required this.newsBloc,
     required this.settingsBloc,
+    required this.savedBriefingsBloc,
     required this.homeWidgetService,
     required this.settingsService,
     required this.persistence,
@@ -22,6 +24,7 @@ class HomeRouteWrapper extends StatefulWidget {
 
   final NewsBloc newsBloc;
   final SettingsBloc settingsBloc;
+  final SavedBriefingsBloc savedBriefingsBloc;
   final HomeWidgetService homeWidgetService;
   final SettingsService settingsService;
   final BriefingPersistence persistence;
@@ -48,6 +51,9 @@ class _HomeRouteWrapperState extends State<HomeRouteWrapper> {
       providers: <SingleChildWidget>[
         BlocProvider<NewsBloc>.value(value: widget.newsBloc),
         BlocProvider<SettingsBloc>.value(value: widget.settingsBloc),
+        BlocProvider<SavedBriefingsBloc>.value(
+          value: widget.savedBriefingsBloc,
+        ),
       ],
       child: MultiBlocListener(
         listeners: <SingleChildWidget>[

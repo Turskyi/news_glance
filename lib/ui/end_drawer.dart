@@ -106,6 +106,15 @@ class EndDrawer extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
+            leading: const Icon(Icons.star_outline),
+            title: Text(l10n.savedInsights),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(AppRoute.savedBriefings.path);
+            },
+          ),
+          const Divider(),
+          ListTile(
             leading: const Icon(Icons.info_outline),
             title: Text(l10n.aboutApp(l10n.appName)),
             onTap: () {
