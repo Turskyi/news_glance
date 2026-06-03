@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
+import 'package:news_glance/res/constants.dart';
 import 'package:news_glance/router/app_route.dart';
+import 'package:news_glance/ui/article_image.dart';
 import 'package:news_glance/ui/bookmark_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -134,46 +136,67 @@ class _ArticleScreenState extends State<ArticleScreen> {
               )
             : DecoratedBox(
                 decoration: BoxDecoration(color: theme.scaffoldBackgroundColor),
-                child: ListView(
-                  padding: const EdgeInsets.all(16.0),
-                  children: <Widget>[
-                    Text(
-                      args is NewsArticle ? args.description : '',
-                      style: theme.textTheme.titleMedium,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: maxContentWidth,
                     ),
-                    const SizedBox(height: 20.0),
-                    if (args is NewsArticle && args.imageUrl.isNotEmpty)
-                      Center(child: Image.network(args.imageUrl)),
-                    if (args is NewsArticle) const SizedBox(height: 20.0),
-                    SelectableText(
-                      args is NewsArticle ? args.articleText : '',
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: 16.0),
-                    GestureDetector(
-                      onTap: onUrlTap,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            args is NewsArticle ? '${l10n.source}: ' : '',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: theme.textTheme.titleLarge?.fontSize,
+                    child: ListView(
+                      padding: const EdgeInsets.all(16.0),
+                      children: <Widget>[
+                        if (args is NewsArticle && args.description.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            child: Text(
+                              args.description,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
-                          SelectableText(
-                            link,
+                        if (args is NewsArticle && args.imageUrl.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            child: ArticleImage(imageUrl: args.imageUrl),
+                          ),
+                        if (args is NewsArticle && args.articleText.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: SelectableText(
+                              args.articleText,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                        if (args is NewsArticle)
+                          GestureDetector(
                             onTap: onUrlTap,
-                            style: TextStyle(
-                              color: colorScheme.primary,
-                              decoration: TextDecoration.underline,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  '${l10n.source}: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        theme.textTheme.titleLarge?.fontSize,
+                                  ),
+                                ),
+                                SelectableText(
+                                  link,
+                                  onTap: onUrlTap,
+                                  style: TextStyle(
+                                    color: colorScheme.primary,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
       ),
