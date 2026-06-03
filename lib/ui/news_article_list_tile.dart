@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/router/app_route.dart';
+import 'package:news_glance/ui/bookmark_button.dart';
 import 'package:news_glance/ui/time_ago_formatter.dart';
 
 class NewsArticleListTile extends StatefulWidget {
@@ -107,10 +108,16 @@ class _NewsArticleListTileState extends State<NewsArticleListTile> {
               ),
             ],
           ),
-          trailing: Icon(
-            Icons.chevron_right_rounded,
-            color: colorScheme.outline,
-            size: 24,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              BookmarkButton(article: widget.article),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: colorScheme.outline,
+                size: 24,
+              ),
+            ],
           ),
           onTap: () => Navigator.pushNamed(
             context,

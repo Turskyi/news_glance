@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
 import 'package:news_glance/application_services/blocs/saved_briefings_bloc.dart';
+import 'package:news_glance/application_services/blocs/saved_news_bloc.dart';
 import 'package:news_glance/application_services/blocs/search_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/application_services/settings_service.dart';
@@ -9,6 +10,7 @@ import 'package:news_glance/domain_services/home_widget_service.dart';
 import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/router/home_route_wrapper.dart';
 import 'package:news_glance/router/saved_briefings_route_wrapper.dart';
+import 'package:news_glance/router/saved_news_route_wrapper.dart';
 import 'package:news_glance/router/search_route_wrapper.dart';
 import 'package:news_glance/ui/about/about_page.dart';
 import 'package:news_glance/ui/article_screen.dart';
@@ -19,6 +21,7 @@ class AppRouter {
     required this.newsBloc,
     required this.searchBloc,
     required this.savedBriefingsBloc,
+    required this.savedNewsBloc,
     required this.settingsBloc,
     required this.homeWidgetService,
     required this.settingsService,
@@ -28,6 +31,7 @@ class AppRouter {
   final NewsBloc newsBloc;
   final SearchBloc searchBloc;
   final SavedBriefingsBloc savedBriefingsBloc;
+  final SavedNewsBloc savedNewsBloc;
   final SettingsBloc settingsBloc;
   final HomeWidgetService homeWidgetService;
   final SettingsService settingsService;
@@ -55,5 +59,9 @@ class AppRouter {
           savedBriefingsBloc: savedBriefingsBloc,
           settingsBloc: settingsBloc,
         ),
+    AppRoute.savedArticles.path: (BuildContext _) => SavedNewsRouteWrapper(
+      savedNewsBloc: savedNewsBloc,
+      settingsBloc: settingsBloc,
+    ),
   };
 }

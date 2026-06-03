@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_glance/domain_models/news_article.dart';
+import 'package:news_glance/ui/bookmark_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleWebScreen extends StatefulWidget {
@@ -88,6 +89,9 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
             color: Colors.white,
           ),
           iconTheme: const IconThemeData(color: Colors.white),
+          actions: <Widget>[
+            if (args is NewsArticle) BookmarkButton(article: args),
+          ],
         ),
         body: DecoratedBox(
           decoration: BoxDecoration(

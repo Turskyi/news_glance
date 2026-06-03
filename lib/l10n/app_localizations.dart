@@ -416,6 +416,36 @@ abstract class AppLocalizations {
   /// **'No saved insights yet.'**
   String get noSavedInsights;
 
+  /// No description provided for @savedArticles.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Articles'**
+  String get savedArticles;
+
+  /// No description provided for @noSavedArticles.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved articles yet.'**
+  String get noSavedArticles;
+
+  /// No description provided for @saveArticlesToReadLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Save articles to read later.'**
+  String get saveArticlesToReadLater;
+
+  /// No description provided for @articleSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Article saved'**
+  String get articleSaved;
+
+  /// No description provided for @articleRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Article removed from bookmarks'**
+  String get articleRemoved;
+
   /// No description provided for @delete.
   ///
   /// In en, this message translates to:

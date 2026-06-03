@@ -172,6 +172,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noSavedInsights => 'No saved insights yet.';
 
   @override
+  String get savedArticles => 'Saved Articles';
+
+  @override
+  String get noSavedArticles => 'No saved articles yet.';
+
+  @override
+  String get saveArticlesToReadLater => 'Save articles to read later.';
+
+  @override
+  String get articleSaved => 'Article saved';
+
+  @override
+  String get articleRemoved => 'Article removed from bookmarks';
+
+  @override
   String get delete => 'Delete';
 
   @override

@@ -172,6 +172,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get noSavedInsights => 'Поки що немає збережених даних.';
 
   @override
+  String get savedArticles => 'Збережені статті';
+
+  @override
+  String get noSavedArticles => 'Ще немає збережених статей.';
+
+  @override
+  String get saveArticlesToReadLater =>
+      'Зберігайте статті, щоб прочитати їх пізніше.';
+
+  @override
+  String get articleSaved => 'Статтю збережено';
+
+  @override
+  String get articleRemoved => 'Статтю видалено з закладок';
+
+  @override
   String get delete => 'Видалити';
 
   @override

@@ -99,6 +99,7 @@ For more information, see the Flutter documentation.
 ```
 dart run build_runner clean
 dart run build_runner build --delete-conflicting-outputs
+flutter gen-l10n
 ```
 
 ## Running on Web (Debug Mode)

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/router/app_route.dart';
+import 'package:news_glance/ui/bookmark_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleScreen extends StatefulWidget {
@@ -109,6 +110,9 @@ class _ArticleScreenState extends State<ArticleScreen> {
             color: Colors.white,
           ),
           iconTheme: const IconThemeData(color: Colors.white),
+          actions: <Widget>[
+            if (args is NewsArticle) BookmarkButton(article: args),
+          ],
         ),
         body:
             args is NewsArticle &&

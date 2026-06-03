@@ -14,6 +14,8 @@ import 'package:injectable/injectable.dart' as _i526;
 import 'package:news_glance/application_services/blocs/news_bloc.dart' as _i347;
 import 'package:news_glance/application_services/blocs/saved_briefings_bloc.dart'
     as _i720;
+import 'package:news_glance/application_services/blocs/saved_news_bloc.dart'
+    as _i731;
 import 'package:news_glance/application_services/blocs/search_bloc.dart'
     as _i998;
 import 'package:news_glance/application_services/home_widget_service_impl.dart'
@@ -32,6 +34,8 @@ import 'package:news_glance/domain_services/home_widget_service.dart' as _i182;
 import 'package:news_glance/domain_services/news_repository.dart' as _i875;
 import 'package:news_glance/domain_services/saved_briefing_persistence.dart'
     as _i846;
+import 'package:news_glance/domain_services/saved_news_persistence.dart'
+    as _i703;
 import 'package:news_glance/domain_services/search_persistence.dart' as _i457;
 import 'package:news_glance/domain_services/settings_persistence.dart' as _i300;
 import 'package:news_glance/domain_services/sharing_service.dart' as _i0;
@@ -43,6 +47,8 @@ import 'package:news_glance/infrastructure/persistence/shared_preferences_briefi
     as _i378;
 import 'package:news_glance/infrastructure/persistence/shared_preferences_saved_briefing_persistence.dart'
     as _i813;
+import 'package:news_glance/infrastructure/persistence/shared_preferences_saved_news_persistence.dart'
+    as _i504;
 import 'package:news_glance/infrastructure/persistence/shared_preferences_search_persistence.dart'
     as _i614;
 import 'package:news_glance/infrastructure/persistence/shared_preferences_settings_persistence.dart'
@@ -83,8 +89,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i1009.BriefingPersistence>(
       () => _i378.SharedPreferencesBriefingPersistence(),
     );
+    gh.lazySingleton<_i703.SavedNewsPersistence>(
+      () => _i504.SharedPreferencesSavedNewsPersistence(),
+    );
     gh.factory<_i979.RestClient>(
       () => restClientModule.getRestClient(gh<_i890.LoggingInterceptor>()),
+    );
+    gh.factory<_i731.SavedNewsBloc>(
+      () => _i731.SavedNewsBloc(gh<_i703.SavedNewsPersistence>()),
     );
     gh.factory<_i473.SettingsService>(
       () => _i473.SettingsService(

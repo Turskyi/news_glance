@@ -3,6 +3,7 @@ import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/ui/article_text_content.dart';
 import 'package:news_glance/ui/article_timestamp_tag.dart';
+import 'package:news_glance/ui/bookmark_button.dart';
 
 class NewsArticleGridTile extends StatefulWidget {
   const NewsArticleGridTile({required this.article, super.key});
@@ -78,6 +79,15 @@ class _NewsArticleGridTileState extends State<NewsArticleGridTile> {
                               publishedAt: widget.article.publishedAt,
                             ),
                           ),
+                          Positioned(
+                            top: 4,
+                            right: 4,
+                            child: Material(
+                              color: Colors.black26,
+                              shape: const CircleBorder(),
+                              child: BookmarkButton(article: widget.article),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -92,19 +102,28 @@ class _NewsArticleGridTileState extends State<NewsArticleGridTile> {
                 )
               : Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Stack(
                     children: <Widget>[
-                      ArticleTimestampTag(
-                        publishedAt: widget.article.publishedAt,
-                        isFloating: false,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          ArticleTimestampTag(
+                            publishedAt: widget.article.publishedAt,
+                            isFloating: false,
+                          ),
+                          const SizedBox(height: 12),
+                          Expanded(
+                            child: ArticleTextContent(
+                              article: widget.article,
+                              isExpanded: true,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 12),
-                      Expanded(
-                        child: ArticleTextContent(
-                          article: widget.article,
-                          isExpanded: true,
-                        ),
+                      Positioned(
+                        top: -8,
+                        right: -8,
+                        child: BookmarkButton(article: widget.article),
                       ),
                     ],
                   ),
