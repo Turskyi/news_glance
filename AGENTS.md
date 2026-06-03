@@ -62,6 +62,11 @@
   delays. Use subtle, integrated loading indicators (e.g., Shimmer, small
   progress bars, or localized indicators).
 - **Transitions:** Prefer concise and elegant UI transitions.
+- **Width Constraints:** Use `maxContentWidth` from `lib/res/constants.dart`
+  to constrain the width of content that uses single-column list tiles (e.g.,
+  `SavedBriefingsScreen`, `AboutPage`) to ensure readability on wide screens.
+  Do not apply this constraint to the `HomePage` or `SearchPage`, as their grid
+  layouts are designed to scale and fill the available width.
 
 ## Project-Specific Guardrails
 

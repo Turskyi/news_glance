@@ -87,7 +87,9 @@ class _AboutPageState extends State<AboutPage> {
               children: <Widget>[
                 Center(
                   child: Container(
-                    constraints: const BoxConstraints(maxWidth: 800),
+                    constraints: const BoxConstraints(
+                      maxWidth: constants.maxContentWidth,
+                    ),
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Column(
                       children: <Widget>[
