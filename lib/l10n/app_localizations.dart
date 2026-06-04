@@ -140,6 +140,42 @@ abstract class AppLocalizations {
   /// **'Category'**
   String get category;
 
+  /// No description provided for @travelCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel'**
+  String get travelCategory;
+
+  /// No description provided for @financeCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
+  String get financeCategory;
+
+  /// No description provided for @safetyCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety'**
+  String get safetyCategory;
+
+  /// No description provided for @healthCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get healthCategory;
+
+  /// No description provided for @lifestyleCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifestyle'**
+  String get lifestyleCategory;
+
+  /// No description provided for @generalCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get generalCategory;
+
   /// No description provided for @signalLevel.
   ///
   /// In en, this message translates to:

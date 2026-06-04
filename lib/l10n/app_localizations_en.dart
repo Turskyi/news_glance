@@ -31,6 +31,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get category => 'Category';
 
   @override
+  String get travelCategory => 'Travel';
+
+  @override
+  String get financeCategory => 'Finance';
+
+  @override
+  String get safetyCategory => 'Safety';
+
+  @override
+  String get healthCategory => 'Health';
+
+  @override
+  String get lifestyleCategory => 'Lifestyle';
+
+  @override
+  String get generalCategory => 'General';
+
+  @override
   String get signalLevel => 'Signal Level';
 
   @override

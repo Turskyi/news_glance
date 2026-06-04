@@ -32,6 +32,8 @@ class ActionableInsight {
 
   bool get isAdvisory => level == ActionableInsightLevel.advisory;
 
+  bool get isNotNeutral => !isNeutral;
+
   @override
   String toString() =>
       'ActionableInsight(conclusion: $conclusion, level: $level, '

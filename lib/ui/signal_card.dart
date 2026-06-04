@@ -5,6 +5,7 @@ import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/actionable_insight_level.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
+import 'package:news_glance/ui/insight_category_probability_label.dart';
 import 'package:news_glance/ui/markdown_preview.dart';
 import 'package:news_glance/ui/save_briefing_button.dart';
 import 'package:news_glance/ui/signal_card_style.dart';
@@ -18,6 +19,7 @@ class SignalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? l10n = AppLocalizations.of(context);
+
     if (l10n == null) {
       return const SizedBox.shrink();
     } else {
@@ -109,28 +111,11 @@ class SignalCard extends StatelessWidget {
                                 ],
                               ),
                               const SizedBox(height: 5.6),
-                              if (insight.level !=
-                                  ActionableInsightLevel.neutral) ...<Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: Text(
-                                        '${insight.category.value} • '
-                                        '${(insight.probability * 100).toInt()}'
-                                        '% ${l10n.probability}',
-                                        style: TextStyle(
-                                          fontSize: 12.8,
-                                          color: isHighRisk
-                                              ? const Color(0xFFE11D48)
-                                              : styles.textColor.withValues(
-                                                  alpha: 0.7,
-                                                ),
-                                          fontWeight: FontWeight.w600,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                              if (insight.isNotNeutral) ...<Widget>[
+                                InsightCategoryProbabilityLabel(
+                                  insight: insight,
+                                  isHighRisk: isHighRisk,
+                                  styles: styles,
                                 ),
                               ] else ...<Widget>[
                                 Text(

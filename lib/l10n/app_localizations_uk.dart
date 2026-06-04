@@ -31,6 +31,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get category => 'Категорія';
 
   @override
+  String get travelCategory => 'Подорожі';
+
+  @override
+  String get financeCategory => 'Фінанси';
+
+  @override
+  String get safetyCategory => 'Безпека';
+
+  @override
+  String get healthCategory => 'Здоров\'я';
+
+  @override
+  String get lifestyleCategory => 'Стиль життя';
+
+  @override
+  String get generalCategory => 'Загальне';
+
+  @override
   String get signalLevel => 'Рівень сигналу';
 
   @override
