@@ -6,8 +6,15 @@ import 'package:news_glance/res/constants.dart' as constants;
 import 'package:news_glance/ui/saved_briefings/empty_saved_briefings_widget.dart';
 import 'package:news_glance/ui/saved_briefings/saved_briefing_card.dart';
 
-class SavedBriefingsScreen extends StatelessWidget {
+class SavedBriefingsScreen extends StatefulWidget {
   const SavedBriefingsScreen({super.key});
+
+  @override
+  State<SavedBriefingsScreen> createState() => _SavedBriefingsScreenState();
+}
+
+class _SavedBriefingsScreenState extends State<SavedBriefingsScreen> {
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,46 +48,56 @@ class SavedBriefingsScreen extends StatelessWidget {
           ),
           iconTheme: const IconThemeData(color: Colors.white),
         ),
-        body: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: constants.maxContentWidth,
-            ),
-            child: BlocBuilder<SavedBriefingsBloc, SavedBriefingsState>(
-              builder: (BuildContext _, SavedBriefingsState state) {
-                if (state is SavedBriefingsLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
-                  );
-                } else if (state is SavedBriefingsLoaded) {
-                  if (state.briefings.isEmpty) {
-                    return const EmptySavedBriefingsWidget();
-                  } else {
-                    return ListView.builder(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      itemCount: state.briefings.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return SavedBriefingCard(
-                          briefing: state.briefings[index],
-                        );
-                      },
-                    );
-                  }
-                } else if (state is SavedBriefingError) {
-                  return Center(
-                    child: Text(
-                      state.message,
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            ),
-          ),
+        body: BlocBuilder<SavedBriefingsBloc, SavedBriefingsState>(
+          builder: (BuildContext _, SavedBriefingsState state) {
+            if (state is SavedBriefingsLoading) {
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              );
+            } else if (state is SavedBriefingsLoaded) {
+              if (state.briefings.isEmpty) {
+                return const EmptySavedBriefingsWidget();
+              } else {
+                return Scrollbar(
+                  controller: _scrollController,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.only(bottom: 24),
+                    itemCount: state.briefings.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            maxWidth: constants.maxContentWidth,
+                          ),
+                          child: SavedBriefingCard(
+                            briefing: state.briefings[index],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            } else if (state is SavedBriefingError) {
+              return Center(
+                child: Text(
+                  state.message,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }

@@ -7,6 +7,7 @@ import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/application_services/settings_service.dart';
 import 'package:news_glance/domain_services/briefing_persistence.dart';
 import 'package:news_glance/domain_services/home_widget_service.dart';
+import 'package:news_glance/domain_services/sharing_service.dart';
 import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/router/home_route_wrapper.dart';
 import 'package:news_glance/router/saved_briefings_route_wrapper.dart';
@@ -27,6 +28,7 @@ class AppRouter {
     required this.homeWidgetService,
     required this.settingsService,
     required this.persistence,
+    required this.sharingService,
   });
 
   final NewsBloc newsBloc;
@@ -37,6 +39,7 @@ class AppRouter {
   final HomeWidgetService homeWidgetService;
   final SettingsService settingsService;
   final BriefingPersistence persistence;
+  final SharingService sharingService;
 
   Map<String, WidgetBuilder> get routeMap => <String, WidgetBuilder>{
     AppRoute.home.path: (BuildContext _) => HomeRouteWrapper(
@@ -47,7 +50,8 @@ class AppRouter {
       settingsService: settingsService,
       persistence: persistence,
     ),
-    AppRoute.article.path: (BuildContext _) => const ArticleScreen(),
+    AppRoute.article.path: (BuildContext _) =>
+        ArticleScreen(sharingService: sharingService),
     AppRoute.articleWeb.path: (BuildContext _) => const ArticleWebScreen(),
     AppRoute.about.path: (BuildContext _) => const AboutPage(),
     AppRoute.onboarding.path: (BuildContext _) => const OnboardingScreen(),

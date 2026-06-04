@@ -6,6 +6,9 @@
 - **Explicit Typing:** Always specify types explicitly; avoid `dynamic` or
   inferred types when clarity is needed.
 - **File Structure:** Every class must reside in its own dedicated file.
+    Exceptions include the `State` class of a `StatefulWidget` or
+    tightly-coupled `Event` and `State` definitions within BLoC files using the
+    `part of` pattern.
 - **Member Ordering:** Sort class members in a logical order (Constants, Fields,
   Constructor, Public Methods, Private Methods).
     - Ensure the **caller is always above the callee**.

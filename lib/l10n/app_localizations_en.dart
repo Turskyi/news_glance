@@ -130,6 +130,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shareBriefing => 'Share briefing';
 
   @override
+  String get share => 'Share';
+
+  @override
+  String get copyLink => 'Copy Link';
+
+  @override
+  String get open => 'Open';
+
+  @override
+  String get linkCopiedToClipboard => 'Link copied to clipboard';
+
+  @override
   String get searchNews => 'News Glance Search';
 
   @override

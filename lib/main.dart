@@ -10,6 +10,7 @@ import 'package:news_glance/application_services/settings_service.dart';
 import 'package:news_glance/di/injector.dart' as di;
 import 'package:news_glance/domain_services/briefing_persistence.dart';
 import 'package:news_glance/domain_services/home_widget_service.dart';
+import 'package:news_glance/domain_services/sharing_service.dart';
 import 'package:news_glance/news_glance_app.dart';
 import 'package:news_glance/res/app_theme.dart';
 import 'package:news_glance/router/routes.dart';
@@ -51,6 +52,7 @@ void main() {
     homeWidgetService: dependencies.get<HomeWidgetService>(),
     settingsService: dependencies.get<SettingsService>(),
     persistence: dependencies.get<BriefingPersistence>(),
+    sharingService: dependencies.get<SharingService>(),
   );
 
   runApp(

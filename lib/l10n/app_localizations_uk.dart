@@ -130,6 +130,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get shareBriefing => 'Поділитися брифінгом';
 
   @override
+  String get share => 'Поділитися';
+
+  @override
+  String get copyLink => 'Скопіювати посилання';
+
+  @override
+  String get open => 'Відкрити';
+
+  @override
+  String get linkCopiedToClipboard => 'Посилання скопійовано';
+
+  @override
   String get searchNews => 'News Glance Пошук';
 
   @override
