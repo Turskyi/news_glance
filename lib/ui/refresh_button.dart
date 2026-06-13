@@ -26,7 +26,7 @@ class _RefreshButtonState extends State<RefreshButton> {
 
     // Subscribe to NewsBloc stream to refresh the cached future when news
     // are loaded so the button visibility updates immediately.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((Duration _) {
       try {
         final NewsBloc bloc = context.read<NewsBloc>();
         _newsSub = bloc.stream.listen((NewsState _) async {
@@ -37,16 +37,11 @@ class _RefreshButtonState extends State<RefreshButton> {
             _lastFetchFuture = newFuture;
           });
         });
-      } catch (_) {
-        // If bloc is not available, ignore — still works initially
+      } catch (e) {
+        debugPrint('Exception in RefreshButton initState: $e');
+        // If bloc is not available, ignore - still works initially
       }
     });
-  }
-
-  @override
-  void dispose() {
-    _newsSub?.cancel();
-    super.dispose();
   }
 
   @override
@@ -66,10 +61,10 @@ class _RefreshButtonState extends State<RefreshButton> {
             last == null ||
             now.difference(last).inMinutes >= constants.manualRefreshMinMinutes;
         if (canRefresh) {
-          return TextButton.icon(
+          return IconButton(
             onPressed: () => _handleRefresh(context),
             icon: const Icon(Icons.refresh, color: Colors.white),
-            label: const Text('Refresh', style: TextStyle(color: Colors.white)),
+            tooltip: 'Refresh',
           );
         } else {
           return const SizedBox.shrink();
@@ -78,9 +73,17 @@ class _RefreshButtonState extends State<RefreshButton> {
     );
   }
 
+  @override
+  void dispose() {
+    _newsSub?.cancel();
+    super.dispose();
+  }
+
   void _handleRefresh(BuildContext context) {
     try {
       context.read<NewsBloc>().add(const LoadNewsEvent());
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('Exception in RefreshButton _handleRefresh: $e');
+    }
   }
 }

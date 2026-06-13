@@ -79,6 +79,7 @@ class _AboutPageState extends State<AboutPage> {
           ),
         ),
         child: SafeArea(
+          bottom: false,
           child: Scrollbar(
             controller: _scrollController,
             child: ListView(

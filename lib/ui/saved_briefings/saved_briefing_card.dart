@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:news_glance/application_services/blocs/saved_briefings_bloc.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
 import 'package:news_glance/domain_models/saved_briefing.dart';
@@ -58,9 +59,54 @@ class SavedBriefingCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  MarkdownPreview(
-                    text: briefing.conclusion,
-                    color: colorScheme.onSurface,
+                  LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                          final String plainText = MarkdownPreview.getPlainText(
+                            briefing.conclusion,
+                          );
+                          final TextPainter textPainter = TextPainter(
+                            text: TextSpan(
+                              text: plainText,
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(color: colorScheme.onSurface),
+                            ),
+                            maxLines: 10,
+                            textDirection: TextDirection.ltr,
+                            textScaler: MediaQuery.textScalerOf(context),
+                          )..layout(maxWidth: constraints.maxWidth);
+
+                          final bool hasOverflow =
+                              textPainter.didExceedMaxLines;
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              MarkdownPreview(
+                                text: briefing.conclusion,
+                                color: colorScheme.onSurface,
+                              ),
+                              if (hasOverflow)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: TextButton(
+                                    onPressed: () => _showFullBriefingDialog(
+                                      context,
+                                      briefing,
+                                      l10n,
+                                    ),
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.all(4),
+                                      minimumSize: const Size(0, 0),
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                    child: Text(l10n?.readMore ?? 'Read more'),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -149,6 +195,56 @@ class SavedBriefingCard extends StatelessWidget {
               ),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  void _showFullBriefingDialog(
+    BuildContext context,
+    SavedBriefing briefing,
+    AppLocalizations? l10n,
+  ) {
+    if (l10n == null) return;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  _getTypeLabel(l10n, briefing),
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: MarkdownBody(
+                      data: briefing.conclusion,
+                      selectable: true,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: Navigator.of(context).pop,
+                    child: Text(l10n.cancel),
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );

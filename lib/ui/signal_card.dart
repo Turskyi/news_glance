@@ -23,6 +23,9 @@ class SignalCard extends StatelessWidget {
     if (l10n == null) {
       return const SizedBox.shrink();
     } else {
+      const double iconBoxSize = 64.0;
+      const double indicatorSize = 9.6;
+
       final SignalCardStyle styles = _getSignalStyles(
         context,
         l10n,
@@ -31,7 +34,8 @@ class SignalCard extends StatelessWidget {
       final bool isHighRisk =
           insight.level != ActionableInsightLevel.neutral &&
           insight.probability >= 0.8;
-
+      final ThemeData theme = Theme.of(context);
+      final TextTheme textTheme = theme.textTheme;
       return AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),
         transitionBuilder: (Widget child, Animation<double> animation) {
@@ -54,10 +58,10 @@ class SignalCard extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         Container(
-                          width: 72,
-                          height: 72,
+                          width: iconBoxSize,
+                          height: iconBoxSize,
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
+                            color: theme.colorScheme.surface,
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
@@ -70,11 +74,13 @@ class SignalCard extends StatelessWidget {
                           child: Center(
                             child: Text(
                               styles.icon,
-                              style: const TextStyle(fontSize: 44),
+                              style: TextStyle(
+                                fontSize: textTheme.displayMedium?.fontSize,
+                              ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 20),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,8 +88,8 @@ class SignalCard extends StatelessWidget {
                               Row(
                                 children: <Widget>[
                                   Container(
-                                    width: 9.6,
-                                    height: 9.6,
+                                    width: indicatorSize,
+                                    height: indicatorSize,
                                     decoration: BoxDecoration(
                                       color: styles.lightColor,
                                       shape: BoxShape.circle,
@@ -98,19 +104,19 @@ class SignalCard extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(width: 9.6),
+                                  const SizedBox(width: 8),
                                   Text(
                                     styles.label,
                                     style: TextStyle(
                                       color: styles.textColor,
-                                      fontSize: 14,
+                                      fontSize: textTheme.titleSmall?.fontSize,
                                       fontWeight: FontWeight.w800,
                                       letterSpacing: 2.4,
                                     ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 5.6),
+                              const SizedBox(height: 4),
                               if (insight.isNotNeutral) ...<Widget>[
                                 InsightCategoryProbabilityLabel(
                                   insight: insight,
@@ -121,7 +127,7 @@ class SignalCard extends StatelessWidget {
                                 Text(
                                   l10n.noImmediateActionRequired,
                                   style: TextStyle(
-                                    fontSize: 12.8,
+                                    fontSize: textTheme.labelMedium?.fontSize,
                                     color: styles.textColor.withValues(
                                       alpha: 0.6,
                                     ),
@@ -141,9 +147,7 @@ class SignalCard extends StatelessWidget {
                         IconButton(
                           icon: Icon(Icons.share, color: styles.textColor),
                           onPressed: () {
-                            context.read<NewsBloc>().add(
-                              ShareBriefingEvent(insight.conclusion),
-                            );
+                            _shareBriefing(context);
                           },
                           tooltip: l10n.shareBriefing,
                         ),
@@ -160,6 +164,10 @@ class SignalCard extends StatelessWidget {
             : const SizedBox.shrink(),
       );
     }
+  }
+
+  void _shareBriefing(BuildContext context) {
+    context.read<NewsBloc>().add(ShareBriefingEvent(insight.conclusion));
   }
 
   SignalCardStyle _getSignalStyles(

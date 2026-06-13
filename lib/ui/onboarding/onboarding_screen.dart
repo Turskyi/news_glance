@@ -21,6 +21,53 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
 
   @override
+  Widget build(BuildContext context) {
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+
+    if (l10n == null) {
+      return const SizedBox.shrink();
+    } else {
+      return Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: _onPageChanged,
+                  children: <Widget>[
+                    OnboardingPageView(
+                      title: l10n.onboardingTitle1,
+                      body: l10n.onboardingBody1,
+                      illustration: const OnboardingIllustrationOne(),
+                    ),
+                    OnboardingPageView(
+                      title: l10n.onboardingTitle2,
+                      body: l10n.onboardingBody2,
+                      illustration: const OnboardingIllustrationTwo(),
+                    ),
+                    OnboardingPageView(
+                      title: l10n.onboardingTitle3,
+                      body: l10n.onboardingBody3,
+                      illustration: const OnboardingIllustrationThree(),
+                    ),
+                  ],
+                ),
+              ),
+              OnboardingNavigationBar(
+                currentPage: _currentPage,
+                totalPages: 3,
+                onNext: _onNext,
+                onSkip: _onSkip,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
@@ -52,62 +99,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final AppLocalizations? l10n = AppLocalizations.of(context);
-
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (int page) {
-                setState(() {
-                  _currentPage = page;
-                });
-              },
-              children: <Widget>[
-                OnboardingPageView(
-                  title: l10n?.onboardingTitle1 ?? 'AI-Powered Briefings',
-                  body:
-                      l10n?.onboardingBody1 ??
-                      'News Glance analyzes multiple international news '
-                          'stories and generates an AI-powered briefing '
-                          'designed to help you quickly understand what '
-                          'matters today.',
-                  illustration: const OnboardingIllustrationOne(),
-                ),
-                OnboardingPageView(
-                  title: l10n?.onboardingTitle2 ?? 'See the Bigger Picture',
-                  body:
-                      l10n?.onboardingBody2 ??
-                      'Individual headlines can be noisy and disconnected. '
-                          'News Glance looks across multiple stories and '
-                          'attempts to identify broader patterns, emerging '
-                          'situations, and practical takeaways.',
-                  illustration: const OnboardingIllustrationTwo(),
-                ),
-                OnboardingPageView(
-                  title: l10n?.onboardingTitle3 ?? 'Get Personalized Insights',
-                  body:
-                      l10n?.onboardingBody3 ??
-                      'News Glance tailors its briefings to your interests and '
-                          'reading habits, ensuring you receive the most '
-                          'relevant information every day.',
-                  illustration: const OnboardingIllustrationThree(),
-                ),
-              ],
-            ),
-          ),
-          OnboardingNavigationBar(
-            currentPage: _currentPage,
-            totalPages: 3,
-            onNext: _onNext,
-            onSkip: _onSkip,
-          ),
-        ],
-      ),
-    );
+  void _onPageChanged(int page) {
+    setState(() {
+      _currentPage = page;
+    });
   }
 }

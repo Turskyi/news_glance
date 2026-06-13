@@ -21,52 +21,56 @@ class OnboardingNavigationBar extends StatelessWidget {
     final AppLocalizations? l10n = AppLocalizations.of(context);
     final bool isLastPage = currentPage == totalPages - 1;
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: constants.maxContentWidth,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                // Skip Button
-                Opacity(
-                  opacity: isLastPage ? 0.0 : 1.0,
-                  child: TextButton(
-                    onPressed: isLastPage ? null : onSkip,
-                    child: Text(l10n?.skip ?? 'Skip'),
+    if (l10n == null) {
+      return const SizedBox.shrink();
+    } else {
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: constants.maxContentWidth,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  // Skip Button
+                  Opacity(
+                    opacity: isLastPage ? 0.0 : 1.0,
+                    child: TextButton(
+                      onPressed: isLastPage ? null : onSkip,
+                      child: Text(l10n.skip),
+                    ),
                   ),
-                ),
 
-                // Page Indicator
-                Row(
-                  children: List<Widget>.generate(
-                    totalPages,
-                    (int index) =>
-                        _PageIndicator(isActive: index == currentPage),
+                  // Page Indicator
+                  Row(
+                    children: List<Widget>.generate(
+                      totalPages,
+                      (int index) =>
+                          _PageIndicator(isActive: index == currentPage),
+                    ),
                   ),
-                ),
 
-                // Next / Get Started Button
-                if (isLastPage)
-                  FilledButton(
-                    onPressed: onNext,
-                    child: Text(l10n?.getStarted ?? 'Get Started'),
-                  )
-                else
-                  IconButton.filled(
-                    onPressed: onNext,
-                    icon: const Icon(Icons.chevron_right),
-                  ),
-              ],
+                  // Next / Get Started Button
+                  if (isLastPage)
+                    FilledButton(
+                      onPressed: onNext,
+                      child: Text(l10n.getStarted),
+                    )
+                  else
+                    IconButton.filled(
+                      onPressed: onNext,
+                      icon: const Icon(Icons.chevron_right),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 }
 

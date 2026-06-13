@@ -42,13 +42,7 @@ class SaveBriefingButton extends StatelessWidget {
           onPressed: isSaved
               ? null
               : () {
-                  context.read<SavedBriefingsBloc>().add(
-                    SaveBriefingEvent(
-                      insight: insight,
-                      type: type,
-                      searchQuery: searchQuery,
-                    ),
-                  );
+                  _saveBriefing(context);
                   _showFeedback(context, l10n);
                 },
           tooltip: isSaved
@@ -59,8 +53,17 @@ class SaveBriefingButton extends StatelessWidget {
     );
   }
 
-  void _showFeedback(BuildContext context, AppLocalizations? l10n) {
-    ScaffoldMessenger.of(context).showSnackBar(
+  void _saveBriefing(BuildContext context) {
+    return context.read<SavedBriefingsBloc>().add(
+      SaveBriefingEvent(insight: insight, type: type, searchQuery: searchQuery),
+    );
+  }
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _showFeedback(
+    BuildContext context,
+    AppLocalizations? l10n,
+  ) {
+    return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(l10n?.briefingSaved ?? 'Insight saved'),
         duration: const Duration(seconds: 2),

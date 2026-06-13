@@ -80,14 +80,20 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text(
-                                    l10n?.appName ?? 'News Glance',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Theme.of(
-                                        context,
-                                      ).textTheme.displaySmall?.fontSize,
+                                  Flexible(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        l10n?.appName ?? 'News Glance',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Theme.of(
+                                            context,
+                                          ).textTheme.headlineLarge?.fontSize,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   Row(
@@ -96,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                                       BlocBuilder<SettingsBloc, SettingsState>(
                                         builder:
                                             (
-                                              BuildContext context,
+                                              BuildContext _,
                                               SettingsState state,
                                             ) {
                                               return IconButton(

@@ -16,10 +16,10 @@ class MarkdownPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle style = TextStyle(
-      fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-      color: color ?? Theme.of(context).colorScheme.onSurface,
-    );
+    final TextStyle style =
+        (Theme.of(context).textTheme.titleMedium ?? const TextStyle()).copyWith(
+          color: color ?? Theme.of(context).colorScheme.onSurface,
+        );
 
     return SelectionArea(
       child: Text(
@@ -33,11 +33,23 @@ class MarkdownPreview extends StatelessWidget {
 
   static String getPlainText(String markdown) {
     // Strip Markdown to plain text.
-    String plainText = md.markdownToHtml(markdown);
-    // Remove HTML tags.
+    String html = md.markdownToHtml(markdown);
+    // Replace block-level tags with newlines to preserve structure
+    String plainText = html
+        .replaceAll(RegExp(r'</?(p|h[1-6]|li|br|ul|ol)>'), '\n')
+        .replaceAll(RegExp(r'\n\s*\n\s*\n'), '\n\n');
+
+    // Remove remaining HTML tags.
     plainText = plainText.replaceAll(RegExp(r'<[^>]*>'), '');
-    // Decode HTML entities if any (optional, but good for UX)
-    // For now, let's keep it simple as it was.
+
+    // Decode common HTML entities
+    plainText = plainText
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#39;', "'");
+
     return plainText.trim();
   }
 }

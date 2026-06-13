@@ -55,6 +55,7 @@ class NewsConclusionSection extends StatelessWidget {
                     ),
                     maxLines: 10,
                     textDirection: TextDirection.ltr,
+                    textScaler: MediaQuery.textScalerOf(context),
                   )..layout(maxWidth: constraints.maxWidth);
 
                   final bool hasOverflow = textPainter.didExceedMaxLines;
@@ -67,42 +68,74 @@ class NewsConclusionSection extends StatelessWidget {
                         color: effectiveColor,
                       ),
                       const SizedBox(height: 8),
-                      Row(
-                        children: <Widget>[
-                          if (hasOverflow) ...<Widget>[
-                            ElevatedButton(
-                              onPressed: () => _showFullConclusionDialog(
-                                context,
-                                conclusion,
-                              ),
-                              child: Text(l10n.readMore),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Wrap(
+                          alignment: WrapAlignment.spaceBetween,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: <Widget>[
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: <Widget>[
+                                if (hasOverflow)
+                                  ElevatedButton(
+                                    onPressed: () => _showFullConclusionDialog(
+                                      context,
+                                      conclusion,
+                                    ),
+                                    child: Text(l10n.readMore),
+                                  ),
+                                ElevatedButton(
+                                  onPressed: () => _speak(context, conclusion),
+                                  child: Text(l10n.readAloud),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 8),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: <Widget>[
+                                SaveBriefingButton(
+                                  insight: insight,
+                                  type: ConclusionUiStyle.conclusion,
+                                  searchQuery: searchQuery,
+                                  color: effectiveColor,
+                                ),
+                                Tooltip(
+                                  message: l10n.shareBriefing,
+                                  child: constraints.maxWidth > 360
+                                      ? ElevatedButton.icon(
+                                          onPressed: () {
+                                            context.read<NewsBloc>().add(
+                                              ShareBriefingEvent(conclusion),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.share,
+                                            size: 18,
+                                          ),
+                                          label: Text(l10n.shareBriefing),
+                                        )
+                                      : ElevatedButton(
+                                          onPressed: () {
+                                            context.read<NewsBloc>().add(
+                                              ShareBriefingEvent(conclusion),
+                                            );
+                                          },
+                                          child: const Icon(
+                                            Icons.share,
+                                            size: 18,
+                                          ),
+                                        ),
+                                ),
+                              ],
+                            ),
                           ],
-                          ElevatedButton(
-                            onPressed: () => _speak(context, conclusion),
-                            child: Text(l10n.readAloud),
-                          ),
-                          const Spacer(),
-                          SaveBriefingButton(
-                            insight: insight,
-                            type: ConclusionUiStyle.conclusion,
-                            searchQuery: searchQuery,
-                            color: effectiveColor,
-                          ),
-                          Tooltip(
-                            message: l10n.shareBriefing,
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                context.read<NewsBloc>().add(
-                                  ShareBriefingEvent(conclusion),
-                                );
-                              },
-                              icon: const Icon(Icons.share, size: 18),
-                              label: Text(l10n.shareBriefing),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   );
@@ -176,8 +209,8 @@ class NewsConclusionSection extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(l10n.close),
+                    onPressed: Navigator.of(context).pop,
+                    child: Text(l10n.cancel),
                   ),
                 ],
               ),
