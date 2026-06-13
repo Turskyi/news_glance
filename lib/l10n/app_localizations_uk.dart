@@ -67,7 +67,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get allClear => 'ВСЕ ЧИСТО';
 
   @override
-  String get criticalAction => 'КРИТИЧНА ДІЯ';
+  String get criticalAction => 'КРИТИЧНО';
 
   @override
   String get warning => 'ПОПЕРЕДЖЕННЯ';
