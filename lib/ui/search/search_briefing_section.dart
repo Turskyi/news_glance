@@ -16,9 +16,9 @@ class SearchBriefingSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-
+    final String? errorMessage = state.errorMessage;
     if (state.insight == null &&
-        state.errorMessage == null &&
+        errorMessage == null &&
         state.articles.isNotEmpty) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -33,11 +33,11 @@ class SearchBriefingSection extends StatelessWidget {
           ),
         ),
       );
-    } else if (state.errorMessage != null) {
+    } else if (errorMessage != null) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Text(
-          state.errorMessage!,
+          errorMessage,
           style: textTheme.bodyMedium?.copyWith(
             color: Colors.white.withValues(alpha: 0.7),
             fontStyle: FontStyle.italic,

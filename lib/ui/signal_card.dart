@@ -23,7 +23,7 @@ class SignalCard extends StatelessWidget {
     if (l10n == null) {
       return const SizedBox.shrink();
     } else {
-      const double iconBoxSize = 64.0;
+      const double iconBoxSize = 56.0;
       const double indicatorSize = 9.6;
 
       final SignalCardStyle styles = _getSignalStyles(
@@ -43,14 +43,15 @@ class SignalCard extends StatelessWidget {
         },
         child: insight.conclusion.trim().isNotEmpty
             ? Container(
+                margin: const EdgeInsets.only(top: 4),
                 decoration: BoxDecoration(
                   color: styles.backgroundColor,
                   border: Border.all(color: styles.borderColor, width: 2),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 24,
+                  horizontal: 16,
+                  vertical: 16,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,12 +76,12 @@ class SignalCard extends StatelessWidget {
                             child: Text(
                               styles.icon,
                               style: TextStyle(
-                                fontSize: textTheme.displayMedium?.fontSize,
+                                fontSize: textTheme.displaySmall?.fontSize,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +112,6 @@ class SignalCard extends StatelessWidget {
                                       color: styles.textColor,
                                       fontSize: textTheme.titleSmall?.fontSize,
                                       fontWeight: FontWeight.w800,
-                                      letterSpacing: 2.4,
                                     ),
                                   ),
                                 ],
@@ -153,7 +153,7 @@ class SignalCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 12),
                     MarkdownPreview(
                       text: insight.conclusion.trim(),
                       color: styles.textColor,

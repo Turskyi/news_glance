@@ -10,7 +10,7 @@ class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
-  String get appName => 'Огляд Новин';
+  String get appName => 'News Glance';
 
   @override
   String get menu => 'Меню';

@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/ui/signal_card_style.dart';
@@ -25,8 +25,9 @@ class InsightCategoryProbabilityLabel extends StatelessWidget {
             '${insight.category.localizedName(l10n)} • '
             '${(insight.probability * 100).toInt()}'
             '% ${l10n?.probability ?? 'Probability'}',
+            maxLines: 2,
             style: TextStyle(
-              fontSize: 12.8,
+              fontSize: Theme.of(context).textTheme.labelMedium?.fontSize,
               color: isHighRisk
                   ? const Color(0xFFE11D48)
                   : styles.textColor.withValues(alpha: 0.7),

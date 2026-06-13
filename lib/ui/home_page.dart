@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                             left: 20,
                             top: MediaQuery.paddingOf(context).top,
                             right: 20,
-                            bottom: 8,
+                            bottom: 4,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

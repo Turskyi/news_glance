@@ -108,7 +108,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(args is NewsArticle ? args.title : ''),
+          title: Text(args is NewsArticle ? args.title : '', maxLines: 2),
           titleTextStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,

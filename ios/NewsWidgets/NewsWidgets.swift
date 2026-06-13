@@ -92,7 +92,8 @@ struct SignalStyle {
     let label: String
 }
 
-func getSignalStyle(_ level: String) -> SignalStyle {
+func getSignalStyle(_ level: String, _ locale: String) -> SignalStyle {
+    let isUkrainian = locale.hasPrefix("uk")
     switch level.uppercased() {
     case "CRITICAL":
         return SignalStyle(
@@ -101,7 +102,7 @@ func getSignalStyle(_ level: String) -> SignalStyle {
             textColor: Color(red: 0.6, green: 0.11, blue: 0.11),
             lightColor: Color(red: 0.937, green: 0.267, blue: 0.267),
             icon: "🚨",
-            label: "CRITICAL ACTION"
+            label: isUkrainian ? "КРИТИЧНО" : "CRITICAL ACTION"
         )
     case "WARNING":
         return SignalStyle(
@@ -110,7 +111,7 @@ func getSignalStyle(_ level: String) -> SignalStyle {
             textColor: Color(red: 0.706, green: 0.329, blue: 0.035),
             lightColor: Color(red: 0.961, green: 0.619, blue: 0.067),
             icon: "⚠️",
-            label: "WARNING"
+            label: isUkrainian ? "ПОПЕРЕДЖЕННЯ" : "WARNING"
         )
     case "ADVISORY":
         return SignalStyle(
@@ -119,7 +120,7 @@ func getSignalStyle(_ level: String) -> SignalStyle {
             textColor: Color(red: 0.114, green: 0.306, blue: 0.851),
             lightColor: Color(red: 0.231, green: 0.51, blue: 0.961),
             icon: "ℹ️",
-            label: "ADVISORY"
+            label: isUkrainian ? "ПОРАДА" : "ADVISORY"
         )
     default:
         return SignalStyle(
@@ -128,7 +129,7 @@ func getSignalStyle(_ level: String) -> SignalStyle {
             textColor: Color(red: 0.016, green: 0.459, blue: 0.341),
             lightColor: Color(red: 0.063, green: 0.725, blue: 0.506),
             icon: "✅",
-            label: "ALL CLEAR"
+            label: isUkrainian ? "БЕЗПЕЧНО" : "ALL CLEAR"
         )
     }
 }
@@ -221,7 +222,7 @@ struct NewsWidgetsEntryView : View {
             }
         } else {
             // Insight style (existing)
-            let style = getSignalStyle(entry.level)
+            let style = getSignalStyle(entry.level, entry.locale)
             let isHighRisk = entry.level.uppercased() != "NEUTRAL" && entry.probability >= 80
             let isNeutral = entry.level.uppercased() == "NEUTRAL"
             let dateFormatter: DateFormatter = {
@@ -270,7 +271,7 @@ struct NewsWidgetsEntryView : View {
                                     .foregroundColor(isHighRisk ? Color(red: 0.88, green: 0.11, blue: 0.29) : style.textColor.opacity(0.75))
                                     .lineLimit(1)
                             } else {
-                                Text("All Clear")
+                                Text(entry.locale.hasPrefix("uk") ? "Все чисто" : "All Clear")
                                     .font(.system(size: 10, weight: .medium))
                                     .foregroundColor(style.textColor.opacity(0.6))
                             }
