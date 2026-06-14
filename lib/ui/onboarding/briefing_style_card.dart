@@ -36,7 +36,7 @@ class BriefingStyleCard extends StatelessWidget {
               ]
             : null,
       ),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       child: Column(
         children: <Widget>[
           Icon(
@@ -48,7 +48,7 @@ class BriefingStyleCard extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 11,
+              fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
               fontWeight: FontWeight.bold,
               color: isFeatured
                   ? colorScheme.onPrimary
@@ -60,7 +60,7 @@ class BriefingStyleCard extends StatelessWidget {
           // Skeleton text
           for (int i = 0; i < 3; i++)
             Container(
-              margin: const EdgeInsets.only(bottom: 6),
+              margin: const EdgeInsets.only(bottom: 4),
               width: double.infinity,
               height: 4,
               decoration: BoxDecoration(

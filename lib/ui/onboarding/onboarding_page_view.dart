@@ -27,7 +27,7 @@ class OnboardingPageView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Expanded(flex: 3, child: illustration),
-              const SizedBox(height: 40),
+              const SizedBox(height: 28),
               Text(
                 title,
                 style: textTheme.headlineMedium?.copyWith(

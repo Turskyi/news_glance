@@ -7,6 +7,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Turskyi/news_glance)
 [![Deploy to Firebase Hosting on PR](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-pull-request.yml/badge.svg)](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-pull-request.yml)
 [![Deploy to Firebase Hosting on merge](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-merge.yml)
+[![wakatime](https://wakatime.com/badge/user/f9df5074-b4ea-4c17-b001-fff428ab82aa/project/7f969c7e-d17d-4570-aaeb-360b0ff3fd64.svg)](https://wakatime.com/badge/user/f9df5074-b4ea-4c17-b001-fff428ab82aa/project/7f969c7e-d17d-4570-aaeb-360b0ff3fd64)
 <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Turskyi/news_glance">
 
 # News Glance
