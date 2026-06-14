@@ -77,10 +77,7 @@ class _SearchPageState extends State<SearchPage> {
                                 state.recentSearches.isNotEmpty)
                               RecentSearchesList(
                                 searches: state.recentSearches,
-                                onTap: (String query) {
-                                  _searchController.text = query;
-                                  _onSearchSubmitted(query);
-                                },
+                                onTap: _onRecentSearchSelected,
                               ),
                             if (state is SearchLoadingState)
                               Padding(
@@ -94,8 +91,6 @@ class _SearchPageState extends State<SearchPage> {
                                 ),
                               ),
                             if (state is SearchResultsLoadedState) ...<Widget>[
-                              const SizedBox(height: 16),
-                              SearchBriefingSection(state: state),
                               if (state.articles.isEmpty &&
                                   state.errorMessage == null)
                                 Padding(
@@ -134,6 +129,13 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                 ),
+                if (state is SearchResultsLoadedState)
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    sliver: SliverToBoxAdapter(
+                      child: SearchBriefingSection(state: state),
+                    ),
+                  ),
                 if (state is SearchResultsLoadedState &&
                     state.articles.isNotEmpty)
                   SliverPadding(
@@ -153,6 +155,11 @@ class _SearchPageState extends State<SearchPage> {
     _searchController.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onRecentSearchSelected(String query) {
+    _searchController.text = query;
+    _onSearchSubmitted(query);
   }
 
   void _onSearchSubmitted(String query) {
