@@ -4,6 +4,7 @@ import 'package:news_glance/application_services/blocs/search_bloc.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
+import 'package:news_glance/res/constants.dart' as constants;
 import 'package:news_glance/ui/conversational_summary_card.dart';
 import 'package:news_glance/ui/news_conclusion_section.dart';
 import 'package:news_glance/ui/signal_card.dart';
@@ -61,6 +62,7 @@ class SearchBriefingSection extends StatelessWidget {
               ConclusionUiStyle.insight => SignalCard(
                 insight: insight,
                 searchQuery: state.query,
+                maxLines: constants.insightMaxLines,
               ),
               ConclusionUiStyle.summary => ConversationalSummaryCard(
                 insight: insight,

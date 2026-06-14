@@ -23,8 +23,11 @@ const double maxContentWidth = 800.0;
 const String homeWidgetMethodChannel = 'com.newsglance.home_widget';
 const String setAppGroupIdMethod = 'setAppGroupId';
 const String saveWidgetDataMethod = 'saveWidgetData';
+const String getWidgetDataMethod = 'getWidgetData';
 const String updateWidgetMethod = 'updateWidget';
 const String appGroupIdArgKey = 'appGroupId';
+const String keyArgKey = 'key';
+const String valueArgKey = 'value';
 
 /// 24 hours
 const int defaultWidgetUpdateFrequencyMinutes = 1440;
@@ -32,3 +35,4 @@ const int minWidgetUpdateFrequencyMinutes = 30;
 
 /// Minimum minutes between manual refreshes shown to the user
 const int manualRefreshMinMinutes = 30;
+const int insightMaxLines = 20;

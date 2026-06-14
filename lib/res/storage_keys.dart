@@ -4,6 +4,7 @@ const String locale = 'locale';
 const String themeMode = 'theme_mode';
 const String onboardingCompleted = 'onboarding_completed';
 const String widgetUpdateFrequency = 'news_glance_widget_update_frequency';
+const String widgetStyle = 'widget_style';
 
 /// Home Widget Keys
 const String headlineTitle = 'headline_title';
