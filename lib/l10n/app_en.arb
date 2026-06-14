@@ -138,5 +138,7 @@
   "getStarted": "Get Started",
   "skip": "Skip",
   "next": "Next",
-  "onboarding": "Onboarding"
+  "onboarding": "Onboarding",
+  "pinWidget": "Pin Widget",
+  "pinWidgetDescription": "Add the News Glance widget to your home screen for quick access."
 }

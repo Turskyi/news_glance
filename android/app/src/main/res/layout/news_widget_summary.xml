@@ -37,7 +37,7 @@
         android:layout_marginTop="6dp"
         android:ellipsize="end"
         android:lineSpacingExtra="3sp"
-        android:maxLines="10"
+        android:maxLines="20"
         android:text="Loading summary..."
         android:textColor="#E0E0E0"
         android:textSize="13sp" />

@@ -1,12 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
-import 'package:news_glance/application_services/home_widget_service_impl.dart';
 import 'package:news_glance/application_services/settings_bloc.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
-import 'package:news_glance/domain_services/home_widget_service.dart';
 import 'package:news_glance/l10n/app_localizations.dart';
-import 'package:news_glance/res/constants.dart' as constants;
 
 class WidgetSettings extends StatefulWidget {
   const WidgetSettings({super.key});
@@ -16,20 +15,167 @@ class WidgetSettings extends StatefulWidget {
 }
 
 class _WidgetSettingsState extends State<WidgetSettings> {
-  int _selectedFrequency = constants.defaultWidgetUpdateFrequencyMinutes;
   bool _isSaving = false;
-  final HomeWidgetService _homeWidgetService = const HomeWidgetServiceImpl();
+  bool _isRequestPinWidgetSupported = false;
 
   @override
   void initState() {
     super.initState();
-    _loadCurrentFrequency();
+    _checkPinWidgetSupport();
   }
 
-  Future<void> _loadCurrentFrequency() async {
-    final int freq = await _homeWidgetService.getWidgetUpdateFrequency();
-    if (mounted) {
-      setState(() => _selectedFrequency = freq);
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      return const SizedBox.shrink();
+    } else {
+      return BlocBuilder<SettingsBloc, SettingsState>(
+        builder: (BuildContext context, SettingsState state) {
+          final TextTheme textTheme = Theme.of(context).textTheme;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              if (!kIsWeb) ...<Widget>[
+                RadioGroup<int>(
+                  groupValue: state.widgetUpdateFrequency,
+                  onChanged: _onFrequencyChanged,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        child: Text(
+                          l10n.widgetUpdateFrequency,
+                          style: TextStyle(
+                            fontSize: textTheme.titleLarge?.fontSize,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          l10n.chooseFrequency,
+                          style: textTheme.bodySmall,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      RadioListTile<int>(
+                        title: Text(l10n.every4Hours),
+                        value: 240,
+                        enabled: !_isSaving,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                        ),
+                      ),
+                      RadioListTile<int>(
+                        title: Text(l10n.every12Hours),
+                        value: 720,
+                        enabled: !_isSaving,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                        ),
+                      ),
+                      RadioListTile<int>(
+                        title: Text(l10n.onceDaily),
+                        value: 1440,
+                        enabled: !_isSaving,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                        ),
+                      ),
+                      const Divider(),
+                    ],
+                  ),
+                ),
+              ],
+              // Conclusion UI selection
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                child: Text(
+                  l10n.conclusionStyle,
+                  style: TextStyle(
+                    fontSize: textTheme.titleLarge?.fontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              RadioGroup<int>(
+                groupValue: state.style.index,
+                onChanged: _onConclusionStyleChanged,
+                child: Column(
+                  children: <Widget>[
+                    RadioListTile<int>(
+                      title: Text(l10n.insight),
+                      value: 0,
+                      enabled: !_isSaving,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
+                    ),
+                    RadioListTile<int>(
+                      title: Text(l10n.conclusion),
+                      value: 1,
+                      enabled: !_isSaving,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
+                    ),
+                    RadioListTile<int>(
+                      title: Text(l10n.summary),
+                      value: 2,
+                      enabled: !_isSaving,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (_isRequestPinWidgetSupported) ...<Widget>[
+                _PinWidgetSection(l10n: l10n),
+              ],
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> _checkPinWidgetSupport() async {
+    if (defaultTargetPlatform == TargetPlatform.android && !kIsWeb) {
+      final bool? isSupported = await HomeWidget.isRequestPinWidgetSupported();
+      if (mounted) {
+        setState(() {
+          _isRequestPinWidgetSupported = isSupported ?? false;
+        });
+      }
+    }
+  }
+
+  void _onConclusionStyleChanged(int? value) {
+    if (value != null) {
+      _saveConclusionStyle(value);
+    }
+  }
+
+  void _onFrequencyChanged(int? value) {
+    if (value != null) {
+      _saveFrequency(value);
     }
   }
 
@@ -40,8 +186,10 @@ class _WidgetSettingsState extends State<WidgetSettings> {
     }
     setState(() => _isSaving = true);
     try {
-      await _homeWidgetService.setWidgetUpdateFrequency(frequency);
-      setState(() => _selectedFrequency = frequency);
+      context.read<SettingsBloc>().add(
+        SetWidgetUpdateFrequencyEvent(frequency),
+      );
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -147,123 +295,54 @@ class _WidgetSettingsState extends State<WidgetSettings> {
     }
     return l10n.frequencyChanged;
   }
+}
+
+class _PinWidgetSection extends StatelessWidget {
+  const _PinWidgetSection({required this.l10n});
+
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations? l10n = AppLocalizations.of(context);
-    if (l10n == null) {
-      return const SizedBox.shrink();
-    }
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        RadioGroup<int>(
-          groupValue: _selectedFrequency,
-          onChanged: (int? value) {
-            if (value != null) {
-              _saveFrequency(value);
-            }
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                child: Text(
-                  l10n.widgetUpdateFrequency,
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  l10n.chooseFrequency,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-              const SizedBox(height: 12),
-              RadioListTile<int>(
-                title: Text(l10n.every4Hours),
-                value: 240,
-                enabled: !_isSaving,
-                controlAffinity: ListTileControlAffinity.leading,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-              ),
-              RadioListTile<int>(
-                title: Text(l10n.every12Hours),
-                value: 720,
-                enabled: !_isSaving,
-                controlAffinity: ListTileControlAffinity.leading,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-              ),
-              RadioListTile<int>(
-                title: Text(l10n.onceDaily),
-                value: 1440,
-                enabled: !_isSaving,
-                controlAffinity: ListTileControlAffinity.leading,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-              ),
-              const Divider(),
-            ],
-          ),
-        ),
-        // Conclusion UI selection
+        const Divider(),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Text(
-            l10n.conclusionStyle,
+            l10n.pinWidget,
             style: TextStyle(
-              fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+              fontSize: textTheme.titleLarge?.fontSize,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-        const SizedBox(height: 8),
-        BlocBuilder<SettingsBloc, SettingsState>(
-          builder: (BuildContext context, SettingsState s) {
-            final ConclusionUiStyle style = s.style;
-            return RadioGroup<int>(
-              groupValue: style.index,
-              onChanged: (int? value) {
-                if (value != null) {
-                  _saveConclusionStyle(value);
-                }
-              },
-              child: Column(
-                children: <Widget>[
-                  RadioListTile<int>(
-                    title: Text(l10n.insight),
-                    value: 0,
-                    enabled: !_isSaving,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  ),
-                  RadioListTile<int>(
-                    title: Text(l10n.conclusion),
-                    value: 1,
-                    enabled: !_isSaving,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  ),
-                  RadioListTile<int>(
-                    title: Text(l10n.summary),
-                    value: 2,
-                    enabled: !_isSaving,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  ),
-                ],
-              ),
-            );
-          },
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(l10n.pinWidgetDescription, style: textTheme.bodySmall),
         ),
-        const Divider(),
+        const SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () => HomeWidget.requestPinWidget(
+                qualifiedAndroidName: 'com.turskyi.news_glance.NewsWidget',
+              ),
+              icon: const Icon(Icons.push_pin_outlined),
+              label: Text(l10n.pinWidget),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

@@ -350,4 +350,11 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get onboarding => 'Знайомство';
+
+  @override
+  String get pinWidget => 'Закріпити віджет';
+
+  @override
+  String get pinWidgetDescription =>
+      'Додайте віджет News Glance на головний екран для швидкого доступу.';
 }

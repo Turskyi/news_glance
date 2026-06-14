@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:news_glance/domain_models/app_locale.dart';
 import 'package:news_glance/domain_models/conclusion_ui_style.dart';
+import 'package:news_glance/domain_services/home_widget_service.dart';
 
 import 'settings_service.dart';
 
@@ -11,7 +12,7 @@ part 'settings_state.dart';
 
 @injectable
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsBloc(this._service)
+  SettingsBloc(this._service, this._homeWidgetService)
     : super(
         const SettingsState(
           style: ConclusionUiStyle.insight,
@@ -23,9 +24,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SetLocaleEvent>(_onSetLocale);
     on<SettingsThemeChanged>(_onSetThemeMode);
     on<SetOnboardingCompletedEvent>(_onSetOnboardingCompleted);
+    on<SetWidgetUpdateFrequencyEvent>(_onSetWidgetUpdateFrequency);
   }
 
   final SettingsService _service;
+  final HomeWidgetService _homeWidgetService;
 
   Future<void> _onLoad(LoadSettingsEvent _, Emitter<SettingsState> emit) async {
     debugPrint('SettingsBloc: [_onLoad] started');
@@ -33,6 +36,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     final AppLocale locale = await _service.getLocale();
     final ThemeMode themeMode = await _service.getThemeMode();
     final bool isOnboardingCompleted = await _service.isOnboardingCompleted();
+    final int frequency = await _homeWidgetService.getWidgetUpdateFrequency();
     debugPrint(
       'SettingsBloc: [_onLoad] settings fetched, emitting isLoaded: true',
     );
@@ -42,6 +46,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         locale: locale,
         themeMode: themeMode,
         isOnboardingCompleted: isOnboardingCompleted,
+        widgetUpdateFrequency: frequency,
         isLoaded: true,
       ),
     );
@@ -58,6 +63,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         locale: state.locale,
         themeMode: state.themeMode,
         isOnboardingCompleted: state.isOnboardingCompleted,
+        widgetUpdateFrequency: state.widgetUpdateFrequency,
         isLoaded: state.isLoaded,
       ),
     );
@@ -74,6 +80,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         locale: event.locale,
         themeMode: state.themeMode,
         isOnboardingCompleted: state.isOnboardingCompleted,
+        widgetUpdateFrequency: state.widgetUpdateFrequency,
         isLoaded: state.isLoaded,
       ),
     );
@@ -90,6 +97,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         locale: state.locale,
         themeMode: event.themeMode,
         isOnboardingCompleted: state.isOnboardingCompleted,
+        widgetUpdateFrequency: state.widgetUpdateFrequency,
         isLoaded: state.isLoaded,
       ),
     );
@@ -106,6 +114,24 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         locale: state.locale,
         themeMode: state.themeMode,
         isOnboardingCompleted: event.completed,
+        widgetUpdateFrequency: state.widgetUpdateFrequency,
+        isLoaded: state.isLoaded,
+      ),
+    );
+  }
+
+  Future<void> _onSetWidgetUpdateFrequency(
+    SetWidgetUpdateFrequencyEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    await _homeWidgetService.setWidgetUpdateFrequency(event.frequency);
+    emit(
+      SettingsState(
+        style: state.style,
+        locale: state.locale,
+        themeMode: state.themeMode,
+        isOnboardingCompleted: state.isOnboardingCompleted,
+        widgetUpdateFrequency: event.frequency,
         isLoaded: state.isLoaded,
       ),
     );

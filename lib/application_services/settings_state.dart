@@ -8,6 +8,7 @@ class SettingsState {
     this.themeMode = ThemeMode.system,
     this.isLoaded = false,
     this.isOnboardingCompleted = false,
+    this.widgetUpdateFrequency = 240,
   });
 
   final ConclusionUiStyle style;
@@ -15,4 +16,5 @@ class SettingsState {
   final ThemeMode themeMode;
   final bool isLoaded;
   final bool isOnboardingCompleted;
+  final int widgetUpdateFrequency;
 }

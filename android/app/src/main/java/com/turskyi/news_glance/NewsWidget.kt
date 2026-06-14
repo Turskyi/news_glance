@@ -160,10 +160,19 @@ internal fun updateAppWidget(
                 val bodyLines = mutableListOf<String>()
 
                 for (line in lines) {
-                    if (line.startsWith("## ")) {
-                        title = line.replace("## ", "").trim()
+                    val trimmedLine = line.trim()
+                    if (trimmedLine.startsWith("#")) {
+                        val headerText = trimmedLine
+                            .replace("^#+\\s*".toRegex(), "")
+                            .replace("**", "")
+                            .trim()
+                        if (title == null) {
+                            title = headerText
+                        } else {
+                            bodyLines.add(headerText)
+                        }
                     } else if (line.isNotBlank() || bodyLines.isNotEmpty()) {
-                        bodyLines.add(line)
+                        bodyLines.add(line.replace("**", "").trim())
                     }
                 }
 

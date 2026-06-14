@@ -138,5 +138,7 @@
   "getStarted": "Почати",
   "skip": "Пропустити",
   "next": "Далі",
-  "onboarding": "Знайомство"
+  "onboarding": "Знайомство",
+  "pinWidget": "Закріпити віджет",
+  "pinWidgetDescription": "Додайте віджет News Glance на головний екран для швидкого доступу."
 }

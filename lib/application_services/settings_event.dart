@@ -32,3 +32,9 @@ class SetOnboardingCompletedEvent extends SettingsEvent {
 
   final bool completed;
 }
+
+class SetWidgetUpdateFrequencyEvent extends SettingsEvent {
+  const SetWidgetUpdateFrequencyEvent(this.frequency);
+
+  final int frequency;
+}

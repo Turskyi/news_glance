@@ -745,6 +745,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Onboarding'**
   String get onboarding;
+
+  /// No description provided for @pinWidget.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin Widget'**
+  String get pinWidget;
+
+  /// No description provided for @pinWidgetDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the News Glance widget to your home screen for quick access.'**
+  String get pinWidgetDescription;
 }
 
 class _AppLocalizationsDelegate

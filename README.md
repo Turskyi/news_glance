@@ -21,8 +21,9 @@ and allows you to view and share the articles.
 
 - **Mobile (Flutter):** The core of News Glance is designed for mobile devices.
   You can download it from
-  [Android Play Market](https://play.google.com/store/apps/details?id=com.turskyi.news_glance)
-  or [iOS TestFlight](https://testflight.apple.com/join/rMxpk2Cp).
+  [Google Play](https://play.google.com/store/apps/details?id=com.turskyi.news_glance),
+  [App Store](https://apps.apple.com/ca/app/news-glance/id6743685132) or
+  [iOS TestFlight](https://testflight.apple.com/join/rMxpk2Cp).
 - **Web (Next.js):** [https://news.turskyi.com](https://news.turskyi.com/) -
   This is the primary web version of News Glance, built with Next.js. It offers
   a full-featured web experience. This version is maintained in a
@@ -149,20 +150,20 @@ open coverage/index.html
 `core`)
 
 The number of layers in the application `core` will vary, but remember that
-the `Domain Model` is the very center, and since all couplings are toward the
-center, the `Domain Model` is only coupled to itself.
+the `Domain Model` is the very centre, and since all couplings are toward the
+centre, the `Domain Model` is only coupled to itself.
 
 #### DOMAIN MODEL - `models`
 
-In the very center, we see the `Domain Model`, which represents the state and
-behavior combination that models truth for the organization.
-Around the Domain Model are other layers with more behavior.
+In the very centre, we see the `Domain Model`, which represents the state and
+behaviour combination that models truth for the organization.
+Around the Domain Model are other layers with more behaviour.
 
 #### DOMAIN SERVICES - `domain_services`
 
 The first layer around the Domain Model is typically where we would find
-interfaces that provide object saving and retrieving behavior, called
-`repository` interfaces. The implementation of the object-saving behavior is
+interfaces that provide object saving and retrieving behaviour, called
+`repository` interfaces. The implementation of the object-saving behaviour is
 not in the application core, however, because it typically involves a database.
 Only the interface is in the application core.
 
@@ -454,11 +455,11 @@ more expression and flexibility.
 ## Screenshots:
 
 <!--suppress CheckImageSize -->
-<img src="screenshots/home_no_conclusion_20240228.png" width="400"  alt="screenshot">
+<img src="screenshots/settings_20260614.png" width="400"  alt="screenshot">
 <!--suppress CheckImageSize -->
-<img src="screenshots/home_20240228.png" width="400"  alt="screenshot">
+<img src="screenshots/home_20260614.png" width="400"  alt="screenshot">
 <!--suppress CheckImageSize -->
-<img src="screenshots/home_widget_20240228.png" width="400"  alt="screenshot">
+<img src="screenshots/home_widget_20260614.png" width="400"  alt="screenshot">
 
 ## Screen Recording:
 
@@ -468,6 +469,9 @@ more expression and flexibility.
 
 <a href="https://play.google.com/store/apps/details?id=com.turskyi.news_glance" target="_blank">
 <img src="https://play.google.com/intl/en_gb/badges/static/images/badges/en_badge_web_generic.png" width=240  alt="google play badge"/>
+</a>
+<a href="https://apps.apple.com/ca/app/news-glance/id6743685132" target="_blank">
+<img src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg" width=210  alt="app store badge"/>
 </a>
 
 ## Credits

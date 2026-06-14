@@ -110,9 +110,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i0.SharingService>(),
       ),
     );
-    gh.factory<_i196.SettingsBloc>(
-      () => _i196.SettingsBloc(gh<_i473.SettingsService>()),
-    );
     gh.factory<_i875.NewsRepository>(
       () => _i491.NewsRepositoryImpl(gh<_i979.RestClient>()),
     );
@@ -123,6 +120,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1009.BriefingPersistence>(),
         gh<_i985.ComputeSearchBriefingChecksum>(),
         gh<_i473.SettingsService>(),
+      ),
+    );
+    gh.factory<_i196.SettingsBloc>(
+      () => _i196.SettingsBloc(
+        gh<_i473.SettingsService>(),
+        gh<_i182.HomeWidgetService>(),
       ),
     );
     gh.factory<_i347.NewsBloc>(

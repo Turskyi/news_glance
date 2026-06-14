@@ -16,3 +16,8 @@
 -keep class io.flutter.view.**  { *; }
 -keep class io.flutter.**  { *; }
 -keep class io.flutter.plugins.**  { *; }
+
+# Play Core & GMS
+-dontwarn com.google.android.play.core.**
+-dontwarn com.google.android.gms.**
+-dontwarn com.google.firebase.**
