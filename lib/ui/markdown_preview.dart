@@ -1,50 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:news_glance/res/constants.dart' as constants;
 import 'package:markdown/markdown.dart' as md;
 
 /// Markdown preview with limited lines.
 class MarkdownPreview extends StatelessWidget {
-  const MarkdownPreview({required this.text, super.key});
+  const MarkdownPreview({
+    required this.text,
+    this.maxLines = 10,
+    this.color,
+    super.key,
+  });
+
   final String text;
+  final int maxLines;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle style = TextStyle(
-      fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-    );
-    return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxHeight: constants.defaultExpandedHeight,
-      ),
-      child: SizedBox(
-        height: 144,
-        child: Markdown(
-          data: _getMarkdownPreview(
-            text,
-          ),
-          styleSheet: MarkdownStyleSheet(
-            p: style.copyWith(
-              color: Colors.white,
-            ),
-          ),
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-        ),
+    final TextStyle style =
+        (Theme.of(context).textTheme.titleMedium ?? const TextStyle()).copyWith(
+          color: color ?? Theme.of(context).colorScheme.onSurface,
+        );
+
+    return SelectionArea(
+      child: Text(
+        getPlainText(text),
+        style: style,
+        maxLines: maxLines,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
 
-  String _getMarkdownPreview(String markdown) {
-    // Strip Markdown to plain text for preview with ellipsis.
-    String plainText = md.markdownToHtml(markdown);
-    // Remove HTML tags.
+  static String getPlainText(String markdown) {
+    // Strip Markdown to plain text.
+    String html = md.markdownToHtml(markdown);
+    // Replace block-level tags with newlines to preserve structure
+    String plainText = html
+        .replaceAll(RegExp(r'</?(p|h[1-6]|li|br|ul|ol)>'), '\n')
+        .replaceAll(RegExp(r'\n\s*\n\s*\n'), '\n\n');
+
+    // Remove remaining HTML tags.
     plainText = plainText.replaceAll(RegExp(r'<[^>]*>'), '');
-    const int previewLength = 120;
-    if (plainText.length > previewLength) {
-      // Limit preview length.
-      return '${plainText.substring(0, previewLength)}...';
-    }
-    return plainText;
+
+    // Decode common HTML entities
+    plainText = plainText
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#39;', "'");
+
+    return plainText.trim();
   }
 }

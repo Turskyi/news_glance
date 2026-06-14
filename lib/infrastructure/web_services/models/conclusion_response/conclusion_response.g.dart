@@ -7,11 +7,7 @@ part of 'conclusion_response.dart';
 // **************************************************************************
 
 ConclusionResponse _$ConclusionResponseFromJson(Map<String, dynamic> json) =>
-    ConclusionResponse(
-      conclusion: json['conclusion'] as String,
-    );
+    ConclusionResponse(conclusion: json['conclusion'] as String);
 
 Map<String, dynamic> _$ConclusionResponseToJson(ConclusionResponse instance) =>
-    <String, dynamic>{
-      'conclusion': instance.conclusion,
-    };
+    <String, dynamic>{'conclusion': instance.conclusion};

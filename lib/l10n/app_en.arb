@@ -1,0 +1,142 @@
+{
+  "@@locale": "en",
+  "appName": "News Glance",
+  "menu": "Menu",
+  "search": "Search",
+  "contactUs": "Contact Us",
+  "actionableInsight": "Actionable Insight",
+  "probability": "Probability",
+  "category": "Category",
+  "travelCategory": "Travel",
+  "financeCategory": "Finance",
+  "safetyCategory": "Safety",
+  "healthCategory": "Health",
+  "lifestyleCategory": "Lifestyle",
+  "generalCategory": "General",
+  "signalLevel": "Signal Level",
+  "noNewsFound": "No news found",
+  "language": "Language",
+  "english": "English",
+  "ukrainian": "Ukrainian",
+  "allClear": "ALL CLEAR",
+  "criticalAction": "CRITICAL ACTION",
+  "warning": "WARNING",
+  "advisory": "ADVISORY",
+  "noImmediateActionRequired": "No immediate action required",
+  "noNewsAvailable": "No news available at the moment.",
+  "pleaseCheckBackLater": "Please check back later.",
+  "widgetUpdateFrequency": "Widget Update Frequency",
+  "chooseFrequency": "Choose how often the News Glance widget updates in Notification Center",
+  "conclusionStyle": "Conclusion Style",
+  "insight": "Insight",
+  "conclusion": "Conclusion",
+  "summary": "Summary",
+  "conversationalSummary": "Conversational Summary",
+  "usingInsight": "Using Insight",
+  "usingConclusion": "Using Conclusion",
+  "usingSummary": "Using Summary",
+  "every4Hours": "Every 4 hours",
+  "every12Hours": "Every 12 hours",
+  "onceDaily": "Once daily (default)",
+  "frequencySetTo": "Widget update frequency set to: {label}",
+  "@frequencySetTo": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "frequencyChanged": "Widget update frequency changed",
+  "readMore": "Read More",
+  "readAloud": "Read Aloud",
+  "close": "\uD83D\uDDD1 Clear History",
+  "source": "Source",
+  "shareBriefing": "Share briefing",
+  "share": "Share",
+  "copyLink": "Copy Link",
+  "open": "Open",
+  "linkCopiedToClipboard": "Link copied to clipboard",
+  "searchNews": "News Glance Search",
+  "searchQueryLabel": "Enter your search query",
+  "searchPlaceholder": "e.g. Technology, AI, Space...",
+  "searchButtonText": "Search",
+  "refresh": "Refresh",
+  "recentSearches": "Recent Searches",
+  "noResultsFound": "No results found.",
+  "searchError": "An error occurred while searching.",
+  "briefingShared": "Briefing shared",
+  "briefingCopiedToClipboard": "Briefing copied to clipboard",
+  "saveBriefing": "Save briefing",
+  "briefingSaved": "Briefing saved",
+  "savedInsights": "Saved Insights",
+  "noSavedInsights": "No saved insights yet.",
+  "savedArticles": "Saved Articles",
+  "noSavedArticles": "No saved articles yet.",
+  "saveArticlesToReadLater": "Save articles to read later.",
+  "articleSaved": "Article saved",
+  "articleRemoved": "Article removed from bookmarks",
+  "delete": "Delete",
+  "confirmDelete": "Are you sure you want to delete this briefing?",
+  "cancel": "Cancel",
+  "aboutApp": "About {appName}",
+  "@aboutApp": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "tagline": "AI-powered daily situational awareness.",
+  "version": "Version {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "whatIsNewsGlance": "What Is News Glance?",
+  "whatIsNewsGlanceContent": "News Glance helps you understand what today's major world events may mean in practice.\n\nRather than simply showing headlines, News Glance uses AI to identify important patterns across multiple international stories and generate a concise daily briefing.",
+  "whyItExists": "Why It Exists",
+  "whyItExistsContent": "The idea behind News Glance was inspired by real-world situations where important warning signals appeared across many separate news stories, but were difficult to interpret collectively.\n\nNews Glance attempts to connect those signals and answer a simple question:\n\n'Is there anything I should pay attention to today beyond simply staying informed?'",
+  "howItWorks": "How It Works",
+  "step1": "1. Collect important international news.",
+  "step2": "2. Analyze stories collectively using AI.",
+  "step3": "3. Generate a short plain-language briefing.",
+  "exampleBriefing": "Example Briefing",
+  "dailyHeadsUp": "Daily Heads-Up",
+  "exampleBriefingContent": "✈️ Rising regional instability may affect travel plans. If you have non-essential travel scheduled to affected areas, consider monitoring official advisories.",
+  "illustrativeExample": "This is an illustrative example, not advice.",
+  "keyFeatures": "Key Features",
+  "featureAiBriefing": "AI-generated daily briefing",
+  "featureGlobalMonitoring": "Global news monitoring",
+  "featureReadingExperience": "Article reading experience",
+  "featureHomeWidget": "Home screen widget",
+  "featureShareableInsights": "Shareable insights",
+  "featureOriginalSources": "Optional access to original sources",
+  "transparency": "Transparency",
+  "transparencyContent": "News Glance is designed to help users stay informed and aware of emerging situations.\n\nAI-generated briefings may be incomplete or incorrect and should not be considered professional, financial, legal, medical, or safety advice.",
+  "privacy": "Privacy",
+  "privacyContent": "News Glance does not require user accounts and does not collect personal information for app functionality.\n\nExternal websites and services may be governed by their own privacy policies.",
+  "copyright": "© {year} {appName}",
+  "@copyright": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingTitle1": "AI-Powered Briefings",
+  "onboardingBody1": "News Glance analyzes multiple international news stories and generates an AI-powered briefing designed to help you quickly understand what matters today.",
+  "onboardingTitle2": "See the Bigger Picture",
+  "onboardingBody2": "Individual headlines can be noisy and disconnected. News Glance looks across multiple stories and attempts to identify broader patterns, emerging situations, and practical takeaways.",
+  "onboardingTitle3": "Choose Your Briefing Style",
+  "onboardingBody3": "News Glance offers three ways to understand the news:\n\n• Insight - concise signal-oriented briefing\n\n• Conclusion - practical takeaway based on current events\n\n• Summary - a longer, conversational overview of today's developments\n\nYou can switch between styles at any time from the menu.",
+  "getStarted": "Get Started",
+  "skip": "Skip",
+  "next": "Next",
+  "onboarding": "Onboarding"
+}

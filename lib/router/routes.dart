@@ -1,46 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
-import 'package:home_widget/home_widget.dart';
 import 'package:news_glance/application_services/blocs/news_bloc.dart';
-import 'package:news_glance/res/constants.dart' as constants;
+import 'package:news_glance/application_services/blocs/saved_briefings_bloc.dart';
+import 'package:news_glance/application_services/blocs/saved_news_bloc.dart';
+import 'package:news_glance/application_services/blocs/search_bloc.dart';
+import 'package:news_glance/application_services/settings_bloc.dart';
+import 'package:news_glance/application_services/settings_service.dart';
+import 'package:news_glance/domain_services/briefing_persistence.dart';
+import 'package:news_glance/domain_services/home_widget_service.dart';
+import 'package:news_glance/domain_services/sharing_service.dart';
 import 'package:news_glance/router/app_route.dart';
+import 'package:news_glance/router/home_route_wrapper.dart';
+import 'package:news_glance/router/saved_briefings_route_wrapper.dart';
+import 'package:news_glance/router/saved_news_route_wrapper.dart';
+import 'package:news_glance/router/search_route_wrapper.dart';
+import 'package:news_glance/ui/about/about_page.dart';
 import 'package:news_glance/ui/article_screen.dart';
 import 'package:news_glance/ui/article_web_screen.dart';
-import 'package:news_glance/ui/home_page.dart';
+import 'package:news_glance/ui/onboarding/onboarding_screen.dart';
 
-Map<String, WidgetBuilder> routeMap = <String, WidgetBuilder>{
-  AppRoute.home.path: (_) => BlocProvider<NewsBloc>(
-        create: (_) => GetIt.I.get<NewsBloc>()..add(const LoadNewsEvent()),
-        child: BlocListener<NewsBloc, NewsState>(
-          listener: (BuildContext context, NewsState state) {
-            if (state.canUpdateHomeWidget && state is LoadedConclusionState) {
-              _updateHomeWidgetConclusion(state.conclusion);
-            }
-          },
-          child: const HomePage(),
+class AppRouter {
+  const AppRouter({
+    required this.newsBloc,
+    required this.searchBloc,
+    required this.savedBriefingsBloc,
+    required this.savedNewsBloc,
+    required this.settingsBloc,
+    required this.homeWidgetService,
+    required this.settingsService,
+    required this.persistence,
+    required this.sharingService,
+  });
+
+  final NewsBloc newsBloc;
+  final SearchBloc searchBloc;
+  final SavedBriefingsBloc savedBriefingsBloc;
+  final SavedNewsBloc savedNewsBloc;
+  final SettingsBloc settingsBloc;
+  final HomeWidgetService homeWidgetService;
+  final SettingsService settingsService;
+  final BriefingPersistence persistence;
+  final SharingService sharingService;
+
+  Map<String, WidgetBuilder> get routeMap => <String, WidgetBuilder>{
+    AppRoute.home.path: (BuildContext _) => HomeRouteWrapper(
+      newsBloc: newsBloc,
+      settingsBloc: settingsBloc,
+      savedBriefingsBloc: savedBriefingsBloc,
+      homeWidgetService: homeWidgetService,
+      settingsService: settingsService,
+      persistence: persistence,
+    ),
+    AppRoute.article.path: (BuildContext _) =>
+        ArticleScreen(sharingService: sharingService),
+    AppRoute.articleWeb.path: (BuildContext _) => const ArticleWebScreen(),
+    AppRoute.about.path: (BuildContext _) => const AboutPage(),
+    AppRoute.onboarding.path: (BuildContext _) => const OnboardingScreen(),
+    AppRoute.search.path: (BuildContext _) => SearchRouteWrapper(
+      searchBloc: searchBloc,
+      settingsBloc: settingsBloc,
+      savedBriefingsBloc: savedBriefingsBloc,
+    ),
+    AppRoute.savedBriefings.path: (BuildContext _) =>
+        SavedBriefingsRouteWrapper(
+          savedBriefingsBloc: savedBriefingsBloc,
+          settingsBloc: settingsBloc,
         ),
-      ),
-  AppRoute.article.path: (_) => const ArticleScreen(),
-  AppRoute.articleWeb.path: (_) => const ArticleWebScreen(),
-};
-
-void _updateHomeWidgetConclusion(String conclusion) {
-  // Set the group ID
-  HomeWidget.setAppGroupId(constants.appGroupId);
-  // Save the headline data to the widget
-  HomeWidget.saveWidgetData<String>(
-    'headline_title',
-    'News Glance from ${DateTime.now().toString().substring(0, 10)}',
-  );
-  if (conclusion.isNotEmpty) {
-    HomeWidget.saveWidgetData<String>(
-      'headline_description',
-      conclusion,
-    );
-  }
-  HomeWidget.updateWidget(
-    iOSName: constants.iOSWidgetName,
-    androidName: constants.androidWidgetName,
-  );
+    AppRoute.savedArticles.path: (BuildContext _) => SavedNewsRouteWrapper(
+      savedNewsBloc: savedNewsBloc,
+      settingsBloc: settingsBloc,
+    ),
+  };
 }

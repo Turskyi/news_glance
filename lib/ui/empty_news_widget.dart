@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:news_glance/l10n/app_localizations.dart';
 
 class EmptyNewsWidget extends StatelessWidget {
-  const EmptyNewsWidget({super.key});
+  const EmptyNewsWidget({this.onRefresh, super.key});
+
+  final VoidCallback? onRefresh;
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+
+    if (l10n == null) {
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
+    }
+
+    final VoidCallback? refreshCallback = onRefresh;
+
     return SliverFillRemaining(
       child: Center(
         child: Card(
@@ -24,29 +35,30 @@ class EmptyNewsWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(
-                  Icons.info_outline,
-                  size: 64,
-                  color: colorScheme.primary,
-                ),
+                Icon(Icons.info_outline, size: 64, color: colorScheme.primary),
                 const SizedBox(height: 16),
                 Text(
-                  'No news available at the moment.',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: colorScheme.onSurface,
-                  ),
+                  l10n.noNewsFound,
+                  style: TextStyle(fontSize: 18, color: colorScheme.onSurface),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Please check back later.',
+                  l10n.pleaseCheckBackLater,
                   style: TextStyle(
                     fontSize: 16,
                     color: colorScheme.onSurfaceVariant,
                   ),
                   textAlign: TextAlign.center,
                 ),
+                if (refreshCallback != null) ...<Widget>[
+                  const SizedBox(height: 24),
+                  FilledButton.icon(
+                    onPressed: refreshCallback,
+                    icon: const Icon(Icons.refresh),
+                    label: Text(l10n.refresh),
+                  ),
+                ],
               ],
             ),
           ),

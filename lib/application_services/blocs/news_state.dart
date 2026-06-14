@@ -4,11 +4,14 @@ part of 'news_bloc.dart';
 abstract class NewsState {
   const NewsState();
 
-  bool get canUpdateHomeWidget =>
-      !kIsWeb &&
-      !Platform.isMacOS &&
-      this is LoadedConclusionState &&
-      (this as LoadedConclusionState).conclusion.isNotEmpty;
+  bool get canUpdateHomeWidget {
+    if (kIsWeb) {
+      return false;
+    }
+    final NewsState state = this;
+    return state is LoadedConclusionState &&
+        state.insight.conclusion.isNotEmpty;
+  }
 }
 
 class LoadingNewsState extends NewsState {
@@ -31,18 +34,23 @@ final class NewsConclusionError extends LoadedNewsState {
 }
 
 class LoadedConclusionState extends LoadedNewsState {
-  const LoadedConclusionState({
+  const LoadedConclusionState({required super.news, required this.insight});
+
+  final ActionableInsight insight;
+}
+
+final class BriefingSharingSuccess extends LoadedConclusionState {
+  const BriefingSharingSuccess({
     required super.news,
-    required this.conclusion,
+    required super.insight,
+    required this.result,
   });
 
-  final String conclusion;
+  final SharingResult result;
 }
 
 final class ErrorState extends NewsState {
-  const ErrorState({
-    this.errorMessage = 'Something went wrong',
-  });
+  const ErrorState({this.errorMessage = 'Something went wrong'});
 
   final String errorMessage;
 }

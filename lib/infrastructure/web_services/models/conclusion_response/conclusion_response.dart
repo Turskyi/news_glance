@@ -18,19 +18,15 @@ class ConclusionResponse {
 
   Map<String, Object?> toJson() => _$ConclusionResponseToJson(this);
 
-  ConclusionResponse copyWith({
-    String? conclusion,
-  }) {
-    return ConclusionResponse(
-      conclusion: conclusion ?? this.conclusion,
-    );
+  ConclusionResponse copyWith({String? conclusion}) {
+    return ConclusionResponse(conclusion: conclusion ?? this.conclusion);
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     if (other is! ConclusionResponse) return false;
-    final bool Function(Object? _, Object? __) mapEquals =
+    final bool Function(Object? _, Object? _) mapEquals =
         const DeepCollectionEquality().equals;
     return mapEquals(other.toJson(), toJson());
   }

@@ -12,6 +12,8 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - "**.g.dart"
+  errors:
+    deprecated_member_use: error
 
 linter:
   # The lint rules applied to this project can be customized in the
@@ -43,6 +45,8 @@ linter:
     avoid_classes_with_only_static_members: true
     sort_constructors_first: true
     prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    avoid_print: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

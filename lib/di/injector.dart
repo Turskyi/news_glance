@@ -3,4 +3,4 @@ import 'package:injectable/injectable.dart';
 import 'package:news_glance/di/injector.config.dart';
 
 @InjectableInit(initializerName: 'initDependencyInjection')
-void injectDependencies() => GetIt.I.initDependencyInjection();
+GetIt injectDependencies() => GetIt.I.initDependencyInjection();

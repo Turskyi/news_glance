@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_glance/application_services/settings_bloc.dart';
+import 'package:news_glance/domain_models/app_locale.dart';
+import 'package:news_glance/l10n/app_localizations.dart';
 import 'package:news_glance/res/constants.dart' as constants;
+import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/ui/clickable_tile.dart';
+import 'package:news_glance/ui/widget_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EndDrawer extends StatelessWidget {
@@ -8,24 +14,140 @@ class EndDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      return const SizedBox.shrink();
+    }
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
+                colors: <Color>[
+                  colorScheme.primary,
+                  colorScheme.primaryContainer,
+                  colorScheme.secondary,
+                ],
               ),
             ),
             child: Text(
-              'Contact Us',
+              l10n.menu,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize,
+              ),
+            ),
+          ),
+          const WidgetSettings(),
+          const Divider(),
+          BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (BuildContext context, SettingsState state) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    const Text('Theme'),
+                    SegmentedButton<ThemeMode>(
+                      segments: const <ButtonSegment<ThemeMode>>[
+                        ButtonSegment<ThemeMode>(
+                          value: ThemeMode.system,
+                          icon: Icon(Icons.brightness_auto),
+                        ),
+                        ButtonSegment<ThemeMode>(
+                          value: ThemeMode.light,
+                          icon: Icon(Icons.light_mode),
+                        ),
+                        ButtonSegment<ThemeMode>(
+                          value: ThemeMode.dark,
+                          icon: Icon(Icons.dark_mode),
+                        ),
+                      ],
+                      selected: <ThemeMode>{state.themeMode},
+                      onSelectionChanged: (Set<ThemeMode> newSelection) {
+                        context.read<SettingsBloc>().add(
+                          SettingsThemeChanged(newSelection.first),
+                        );
+                      },
+                      showSelectedIcon: false,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          const Divider(),
+          BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (BuildContext context, SettingsState state) {
+              return ListTile(
+                title: Text(l10n.language),
+                trailing: Text(
+                  state.locale.displayCode,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onTap: () {
+                  final AppLocale newLocale = state.locale.isUkrainian
+                      ? AppLocale.english
+                      : AppLocale.ukrainian;
+
+                  context.read<SettingsBloc>().add(SetLocaleEvent(newLocale));
+                },
+              );
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.star_outline),
+            title: Text(l10n.savedInsights),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(AppRoute.savedBriefings.path);
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.bookmark_outline),
+            title: Text(l10n.savedArticles),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(AppRoute.savedArticles.path);
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.auto_awesome_outlined),
+            title: Text(l10n.onboarding),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(AppRoute.onboarding.path);
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: Text(l10n.aboutApp(l10n.appName)),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(AppRoute.about.path);
+            },
+          ),
+          const Divider(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              l10n.contactUs,
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

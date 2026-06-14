@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_glance/domain_models/news_article.dart';
+import 'package:news_glance/ui/bookmark_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleWebScreen extends StatefulWidget {
@@ -10,22 +11,42 @@ class ArticleWebScreen extends StatefulWidget {
 }
 
 class _ArticleWebScreenState extends State<ArticleWebScreen> {
-  late WebViewController _controller;
+  WebViewController? _controller;
+  int _loadingProgress = 0;
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_controller != null) {
+      return;
+    }
     final Object? args = ModalRoute.of(context)?.settings.arguments;
     if (args is NewsArticle) {
-      _controller = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..setBackgroundColor(const Color(0x00000000))
+      final WebViewController controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted);
+
+      if (Theme.of(context).platform != TargetPlatform.macOS) {
+        controller.setBackgroundColor(const Color(0x00000000));
+      }
+
+      controller
         ..setNavigationDelegate(
           NavigationDelegate(
             onProgress: (int progress) {
-              //TODO: Update loading bar.
+              setState(() {
+                _loadingProgress = progress;
+              });
             },
-            onPageStarted: (String url) {},
-            onPageFinished: (String url) {},
+            onPageStarted: (String url) {
+              setState(() {
+                _loadingProgress = 0;
+              });
+            },
+            onPageFinished: (String url) {
+              setState(() {
+                _loadingProgress = 100;
+              });
+            },
             onWebResourceError: (WebResourceError error) {},
             onNavigationRequest: (NavigationRequest request) {
               return NavigationDecision.navigate;
@@ -33,20 +54,28 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
           ),
         )
         ..loadRequest(Uri.parse(args.urlSource));
+
+      _controller = controller;
     }
-    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     // Extract the arguments from the current ModalRoute settings.
     final Object? args = ModalRoute.of(context)?.settings.arguments;
+    final WebViewController? controller = _controller;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return DecoratedBox(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-          colors: <Color>[Colors.blue, Colors.indigo, Colors.purple],
+          colors: <Color>[
+            colorScheme.primary,
+            colorScheme.primaryContainer,
+            colorScheme.secondary,
+          ],
         ),
       ),
       child: Scaffold(
@@ -57,13 +86,32 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
           titleTextStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
+          iconTheme: const IconThemeData(color: Colors.white),
+          actions: <Widget>[
+            if (args is NewsArticle) BookmarkButton(article: args),
+          ],
         ),
         body: DecoratedBox(
           decoration: BoxDecoration(
-            color: Colors.blue[50],
+            color: Theme.of(context).scaffoldBackgroundColor,
           ),
-          child: WebViewWidget(controller: _controller),
+          child: controller == null
+              ? const SizedBox.shrink()
+              : Stack(
+                  children: <Widget>[
+                    WebViewWidget(controller: controller),
+                    if (_loadingProgress < 100)
+                      LinearProgressIndicator(
+                        value: _loadingProgress / 100.0,
+                        backgroundColor: Colors.transparent,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          colorScheme.primary,
+                        ),
+                      ),
+                  ],
+                ),
         ),
       ),
     );

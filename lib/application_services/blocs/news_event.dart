@@ -8,3 +8,15 @@ abstract class NewsEvent {
 class LoadNewsEvent extends NewsEvent {
   const LoadNewsEvent();
 }
+
+class RegenerateInsightEvent extends NewsEvent {
+  const RegenerateInsightEvent(this.style);
+
+  final ConclusionUiStyle style;
+}
+
+class ShareBriefingEvent extends NewsEvent {
+  const ShareBriefingEvent(this.text);
+
+  final String text;
+}

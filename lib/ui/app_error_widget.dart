@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppErrorWidget extends StatelessWidget {
-  const AppErrorWidget({
-    this.errorMessage = 'Something went wrong',
-    super.key,
-  });
+  const AppErrorWidget({this.errorMessage = 'Something went wrong', super.key});
 
   final String errorMessage;
 
@@ -42,7 +39,7 @@ class AppErrorWidget extends StatelessWidget {
               ),
               const SizedBox(width: 8.0),
               Flexible(
-                child: Text(
+                child: SelectableText(
                   errorMessage,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyLarge?.copyWith(

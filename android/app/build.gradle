@@ -1,10 +1,8 @@
 plugins {
     id "com.android.application"
-    id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
-    id 'com.google.firebase.firebase-perf'
     id 'com.google.firebase.appdistribution'
 }
 
@@ -46,8 +44,7 @@ def SIGNING_KEY_RELEASE_KEY_PASSWORD = keyProperties.getProperty('SIGNING_KEY_RE
 android {
     namespace rootProject.application_id
     compileSdk flutter.compileSdkVersion
-    //TODO: change back to dynamic "flutter.ndkVersion" version, when the error "One or more plugins require a higher Android NDK version." is gone.
-    ndkVersion = "27.0.12077973"
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -124,9 +121,7 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-analytics:22.3.0'
-    implementation 'com.google.firebase:firebase-crashlytics:19.4.1'
-    implementation 'com.google.firebase:firebase-perf:21.0.4'
-    implementation 'com.google.firebase:firebase-messaging:24.1.0'
+    implementation 'com.google.firebase:firebase-analytics:23.2.0'
+    implementation 'com.google.firebase:firebase-crashlytics:20.0.6'
     implementation 'com.android.support:multidex:1.0.3'
 }

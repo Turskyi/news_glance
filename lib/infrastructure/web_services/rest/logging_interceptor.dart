@@ -9,7 +9,7 @@ class LoggingInterceptor extends Interceptor {
 
   @override
   void onResponse(
-    Response<dynamic> response,
+    Response<Object?> response,
     ResponseInterceptorHandler handler,
   ) {
     log('onResponse -------------------');

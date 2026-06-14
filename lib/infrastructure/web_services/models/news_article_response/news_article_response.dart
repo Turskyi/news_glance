@@ -12,21 +12,21 @@ class NewsArticleResponse {
     this.description = '',
     this.urlToImage = '',
     required this.url,
-    required this.source,
+    this.source,
     this.author = '',
     required this.publishedAt,
     this.content = '',
   });
 
-  factory NewsArticleResponse.fromJson(Map<String, dynamic> json) {
-    return _$NewsArticleResponseFromJson(json);
+  factory NewsArticleResponse.fromJson(Map<String, Object?> json) {
+    return _$NewsArticleResponseFromJson(json as Map<String, dynamic>);
   }
 
   final String title;
   final String description;
   final String urlToImage;
   final String url;
-  final Source source;
+  final Source? source;
   final String author;
   final String publishedAt;
   final String content;
@@ -39,34 +39,33 @@ class NewsArticleResponse {
         'content: $content)';
   }
 
-  Map<String, dynamic> toJson() => _$NewsArticleResponseToJson(this);
+  Map<String, Object?> toJson() => _$NewsArticleResponseToJson(this);
 
   NewsArticleResponse copyWith({
     Source? source,
     String? author,
     String? title,
-    dynamic description,
+    String? description,
     String? url,
-    dynamic urlToImage,
+    String? urlToImage,
     String? publishedAt,
-    dynamic content,
-  }) =>
-      NewsArticleResponse(
-        source: source ?? this.source,
-        author: author ?? this.author,
-        title: title ?? this.title,
-        description: description ?? this.description,
-        url: url ?? this.url,
-        urlToImage: urlToImage ?? this.urlToImage,
-        publishedAt: publishedAt ?? this.publishedAt,
-        content: content ?? this.content,
-      );
+    String? content,
+  }) => NewsArticleResponse(
+    source: source ?? this.source,
+    author: author ?? this.author,
+    title: title ?? this.title,
+    description: description ?? this.description,
+    url: url ?? this.url,
+    urlToImage: urlToImage ?? this.urlToImage,
+    publishedAt: publishedAt ?? this.publishedAt,
+    content: content ?? this.content,
+  );
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     if (other is! NewsArticleResponse) return false;
-    final bool Function(Object? _, Object? __) mapEquals =
+    final bool Function(Object? _, Object? _) mapEquals =
         const DeepCollectionEquality().equals;
     return mapEquals(other.toJson(), toJson());
   }

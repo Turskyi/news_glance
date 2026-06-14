@@ -1,6 +1,6 @@
 {
-  "name": "news_glance",
-  "short_name": "news_glance",
+  "name": "News Glance",
+  "short_name": "News Glance",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0175C2",

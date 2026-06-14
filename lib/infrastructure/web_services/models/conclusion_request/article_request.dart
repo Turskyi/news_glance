@@ -21,7 +21,7 @@ class ArticleRequest {
         'articleText: $articleText)';
   }
 
-  Map<String, dynamic> toJson() => _$ArticleRequestToJson(this);
+  Map<String, Object?> toJson() => _$ArticleRequestToJson(this);
 
   ArticleRequest copyWith({
     String? title,
@@ -45,6 +45,7 @@ class ArticleRequest {
   }
 
   @override
+  @JsonKey(includeToJson: false)
   int get hashCode =>
       title.hashCode ^ description.hashCode ^ articleText.hashCode;
 }
