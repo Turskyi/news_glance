@@ -17,159 +17,162 @@ class EndDrawer extends StatelessWidget {
     final AppLocalizations? l10n = AppLocalizations.of(context);
     if (l10n == null) {
       return const SizedBox.shrink();
-    }
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  colorScheme.primary,
-                  colorScheme.primaryContainer,
-                  colorScheme.secondary,
-                ],
-              ),
-            ),
-            child: Text(
-              l10n.menu,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize,
-              ),
-            ),
-          ),
-          const WidgetSettings(),
-          const Divider(),
-          BlocBuilder<SettingsBloc, SettingsState>(
-            builder: (BuildContext context, SettingsState state) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    const Text('Theme'),
-                    SegmentedButton<ThemeMode>(
-                      segments: const <ButtonSegment<ThemeMode>>[
-                        ButtonSegment<ThemeMode>(
-                          value: ThemeMode.system,
-                          icon: Icon(Icons.brightness_auto),
-                        ),
-                        ButtonSegment<ThemeMode>(
-                          value: ThemeMode.light,
-                          icon: Icon(Icons.light_mode),
-                        ),
-                        ButtonSegment<ThemeMode>(
-                          value: ThemeMode.dark,
-                          icon: Icon(Icons.dark_mode),
-                        ),
-                      ],
-                      selected: <ThemeMode>{state.themeMode},
-                      onSelectionChanged: (Set<ThemeMode> newSelection) {
-                        context.read<SettingsBloc>().add(
-                          SettingsThemeChanged(newSelection.first),
-                        );
-                      },
-                      showSelectedIcon: false,
-                    ),
+    } else {
+      final ThemeData theme = Theme.of(context);
+      final ColorScheme colorScheme = theme.colorScheme;
+      final TextTheme textTheme = theme.textTheme;
+      return Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[
+                    colorScheme.primary,
+                    colorScheme.primaryContainer,
+                    colorScheme.secondary,
                   ],
                 ),
-              );
-            },
-          ),
-          const Divider(),
-          BlocBuilder<SettingsBloc, SettingsState>(
-            builder: (BuildContext context, SettingsState state) {
-              return ListTile(
-                title: Text(l10n.language),
-                trailing: Text(
-                  state.locale.displayCode,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              child: Text(
+                l10n.menu,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: textTheme.headlineLarge?.fontSize,
                 ),
-                onTap: () {
-                  final AppLocale newLocale = state.locale.isUkrainian
-                      ? AppLocale.english
-                      : AppLocale.ukrainian;
-
-                  context.read<SettingsBloc>().add(SetLocaleEvent(newLocale));
-                },
-              );
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.star_outline),
-            title: Text(l10n.savedInsights),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(AppRoute.savedBriefings.path);
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.bookmark_outline),
-            title: Text(l10n.savedArticles),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(AppRoute.savedArticles.path);
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.auto_awesome_outlined),
-            title: Text(l10n.onboarding),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(AppRoute.onboarding.path);
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: Text(l10n.aboutApp(l10n.appName)),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(AppRoute.about.path);
-            },
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Text(
-              l10n.contactUs,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
-                fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          ClickableTile(
-            title: 'Website: ${constants.website}',
-            onTap: () => _launchUrl(constants.website),
-          ),
-          ClickableTile(
-            title: 'Email: ${constants.email}',
-            onTap: () => _launchEmail(constants.email),
-          ),
-          ClickableTile(
-            title: 'Phone: ${constants.phone}',
-            onTap: () => _launchPhone(constants.phone),
-          ),
-          ClickableTile(
-            title: constants.address,
-            onTap: () => _launchMap(constants.address),
-          ),
-        ],
-      ),
-    );
+            const WidgetSettings(),
+            const Divider(),
+            BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (BuildContext context, SettingsState state) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(l10n.theme),
+                      SegmentedButton<ThemeMode>(
+                        segments: const <ButtonSegment<ThemeMode>>[
+                          ButtonSegment<ThemeMode>(
+                            value: ThemeMode.system,
+                            icon: Icon(Icons.brightness_auto),
+                          ),
+                          ButtonSegment<ThemeMode>(
+                            value: ThemeMode.light,
+                            icon: Icon(Icons.light_mode),
+                          ),
+                          ButtonSegment<ThemeMode>(
+                            value: ThemeMode.dark,
+                            icon: Icon(Icons.dark_mode),
+                          ),
+                        ],
+                        selected: <ThemeMode>{state.themeMode},
+                        onSelectionChanged: (Set<ThemeMode> newSelection) {
+                          context.read<SettingsBloc>().add(
+                            SettingsThemeChanged(newSelection.first),
+                          );
+                        },
+                        showSelectedIcon: false,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (BuildContext context, SettingsState state) {
+                return ListTile(
+                  title: Text(l10n.language),
+                  trailing: Text(
+                    state.locale.displayCode,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () {
+                    final AppLocale newLocale = state.locale.isUkrainian
+                        ? AppLocale.english
+                        : AppLocale.ukrainian;
+
+                    context.read<SettingsBloc>().add(SetLocaleEvent(newLocale));
+                  },
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.star_outline),
+              title: Text(l10n.savedInsights),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(AppRoute.savedBriefings.path);
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.bookmark_outline),
+              title: Text(l10n.savedArticles),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(AppRoute.savedArticles.path);
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.auto_awesome_outlined),
+              title: Text(l10n.onboarding),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(AppRoute.onboarding.path);
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: Text(l10n.aboutApp(l10n.appName)),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(AppRoute.about.path);
+              },
+            ),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Text(
+                l10n.contactUs,
+                style: TextStyle(
+                  fontSize: textTheme.titleLarge?.fontSize,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ClickableTile(
+              title: '${l10n.website}: ${constants.website}',
+              onTap: () => _launchUrl(constants.website),
+            ),
+            ClickableTile(
+              title: '${l10n.email}: ${constants.email}',
+              onTap: () => _launchEmail(constants.email),
+            ),
+            ClickableTile(
+              title: '${l10n.phone}: ${constants.phone}',
+              onTap: () => _launchPhone(constants.phone),
+            ),
+            ClickableTile(
+              title: '${l10n.address}:\n${constants.address}',
+              onTap: () => _launchMap(constants.address),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void _launchUrl(String url) async {

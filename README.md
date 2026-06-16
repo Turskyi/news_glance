@@ -23,7 +23,7 @@ and allows you to view and share the articles.
   [Google Play](https://play.google.com/store/apps/details?id=com.turskyi.news_glance),
   [App Store](https://apps.apple.com/ca/app/news-glance/id6743685132) or
   [iOS TestFlight](https://testflight.apple.com/join/rMxpk2Cp).
-- **Web (Next.js):** [https://news.turskyi.com](https://news.turskyi.com/) -
+- **Web (Next.js):** [https://newsglanceai.com](https://newsglanceai.com) -
   This is the primary web version of News Glance, built with Next.js. It offers
   a full-featured web experience. This version is maintained in a
   [separate repository](https://github.com/Turskyi/news-nextjs)

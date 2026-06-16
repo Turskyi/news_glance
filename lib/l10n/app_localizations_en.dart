@@ -357,4 +357,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pinWidgetDescription =>
       'Add the News Glance widget to your home screen for quick access.';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get theme => 'Theme';
 }

@@ -2,17 +2,18 @@ const String iOSWidgetName = 'NewsWidgets';
 const String androidWidgetName = 'NewsWidget';
 const String appGroupId = 'group.dmytrowidget';
 const String developerDomain = 'turskyi.com';
+const String domain = 'newsglanceai.com';
 
 /// Change it to `const String baseUrl = 'http://localhost:3000/api/';` when
 /// running the backend locally.
-const String baseUrl = 'https://news.$developerDomain/api/';
+const String baseUrl = 'https://news.$domain/api/';
 const String usaCode = 'US';
 const String internationalCode = 'intl';
-const String website = 'https://news.$developerDomain';
-const String email = 'dmytro@$developerDomain';
+const String website = 'https://news.$domain';
+const String email = 'support@$domain';
 const String phone = '+14379852581';
 const String address =
-    'Address:\nHarmony Village\n3035 Finch West Avenue.,\nNorth York\nOntario\n'
+    'Harmony Village\n3035 Finch West Avenue.,\nNorth York\nOntario\n'
     'M9M 0A3\nCanada.';
 const int newsMax = 12;
 const double defaultExpandedHeight = 278.0;
