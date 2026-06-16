@@ -57,3 +57,6 @@ android/app/.cxx
 coverage
 ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved
 ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+# Firebase
+.firebase/
