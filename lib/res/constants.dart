@@ -6,10 +6,10 @@ const String domain = 'newsglanceai.com';
 
 /// Change it to `const String baseUrl = 'http://localhost:3000/api/';` when
 /// running the backend locally.
-const String baseUrl = 'https://news.$domain/api/';
+const String baseUrl = 'https://$domain/api/';
 const String usaCode = 'US';
 const String internationalCode = 'intl';
-const String website = 'https://news.$domain';
+const String website = 'https://$domain';
 const String email = 'support@$domain';
 const String phone = '+14379852581';
 const String address =
