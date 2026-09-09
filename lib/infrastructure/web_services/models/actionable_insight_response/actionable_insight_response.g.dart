@@ -13,6 +13,7 @@ ActionableInsightResponse _$ActionableInsightResponseFromJson(
   level: _levelFromJson(json['level'] as String),
   probability: (json['probability'] as num).toDouble(),
   category: _categoryFromJson(json['category'] as String),
+  model: json['model'] as String?,
 );
 
 Map<String, dynamic> _$ActionableInsightResponseToJson(
@@ -22,4 +23,5 @@ Map<String, dynamic> _$ActionableInsightResponseToJson(
   'level': _levelToJson(instance.level),
   'probability': instance.probability,
   'category': _categoryToJson(instance.category),
+  'model': instance.model,
 };

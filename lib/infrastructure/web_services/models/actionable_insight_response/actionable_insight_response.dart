@@ -12,6 +12,7 @@ class ActionableInsightResponse {
     required this.level,
     required this.probability,
     required this.category,
+    this.model,
   });
 
   factory ActionableInsightResponse.fromJson(Map<String, Object?> json) {
@@ -28,10 +29,12 @@ class ActionableInsightResponse {
   @JsonKey(fromJson: _categoryFromJson, toJson: _categoryToJson)
   final InsightCategory category;
 
+  final String? model;
+
   @override
   String toString() =>
       'ActionableInsightResponse(conclusion: $conclusion, level: $level, '
-      'probability: $probability, category: $category)';
+      'probability: $probability, category: $category, model: $model)';
 
   Map<String, Object?> toJson() => _$ActionableInsightResponseToJson(this);
 
@@ -40,12 +43,14 @@ class ActionableInsightResponse {
     ActionableInsightLevel? level,
     double? probability,
     InsightCategory? category,
+    String? model,
   }) {
     return ActionableInsightResponse(
       conclusion: conclusion ?? this.conclusion,
       level: level ?? this.level,
       probability: probability ?? this.probability,
       category: category ?? this.category,
+      model: model ?? this.model,
     );
   }
 
@@ -62,7 +67,8 @@ class ActionableInsightResponse {
       conclusion.hashCode ^
       level.hashCode ^
       probability.hashCode ^
-      category.hashCode;
+      category.hashCode ^
+      model.hashCode;
 }
 
 ActionableInsightLevel _levelFromJson(String value) {

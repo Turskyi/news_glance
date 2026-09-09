@@ -5,21 +5,26 @@ part 'conclusion_response.g.dart';
 
 @JsonSerializable()
 class ConclusionResponse {
-  const ConclusionResponse({required this.conclusion});
+  const ConclusionResponse({required this.conclusion, this.model});
 
   factory ConclusionResponse.fromJson(Map<String, Object?> json) {
     return _$ConclusionResponseFromJson(json);
   }
 
   final String conclusion;
+  final String? model;
 
   @override
-  String toString() => 'ConclusionResponse(conclusion: $conclusion)';
+  String toString() =>
+      'ConclusionResponse(conclusion: $conclusion, model: $model)';
 
   Map<String, Object?> toJson() => _$ConclusionResponseToJson(this);
 
-  ConclusionResponse copyWith({String? conclusion}) {
-    return ConclusionResponse(conclusion: conclusion ?? this.conclusion);
+  ConclusionResponse copyWith({String? conclusion, String? model}) {
+    return ConclusionResponse(
+      conclusion: conclusion ?? this.conclusion,
+      model: model ?? this.model,
+    );
   }
 
   @override
@@ -32,5 +37,5 @@ class ConclusionResponse {
   }
 
   @override
-  int get hashCode => conclusion.hashCode;
+  int get hashCode => conclusion.hashCode ^ model.hashCode;
 }

@@ -165,6 +165,21 @@ class SignalCard extends StatelessWidget {
                       color: styles.textColor,
                       maxLines: maxLines,
                     ),
+                    if (insight.model != null &&
+                        insight.model!.isNotEmpty) ...<Widget>[
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'Analyzed by ${insight.model}',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: styles.textColor.withValues(alpha: 0.4),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               )
