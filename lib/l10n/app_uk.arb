@@ -140,5 +140,10 @@
   "next": "Далі",
   "onboarding": "Знайомство",
   "pinWidget": "Закріпити віджет",
-  "pinWidgetDescription": "Додайте віджет News Glance на головний екран для швидкого доступу."
+  "pinWidgetDescription": "Додайте віджет News Glance на головний екран для швидкого доступу.",
+  "address": "Адреса",
+  "phone": "Телефон",
+  "email": "Електронна пошта",
+  "website": "Вебсайт",
+  "theme": "Тема"
 }

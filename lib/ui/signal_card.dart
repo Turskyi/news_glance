@@ -11,10 +11,16 @@ import 'package:news_glance/ui/save_briefing_button.dart';
 import 'package:news_glance/ui/signal_card_style.dart';
 
 class SignalCard extends StatelessWidget {
-  const SignalCard({required this.insight, this.searchQuery, super.key});
+  const SignalCard({
+    required this.insight,
+    this.searchQuery,
+    this.maxLines = 10,
+    super.key,
+  });
 
   final ActionableInsight insight;
   final String? searchQuery;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +163,23 @@ class SignalCard extends StatelessWidget {
                     MarkdownPreview(
                       text: insight.conclusion.trim(),
                       color: styles.textColor,
+                      maxLines: maxLines,
                     ),
+                    if (insight.model != null &&
+                        insight.model!.isNotEmpty) ...<Widget>[
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'Analyzed by ${insight.model}',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: styles.textColor.withValues(alpha: 0.4),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               )

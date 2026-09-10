@@ -134,6 +134,20 @@ class ConversationalSummaryCard extends StatelessWidget {
               ),
             ),
           ),
+          if (insight.model != null && insight.model!.isNotEmpty) ...<Widget>[
+            const SizedBox(height: 12),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'Analyzed by ${insight.model}',
+                style: TextStyle(
+                  fontSize: 10,
+                  color: colorScheme.onSurface.withValues(alpha: 0.4),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

@@ -8,6 +8,7 @@ class ActionableInsight {
     required this.level,
     required this.probability,
     required this.category,
+    this.model,
   });
 
   factory ActionableInsight.fromPlainText(ConclusionResponse response) {
@@ -16,6 +17,7 @@ class ActionableInsight {
       level: ActionableInsightLevel.neutral,
       probability: 0.0,
       category: InsightCategory.general,
+      model: response.model,
     );
   }
 
@@ -23,6 +25,7 @@ class ActionableInsight {
   final ActionableInsightLevel level;
   final double probability;
   final InsightCategory category;
+  final String? model;
 
   bool get isNeutral => level == ActionableInsightLevel.neutral;
 
@@ -37,7 +40,7 @@ class ActionableInsight {
   @override
   String toString() =>
       'ActionableInsight(conclusion: $conclusion, level: $level, '
-      'probability: $probability, category: $category)';
+      'probability: $probability, category: $category, model: $model)';
 
   @override
   bool operator ==(Object other) {
@@ -46,7 +49,8 @@ class ActionableInsight {
     return other.conclusion == conclusion &&
         other.level == level &&
         other.probability == probability &&
-        other.category == category;
+        other.category == category &&
+        other.model == model;
   }
 
   @override
@@ -54,5 +58,6 @@ class ActionableInsight {
       conclusion.hashCode ^
       level.hashCode ^
       probability.hashCode ^
-      category.hashCode;
+      category.hashCode ^
+      model.hashCode;
 }

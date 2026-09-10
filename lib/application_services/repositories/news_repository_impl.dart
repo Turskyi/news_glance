@@ -103,6 +103,7 @@ class NewsRepositoryImpl implements NewsRepository {
         level: response.level,
         probability: response.probability,
         category: response.category,
+        model: response.model,
       );
     } catch (e) {
       // Fallback to the legacy endpoint

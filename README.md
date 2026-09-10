@@ -5,7 +5,6 @@
 [![codecov](https://codecov.io/gh/Turskyi/news_glance/graph/badge.svg?token=P02XSDS5QB)](https://codecov.io/gh/Turskyi/news_glance)
 [![style: flutter lints](https://img.shields.io/badge/style-flutter__lints-blue)](https://pub.dev/packages/flutter_lints)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Turskyi/news_glance)
-[![Deploy to Firebase Hosting on PR](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-pull-request.yml/badge.svg)](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-pull-request.yml)
 [![Deploy to Firebase Hosting on merge](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/Turskyi/news_glance/actions/workflows/firebase-hosting-merge.yml)
 [![wakatime](https://wakatime.com/badge/user/f9df5074-b4ea-4c17-b001-fff428ab82aa/project/7f969c7e-d17d-4570-aaeb-360b0ff3fd64.svg)](https://wakatime.com/badge/user/f9df5074-b4ea-4c17-b001-fff428ab82aa/project/7f969c7e-d17d-4570-aaeb-360b0ff3fd64)
 <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Turskyi/news_glance">
@@ -24,7 +23,7 @@ and allows you to view and share the articles.
   [Google Play](https://play.google.com/store/apps/details?id=com.turskyi.news_glance),
   [App Store](https://apps.apple.com/ca/app/news-glance/id6743685132) or
   [iOS TestFlight](https://testflight.apple.com/join/rMxpk2Cp).
-- **Web (Next.js):** [https://news.turskyi.com](https://news.turskyi.com/) -
+- **Web (Next.js):** [https://newsglanceai.com](https://newsglanceai.com) -
   This is the primary web version of News Glance, built with Next.js. It offers
   a full-featured web experience. This version is maintained in a
   [separate repository](https://github.com/Turskyi/news-nextjs)

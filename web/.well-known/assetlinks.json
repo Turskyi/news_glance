@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.turskyi.news_glance",
+      "sha256_cert_fingerprints": [
+        "68:BC:95:6A:E1:06:BD:42:9B:87:FB:87:0D:47:CF:60:EA:20:7E:3B:CE:D2:B5:57:5E:EA:B8:DD:3A:61:CE:5A"
+      ]
+    }
+  }
+]

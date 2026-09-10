@@ -140,5 +140,10 @@
   "next": "Next",
   "onboarding": "Onboarding",
   "pinWidget": "Pin Widget",
-  "pinWidgetDescription": "Add the News Glance widget to your home screen for quick access."
+  "pinWidgetDescription": "Add the News Glance widget to your home screen for quick access.",
+  "website": "Website",
+  "email": "Email",
+  "phone": "Phone",
+  "address": "Address",
+  "theme": "Theme"
 }

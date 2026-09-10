@@ -46,14 +46,12 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
         'HomeWidgetService saveWidgetData: macOS channel call '
         '(key=$id, type=${data.runtimeType}).',
       );
-      return _widgetChannel.invokeMethod<bool>(
-        constants.saveWidgetDataMethod,
-        <String, Object?>{
-          'key': id,
-          'value': data,
-          constants.appGroupIdArgKey: constants.appGroupId,
-        },
-      );
+      return _widgetChannel
+          .invokeMethod<bool>(constants.saveWidgetDataMethod, <String, Object?>{
+            constants.keyArgKey: id,
+            constants.valueArgKey: data,
+            constants.appGroupIdArgKey: constants.appGroupId,
+          });
     } else {
       return HomeWidget.saveWidgetData<T>(id, data);
     }
@@ -192,7 +190,7 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
   @override
   Future<bool?> setWidgetStyle(String style) async {
     debugPrint('HomeWidgetService setWidgetStyle: $style.');
-    return saveWidgetData<String>('widget_style', style);
+    return saveWidgetData<String>(storage_keys.widgetStyle, style);
   }
 
   @override
@@ -202,11 +200,13 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
         return constants.defaultWidgetUpdateFrequencyMinutes;
       }
       if (Platform.isMacOS) {
-        final dynamic result = await _widgetChannel
-            .invokeMethod<dynamic>('getWidgetData', <String, Object?>{
-              'key': storage_keys.widgetUpdateFrequency,
-              constants.appGroupIdArgKey: constants.appGroupId,
-            });
+        final Object? result = await _widgetChannel.invokeMethod<Object?>(
+          constants.getWidgetDataMethod,
+          <String, Object?>{
+            constants.keyArgKey: storage_keys.widgetUpdateFrequency,
+            constants.appGroupIdArgKey: constants.appGroupId,
+          },
+        );
         if (result == null) {
           return constants.defaultWidgetUpdateFrequencyMinutes;
         }
@@ -217,7 +217,7 @@ class HomeWidgetServiceImpl implements HomeWidgetService {
         }
         return constants.defaultWidgetUpdateFrequencyMinutes;
       } else {
-        final dynamic result = await HomeWidget.getWidgetData(
+        final Object? result = await HomeWidget.getWidgetData(
           storage_keys.widgetUpdateFrequency,
         );
         if (result == null) {

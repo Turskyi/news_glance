@@ -14,6 +14,7 @@ import 'package:news_glance/ui/news_conclusion_section.dart';
 import 'package:news_glance/ui/refresh_button.dart';
 import 'package:news_glance/ui/signal_card.dart';
 
+import '../res/constants.dart' as constants;
 import 'app_error_widget.dart';
 import 'empty_news_widget.dart';
 
@@ -168,6 +169,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ConclusionUiStyle.insight => SignalCard(
                                         insight: state.insight,
+                                        maxLines: constants.insightMaxLines,
                                       ),
                                       ConclusionUiStyle.summary =>
                                         ConversationalSummaryCard(
