@@ -160,6 +160,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get linkCopiedToClipboard => 'Link copied to clipboard';
 
   @override
+  String get linkOpenFailed => 'Could not open link';
+
+  @override
   String get searchNews => 'News Glance Search';
 
   @override

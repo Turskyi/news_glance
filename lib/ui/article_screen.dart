@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/domain_services/sharing_service.dart';
@@ -6,6 +7,7 @@ import 'package:news_glance/res/constants.dart';
 import 'package:news_glance/router/app_route.dart';
 import 'package:news_glance/ui/article_image.dart';
 import 'package:news_glance/ui/bookmark_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleScreen extends StatefulWidget {
@@ -85,11 +87,36 @@ class _ArticleScreenState extends State<ArticleScreen> {
     final VoidCallback? onUrlTap = link.isEmpty
         ? null
         : () {
-            Navigator.pushNamed(
-              context,
-              AppRoute.articleWeb.path,
-              arguments: args,
-            );
+            if (defaultTargetPlatform == TargetPlatform.android) {
+              final Uri uri = Uri.parse(link);
+              launchUrl(uri, mode: LaunchMode.externalApplication)
+                  .then((bool launched) {
+                    if (!launched && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(l10n.linkOpenFailed),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  })
+                  .catchError((_) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(l10n.linkOpenFailed),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  });
+            } else {
+              Navigator.pushNamed(
+                context,
+                AppRoute.articleWeb.path,
+                arguments: args,
+              );
+            }
           };
 
     return DecoratedBox(
@@ -214,71 +241,71 @@ class _SourceSection extends StatelessWidget {
 
     if (l10n == null) {
       return const SizedBox.shrink();
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: onUrlTap,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '${l10n.source}: ',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: theme.textTheme.titleLarge?.fontSize,
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: onUrlTap,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    '${l10n.source}: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: theme.textTheme.titleLarge?.fontSize,
+                    ),
                   ),
-                ),
-                Text(
-                  link,
-                  style: TextStyle(
-                    color: colorScheme.primary,
-                    decoration: TextDecoration.underline,
+                  Text(
+                    link,
+                    style: TextStyle(
+                      color: colorScheme.primary,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 12.0),
-        Wrap(
-          spacing: 8.0,
-          runSpacing: 8.0,
-          children: <Widget>[
-            _ArticleActionButton(
-              icon: Icons.open_in_new,
-              label: l10n.open,
-              onPressed: onUrlTap,
-            ),
-            _ArticleActionButton(
-              icon: Icons.copy,
-              label: l10n.copyLink,
-              onPressed: () {
-                sharingService.copyToClipboard(link);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.linkCopiedToClipboard),
-                    behavior: SnackBarBehavior.floating,
-                    width: 300,
-                  ),
-                );
-              },
-            ),
-            _ArticleActionButton(
-              icon: Icons.share,
-              label: l10n.share,
-              onPressed: () {
-                sharingService.shareUrl(link, title: title);
-              },
-            ),
-          ],
-        ),
-      ],
-    );
+          const SizedBox(height: 12.0),
+          Wrap(
+            spacing: 8.0,
+            runSpacing: 8.0,
+            children: <Widget>[
+              _ArticleActionButton(
+                icon: Icons.open_in_new,
+                label: l10n.open,
+                onPressed: onUrlTap,
+              ),
+              _ArticleActionButton(
+                icon: Icons.copy,
+                label: l10n.copyLink,
+                onPressed: () {
+                  sharingService.copyToClipboard(link);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.linkCopiedToClipboard),
+                      behavior: SnackBarBehavior.floating,
+                      width: 300,
+                    ),
+                  );
+                },
+              ),
+              _ArticleActionButton(
+                icon: Icons.share,
+                label: l10n.share,
+                onPressed: () {
+                  sharingService.shareUrl(link, title: title);
+                },
+              ),
+            ],
+          ),
+        ],
+      );
+    }
   }
 }
 

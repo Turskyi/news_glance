@@ -392,6 +392,12 @@ abstract class AppLocalizations {
   /// **'Link copied to clipboard'**
   String get linkCopiedToClipboard;
 
+  /// No description provided for @linkOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open link'**
+  String get linkOpenFailed;
+
   /// No description provided for @searchNews.
   ///
   /// In en, this message translates to:

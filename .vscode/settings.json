@@ -7,5 +7,6 @@
     "latex",
     "plaintext",
     "yaml"
-  ]
+  ],
+  "java.compile.nullAnalysis.mode": "disabled"
 }

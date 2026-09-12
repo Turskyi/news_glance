@@ -160,6 +160,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get linkCopiedToClipboard => 'Посилання скопійовано';
 
   @override
+  String get linkOpenFailed => 'Не вдалося відкрити посилання';
+
+  @override
   String get searchNews => 'News Glance Пошук';
 
   @override
