@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
@@ -141,11 +142,15 @@ internal fun updateAppWidget(
         layoutRes,
     ).apply {
         // Open App on Widget Click
-        val pendingIntent: PendingIntent =
-            HomeWidgetLaunchIntent.getActivity(
-                context,
-                MainActivity::class.java
-            )
+        val intent = Intent(context, MainActivity::class.java).apply {
+            action = HomeWidgetLaunchIntent.HOME_WIDGET_LAUNCH_ACTION
+        }
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+        val pendingIntent = PendingIntent.getActivity(context, 0, intent, flags)
         setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
         when (widgetStyle) {
