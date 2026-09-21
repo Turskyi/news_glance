@@ -793,6 +793,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Theme'**
   String get theme;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get somethingWentWrong;
+
+  /// No description provided for @whatYouCanDo.
+  ///
+  /// In en, this message translates to:
+  /// **'What you can do:'**
+  String get whatYouCanDo;
+
+  /// No description provided for @checkInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your internet connection.'**
+  String get checkInternetConnection;
+
+  /// No description provided for @tryAgainButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again using the button below.'**
+  String get tryAgainButton;
+
+  /// No description provided for @comeBackTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Come back tomorrow if the server is undergoing maintenance.'**
+  String get comeBackTomorrow;
+
+  /// No description provided for @contactSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact support at {email}'**
+  String contactSupport(String email);
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @connectionTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection timed out. Please try again later.'**
+  String get connectionTimedOut;
+
+  /// No description provided for @noInternetConnectionSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please check your network settings.'**
+  String get noInternetConnectionSettings;
+
+  /// No description provided for @unexpectedErrorOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred.'**
+  String get unexpectedErrorOccurred;
+
+  /// No description provided for @networkErrorPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error: {message}'**
+  String networkErrorPrefix(String message);
 }
 
 class _AppLocalizationsDelegate

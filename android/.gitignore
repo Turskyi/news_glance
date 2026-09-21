@@ -15,3 +15,6 @@ key.properties
 /keystore
 /keystore/
 /app/google-services.json
+
+# Gradle build outputs
+build/

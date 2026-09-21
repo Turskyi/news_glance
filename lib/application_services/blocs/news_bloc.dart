@@ -194,7 +194,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           error.type == DioExceptionType.receiveTimeout) {
         return 'Connection timed out. Please try again later.';
       }
-      return 'Network error: ${error.message}';
+      final String message =
+          error.message ?? error.error?.toString() ?? 'Unknown network error.';
+      return 'Network error: $message';
     }
     return 'An unexpected error occurred.';
   }

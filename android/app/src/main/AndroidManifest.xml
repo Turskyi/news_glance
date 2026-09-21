@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.turskyi.news_glance"
-    android:versionCode="14"
-    android:versionName="0.1.4">
+    android:versionCode="15"
+    android:versionName="0.1.5">
 
     <queries>
         <intent>
@@ -79,6 +79,18 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!--
+            Fix for Glance InvisibleActionTrampolineActivity crash.
+            Forcing singleInstance prevents the activity from losing its intent extras
+            during task restoration, which is common on OnePlus devices.
+        -->
+        <activity
+            android:name="androidx.glance.appwidget.action.InvisibleActionTrampolineActivity"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            tools:node="merge"
+            tools:replace="android:exported,android:launchMode" />
     </application>
 
 </manifest>

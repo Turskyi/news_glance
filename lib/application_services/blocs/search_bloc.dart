@@ -226,7 +226,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           error.type == DioExceptionType.receiveTimeout) {
         return 'Connection timed out. Please try again later.';
       } else {
-        return 'Network error: ${error.message}';
+        final String message =
+            error.message ??
+            error.error?.toString() ??
+            'Unknown network error.';
+        return 'Network error: $message';
       }
     } else {
       return 'An unexpected error occurred.';
