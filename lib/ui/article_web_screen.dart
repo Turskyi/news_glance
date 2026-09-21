@@ -33,9 +33,11 @@ class _ArticleWebScreenState extends State<ArticleWebScreen> {
         ..setNavigationDelegate(
           NavigationDelegate(
             onProgress: (int progress) {
-              setState(() {
-                _loadingProgress = progress;
-              });
+              if (mounted) {
+                setState(() {
+                  _loadingProgress = progress;
+                });
+              }
             },
             onPageStarted: (String url) {
               setState(() {

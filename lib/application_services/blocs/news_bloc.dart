@@ -16,8 +16,6 @@ import 'package:news_glance/domain_services/briefing_persistence.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
 import 'package:news_glance/domain_services/sharing_service.dart';
 import 'package:news_glance/domain_services/use_cases/compute_news_checksum.dart';
-import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/actionable_insight_level.dart';
-import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/insight_category.dart';
 import 'package:news_glance/res/constants.dart' as constants;
 
 part 'news_event.dart';
@@ -50,8 +48,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   // Caches keyed by the last news checksum — avoid regenerating if same news
   int? _lastNewsHash;
   ActionableInsight? _cachedActionableInsight;
-  String? _cachedConclusionText;
-  String? _cachedSummaryText;
+  ActionableInsight? _cachedConclusion;
+  ActionableInsight? _cachedSummary;
 
   FutureOr<void> _loadNews(LoadNewsEvent event, Emitter<NewsState> emit) async {
     debugPrint('NewsBloc: [_loadNews] triggered');
@@ -90,36 +88,22 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
         if (style.isConclusion) {
           debugPrint('NewsBloc: [_loadNews] calling getNewsConclusion');
-          final String conclusionText = await _newsRepository.getNewsConclusion(
+          insight = await _newsRepository.getNewsConclusion(
             news,
             lang: locale.languageCode,
           );
-          _cachedConclusionText = conclusionText;
+          _cachedConclusion = insight;
           _cachedActionableInsight = null;
-          _cachedSummaryText = null;
-
-          insight = ActionableInsight(
-            conclusion: conclusionText,
-            level: ActionableInsightLevel.neutral,
-            probability: 0.0,
-            category: InsightCategory.general,
-          );
+          _cachedSummary = null;
         } else if (style.isSummary) {
           debugPrint('NewsBloc: [_loadNews] calling getNewsSummary');
-          final String summaryText = await _newsRepository.getNewsSummary(
+          insight = await _newsRepository.getNewsSummary(
             news,
             lang: locale.languageCode,
           );
-          _cachedSummaryText = summaryText;
-          _cachedConclusionText = null;
+          _cachedSummary = insight;
+          _cachedConclusion = null;
           _cachedActionableInsight = null;
-
-          insight = ActionableInsight(
-            conclusion: summaryText,
-            level: ActionableInsightLevel.neutral,
-            probability: 0.0,
-            category: InsightCategory.general,
-          );
         } else {
           debugPrint('NewsBloc: [_loadNews] calling getActionableInsight');
           insight = await _newsRepository.getActionableInsight(
@@ -127,26 +111,26 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
             lang: locale.languageCode,
           );
           _cachedActionableInsight = insight;
-          _cachedConclusionText = null;
-          _cachedSummaryText = null;
+          _cachedConclusion = null;
+          _cachedSummary = null;
         }
 
         final int checksum = _computeNewsChecksum(news);
         _lastNewsHash = checksum;
 
         try {
-          final String? ct = _cachedConclusionText;
-          if (ct != null) {
+          final ActionableInsight? cc = _cachedConclusion;
+          if (cc != null) {
             await _briefingPersistence.saveConclusion(
               checksum: checksum,
-              text: ct,
+              insight: cc,
             );
           }
-          final String? st = _cachedSummaryText;
-          if (st != null) {
+          final ActionableInsight? cs = _cachedSummary;
+          if (cs != null) {
             await _briefingPersistence.saveSummary(
               checksum: checksum,
-              text: st,
+              insight: cs,
             );
           }
           final ActionableInsight? ci = _cachedActionableInsight;
@@ -194,7 +178,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           error.type == DioExceptionType.receiveTimeout) {
         return 'Connection timed out. Please try again later.';
       }
-      return 'Network error: ${error.message}';
+      final String message =
+          error.message ?? error.error?.toString() ?? 'Unknown network error.';
+      return 'Network error: $message';
     }
     return 'An unexpected error occurred.';
   }
@@ -215,28 +201,15 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
       // If checksum matches and cached value exists in memory, reuse it
       if (_lastNewsHash == checksum) {
-        final String? conclusionText = _cachedConclusionText;
-        if (event.style == ConclusionUiStyle.conclusion &&
-            conclusionText != null) {
-          final ActionableInsight cached = ActionableInsight(
-            conclusion: conclusionText,
-            level: ActionableInsightLevel.neutral,
-            probability: 0.0,
-            category: InsightCategory.general,
-          );
-          emit(LoadedConclusionState(news: current.news, insight: cached));
+        final ActionableInsight? conclusion = _cachedConclusion;
+        if (event.style == ConclusionUiStyle.conclusion && conclusion != null) {
+          emit(LoadedConclusionState(news: current.news, insight: conclusion));
           return;
         }
 
-        final String? summaryText = _cachedSummaryText;
-        if (event.style == ConclusionUiStyle.summary && summaryText != null) {
-          final ActionableInsight cached = ActionableInsight(
-            conclusion: summaryText,
-            level: ActionableInsightLevel.neutral,
-            probability: 0.0,
-            category: InsightCategory.general,
-          );
-          emit(LoadedConclusionState(news: current.news, insight: cached));
+        final ActionableInsight? summary = _cachedSummary;
+        if (event.style == ConclusionUiStyle.summary && summary != null) {
+          emit(LoadedConclusionState(news: current.news, insight: summary));
           return;
         }
 
@@ -252,35 +225,21 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       // If not cached in memory, try persistence
       try {
         if (event.style.isConclusion) {
-          final String? stored = await _briefingPersistence.getConclusion(
-            checksum,
-          );
-          if (stored != null && stored.isNotEmpty) {
-            _cachedConclusionText = stored;
+          final ActionableInsight? stored = await _briefingPersistence
+              .getConclusion(checksum);
+          if (stored != null) {
+            _cachedConclusion = stored;
             _lastNewsHash = checksum;
-            final ActionableInsight cached = ActionableInsight(
-              conclusion: stored,
-              level: ActionableInsightLevel.neutral,
-              probability: 0.0,
-              category: InsightCategory.general,
-            );
-            emit(LoadedConclusionState(news: current.news, insight: cached));
+            emit(LoadedConclusionState(news: current.news, insight: stored));
             return;
           }
         } else if (event.style.isSummary) {
-          final String? stored = await _briefingPersistence.getSummary(
-            checksum,
-          );
-          if (stored != null && stored.isNotEmpty) {
-            _cachedSummaryText = stored;
+          final ActionableInsight? stored = await _briefingPersistence
+              .getSummary(checksum);
+          if (stored != null) {
+            _cachedSummary = stored;
             _lastNewsHash = checksum;
-            final ActionableInsight cached = ActionableInsight(
-              conclusion: stored,
-              level: ActionableInsightLevel.neutral,
-              probability: 0.0,
-              category: InsightCategory.general,
-            );
-            emit(LoadedConclusionState(news: current.news, insight: cached));
+            emit(LoadedConclusionState(news: current.news, insight: stored));
             return;
           }
         } else {
@@ -300,38 +259,27 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
       try {
         if (event.style.isConclusion) {
-          final String conclusionText = await _newsRepository.getNewsConclusion(
-            articles,
-            lang: lang,
-          );
-          _cachedConclusionText = conclusionText;
+          final ActionableInsight insight = await _newsRepository
+              .getNewsConclusion(articles, lang: lang);
+          _cachedConclusion = insight;
           _cachedActionableInsight = null;
-          _cachedSummaryText = null;
+          _cachedSummary = null;
           _lastNewsHash = checksum;
 
           // persist
           try {
             await _briefingPersistence.saveConclusion(
               checksum: checksum,
-              text: conclusionText,
+              insight: insight,
             );
           } catch (_) {}
 
-          final ActionableInsight insight = ActionableInsight(
-            conclusion: conclusionText,
-            level: ActionableInsightLevel.neutral,
-            probability: 0.0,
-            category: InsightCategory.general,
-          );
-
           emit(LoadedConclusionState(news: current.news, insight: insight));
         } else if (event.style.isSummary) {
-          final String summaryText = await _newsRepository.getNewsSummary(
-            articles,
-            lang: lang,
-          );
-          _cachedSummaryText = summaryText;
-          _cachedConclusionText = null;
+          final ActionableInsight insight = await _newsRepository
+              .getNewsSummary(articles, lang: lang);
+          _cachedSummary = insight;
+          _cachedConclusion = null;
           _cachedActionableInsight = null;
           _lastNewsHash = checksum;
 
@@ -339,24 +287,17 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           try {
             await _briefingPersistence.saveSummary(
               checksum: checksum,
-              text: summaryText,
+              insight: insight,
             );
           } catch (_) {}
-
-          final ActionableInsight insight = ActionableInsight(
-            conclusion: summaryText,
-            level: ActionableInsightLevel.neutral,
-            probability: 0.0,
-            category: InsightCategory.general,
-          );
 
           emit(LoadedConclusionState(news: current.news, insight: insight));
         } else {
           final ActionableInsight insight = await _newsRepository
               .getActionableInsight(articles, lang: lang);
           _cachedActionableInsight = insight;
-          _cachedConclusionText = null;
-          _cachedSummaryText = null;
+          _cachedConclusion = null;
+          _cachedSummary = null;
           _lastNewsHash = checksum;
 
           // persist

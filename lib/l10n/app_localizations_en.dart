@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -375,4 +374,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get theme => 'Theme';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong';
+
+  @override
+  String get whatYouCanDo => 'What you can do:';
+
+  @override
+  String get checkInternetConnection => 'Check your internet connection.';
+
+  @override
+  String get tryAgainButton => 'Try again using the button below.';
+
+  @override
+  String get comeBackTomorrow =>
+      'Come back tomorrow if the server is undergoing maintenance.';
+
+  @override
+  String contactSupport(String email) {
+    return 'Contact support at $email';
+  }
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get connectionTimedOut =>
+      'Connection timed out. Please try again later.';
+
+  @override
+  String get noInternetConnectionSettings =>
+      'No internet connection. Please check your network settings.';
+
+  @override
+  String get unexpectedErrorOccurred => 'An unexpected error occurred.';
+
+  @override
+  String networkErrorPrefix(String message) {
+    return 'Network error: $message';
+  }
 }

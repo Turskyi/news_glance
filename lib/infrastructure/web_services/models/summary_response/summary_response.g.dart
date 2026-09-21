@@ -7,7 +7,10 @@ part of 'summary_response.dart';
 // **************************************************************************
 
 SummaryResponse _$SummaryResponseFromJson(Map<String, dynamic> json) =>
-    SummaryResponse(summary: json['summary'] as String);
+    SummaryResponse(
+      summary: json['summary'] as String,
+      model: json['model'] as String?,
+    );
 
 Map<String, dynamic> _$SummaryResponseToJson(SummaryResponse instance) =>
-    <String, dynamic>{'summary': instance.summary};
+    <String, dynamic>{'summary': instance.summary, 'model': instance.model};

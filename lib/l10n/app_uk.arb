@@ -146,5 +146,30 @@
   "email": "Електронна пошта",
   "website": "Вебсайт",
   "theme": "Тема",
-  "linkOpenFailed": "Не вдалося відкрити посилання"
+  "linkOpenFailed": "Не вдалося відкрити посилання",
+  "somethingWentWrong": "Щось пішло не так",
+  "whatYouCanDo": "Що ви можете зробити:",
+  "checkInternetConnection": "Перевірте підключення до інтернету.",
+  "tryAgainButton": "Спробуйте ще раз за допомогою кнопки нижче.",
+  "comeBackTomorrow": "Поверніться завтра, якщо на сервері проводяться технічні роботи.",
+  "contactSupport": "Зв'яжіться зі службою підтримки за адресою {email}",
+  "@contactSupport": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "retry": "Повторити",
+  "connectionTimedOut": "Час очікування з'єднання закінчився. Будь ласка, спробуйте пізніше.",
+  "noInternetConnectionSettings": "Немає підключення до інтернету. Будь ласка, перевірте налаштування мережі.",
+  "unexpectedErrorOccurred": "Сталася неочікувана помилка.",
+  "networkErrorPrefix": "Помилка мережі: {message}",
+  "@networkErrorPrefix": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  }
 }

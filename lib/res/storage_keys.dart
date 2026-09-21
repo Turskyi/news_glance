@@ -18,6 +18,10 @@ String aiCacheConclusion(int checksum) {
   return 'ai_cache_${checksum}_conclusion';
 }
 
+String aiCacheConclusionModel(int checksum) {
+  return 'ai_cache_${checksum}_conclusion_model';
+}
+
 String aiCacheInsightConclusion(int checksum) {
   return 'ai_cache_${checksum}_insight_conclusion';
 }
@@ -34,6 +38,14 @@ String aiCacheInsightCategory(int checksum) {
   return 'ai_cache_${checksum}_insight_category';
 }
 
+String aiCacheInsightModel(int checksum) {
+  return 'ai_cache_${checksum}_insight_model';
+}
+
 String aiCacheSummary(int checksum) {
   return 'ai_cache_${checksum}_summary';
+}
+
+String aiCacheSummaryModel(int checksum) {
+  return 'ai_cache_${checksum}_summary_model';
 }

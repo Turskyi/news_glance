@@ -146,5 +146,30 @@
   "email": "Email",
   "phone": "Phone",
   "address": "Address",
-  "theme": "Theme"
+  "theme": "Theme",
+  "somethingWentWrong": "Something went wrong",
+  "whatYouCanDo": "What you can do:",
+  "checkInternetConnection": "Check your internet connection.",
+  "tryAgainButton": "Try again using the button below.",
+  "comeBackTomorrow": "Come back tomorrow if the server is undergoing maintenance.",
+  "contactSupport": "Contact support at {email}",
+  "@contactSupport": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "retry": "Retry",
+  "connectionTimedOut": "Connection timed out. Please try again later.",
+  "noInternetConnectionSettings": "No internet connection. Please check your network settings.",
+  "unexpectedErrorOccurred": "An unexpected error occurred.",
+  "networkErrorPrefix": "Network error: {message}",
+  "@networkErrorPrefix": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  }
 }

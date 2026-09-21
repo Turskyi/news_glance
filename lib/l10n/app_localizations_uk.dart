@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -375,4 +374,44 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get theme => 'Тема';
+
+  @override
+  String get somethingWentWrong => 'Щось пішло не так';
+
+  @override
+  String get whatYouCanDo => 'Що ви можете зробити:';
+
+  @override
+  String get checkInternetConnection => 'Перевірте підключення до інтернету.';
+
+  @override
+  String get tryAgainButton => 'Спробуйте ще раз за допомогою кнопки нижче.';
+
+  @override
+  String get comeBackTomorrow =>
+      'Поверніться завтра, якщо на сервері проводяться технічні роботи.';
+
+  @override
+  String contactSupport(String email) {
+    return 'Зв\'яжіться зі службою підтримки за адресою $email';
+  }
+
+  @override
+  String get retry => 'Повторити';
+
+  @override
+  String get connectionTimedOut =>
+      'Час очікування з\'єднання закінчився. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get noInternetConnectionSettings =>
+      'Немає підключення до інтернету. Будь ласка, перевірте налаштування мережі.';
+
+  @override
+  String get unexpectedErrorOccurred => 'Сталася неочікувана помилка.';
+
+  @override
+  String networkErrorPrefix(String message) {
+    return 'Помилка мережі: $message';
+  }
 }

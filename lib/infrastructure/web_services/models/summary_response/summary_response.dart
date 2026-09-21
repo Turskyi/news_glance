@@ -5,16 +5,17 @@ part 'summary_response.g.dart';
 
 @JsonSerializable()
 class SummaryResponse {
-  const SummaryResponse({required this.summary});
+  const SummaryResponse({required this.summary, this.model});
 
   factory SummaryResponse.fromJson(Map<String, Object?> json) {
     return _$SummaryResponseFromJson(json);
   }
 
   final String summary;
+  final String? model;
 
   @override
-  String toString() => 'SummaryResponse(summary: $summary)';
+  String toString() => 'SummaryResponse(summary: $summary, model: $model)';
 
   Map<String, Object?> toJson() => _$SummaryResponseToJson(this);
 
@@ -28,5 +29,5 @@ class SummaryResponse {
   }
 
   @override
-  int get hashCode => summary.hashCode;
+  int get hashCode => summary.hashCode ^ model.hashCode;
 }

@@ -197,7 +197,10 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             } else if (state is ErrorState) {
-              return AppErrorWidget(errorMessage: state.errorMessage);
+              return AppErrorWidget(
+                errorMessage: state.errorMessage,
+                onRetry: _loadNews,
+              );
             } else {
               return const Center(child: CircularProgressIndicator());
             }
