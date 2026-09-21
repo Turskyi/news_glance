@@ -11,31 +11,78 @@ class SharedPreferencesBriefingPersistence implements BriefingPersistence {
   @override
   Future<void> saveConclusion({
     required int checksum,
-    required String text,
+    required ActionableInsight insight,
   }) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(storage_keys.aiCacheConclusion(checksum), text);
+    await prefs.setString(
+      storage_keys.aiCacheConclusion(checksum),
+      insight.conclusion,
+    );
+    final String? model = insight.model;
+    if (model != null) {
+      await prefs.setString(
+        storage_keys.aiCacheConclusionModel(checksum),
+        model,
+      );
+    }
   }
 
   @override
-  Future<String?> getConclusion(int checksum) async {
+  Future<ActionableInsight?> getConclusion(int checksum) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(storage_keys.aiCacheConclusion(checksum));
+    final String? conclusion = prefs.getString(
+      storage_keys.aiCacheConclusion(checksum),
+    );
+    if (conclusion == null || conclusion.isEmpty) {
+      return null;
+    }
+    final String? model = prefs.getString(
+      storage_keys.aiCacheConclusionModel(checksum),
+    );
+    return ActionableInsight(
+      conclusion: conclusion,
+      level: ActionableInsightLevel.neutral,
+      probability: 0.0,
+      category: InsightCategory.general,
+      model: model,
+    );
   }
 
   @override
   Future<void> saveSummary({
     required int checksum,
-    required String text,
+    required ActionableInsight insight,
   }) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(storage_keys.aiCacheSummary(checksum), text);
+    await prefs.setString(
+      storage_keys.aiCacheSummary(checksum),
+      insight.conclusion,
+    );
+    final String? model = insight.model;
+    if (model != null) {
+      await prefs.setString(storage_keys.aiCacheSummaryModel(checksum), model);
+    }
   }
 
   @override
-  Future<String?> getSummary(int checksum) async {
+  Future<ActionableInsight?> getSummary(int checksum) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(storage_keys.aiCacheSummary(checksum));
+    final String? summary = prefs.getString(
+      storage_keys.aiCacheSummary(checksum),
+    );
+    if (summary == null || summary.isEmpty) {
+      return null;
+    }
+    final String? model = prefs.getString(
+      storage_keys.aiCacheSummaryModel(checksum),
+    );
+    return ActionableInsight(
+      conclusion: summary,
+      level: ActionableInsightLevel.neutral,
+      probability: 0.0,
+      category: InsightCategory.general,
+      model: model,
+    );
   }
 
   @override
@@ -60,6 +107,10 @@ class SharedPreferencesBriefingPersistence implements BriefingPersistence {
       storage_keys.aiCacheInsightCategory(checksum),
       insight.category.value,
     );
+    final String? model = insight.model;
+    if (model != null) {
+      await prefs.setString(storage_keys.aiCacheInsightModel(checksum), model);
+    }
   }
 
   @override
@@ -82,12 +133,16 @@ class SharedPreferencesBriefingPersistence implements BriefingPersistence {
     final String? categoryStr = prefs.getString(
       storage_keys.aiCacheInsightCategory(checksum),
     );
+    final String? model = prefs.getString(
+      storage_keys.aiCacheInsightModel(checksum),
+    );
 
     return ActionableInsight(
       conclusion: conclusion,
       level: ActionableInsightLevel.fromString(levelStr ?? 'NEUTRAL'),
       probability: prob ?? 0.0,
       category: InsightCategory.fromString(categoryStr ?? 'GENERAL'),
+      model: model,
     );
   }
 

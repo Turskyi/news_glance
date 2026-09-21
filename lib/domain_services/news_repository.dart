@@ -16,10 +16,13 @@ abstract interface class NewsRepository {
     String? lang,
   });
 
-  Future<String> getNewsConclusion(
+  Future<ActionableInsight> getNewsConclusion(
     Iterable<NewsArticle> articles, {
     String? lang,
   });
 
-  Future<String> getNewsSummary(Iterable<NewsArticle> articles, {String? lang});
+  Future<ActionableInsight> getNewsSummary(
+    Iterable<NewsArticle> articles, {
+    String? lang,
+  });
 }

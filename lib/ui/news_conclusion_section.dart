@@ -137,6 +137,21 @@ class NewsConclusionSection extends StatelessWidget {
                           ],
                         ),
                       ),
+                      if (insight.model != null &&
+                          insight.model!.isNotEmpty) ...<Widget>[
+                        const SizedBox(height: 8),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            'Analyzed by ${insight.model}',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: effectiveColor.withValues(alpha: 0.4),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   );
                 },

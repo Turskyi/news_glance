@@ -91,12 +91,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
             // Try cache first
             if (style.isConclusion) {
-              final String? cached = await _briefingPersistence.getConclusion(
-                checksum,
-              );
+              final ActionableInsight? cached = await _briefingPersistence
+                  .getConclusion(checksum);
               if (cached != null) {
                 briefing = ActionableInsight(
-                  conclusion: cached,
+                  conclusion: cached.conclusion,
                   level: ActionableInsightLevel.neutral,
                   probability: 0.0,
                   category: InsightCategory.general,
@@ -105,12 +104,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
                 // Not in cache
               }
             } else if (style.isSummary) {
-              final String? cached = await _briefingPersistence.getSummary(
-                checksum,
-              );
+              final ActionableInsight? cached = await _briefingPersistence
+                  .getSummary(checksum);
               if (cached != null) {
                 briefing = ActionableInsight(
-                  conclusion: cached,
+                  conclusion: cached.conclusion,
                   level: ActionableInsightLevel.neutral,
                   probability: 0.0,
                   category: InsightCategory.general,
@@ -133,31 +131,27 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             } else {
               // Not in cache, request from AI
               if (style.isConclusion) {
-                final String text = await _newsRepository.getNewsConclusion(
-                  articles,
-                  lang: locale.languageCode,
-                );
+                final ActionableInsight text = await _newsRepository
+                    .getNewsConclusion(articles, lang: locale.languageCode);
                 await _briefingPersistence.saveConclusion(
                   checksum: checksum,
-                  text: text,
+                  insight: text,
                 );
                 briefing = ActionableInsight(
-                  conclusion: text,
+                  conclusion: text.conclusion,
                   level: ActionableInsightLevel.neutral,
                   probability: 0.0,
                   category: InsightCategory.general,
                 );
               } else if (style.isSummary) {
-                final String text = await _newsRepository.getNewsSummary(
-                  articles,
-                  lang: locale.languageCode,
-                );
+                final ActionableInsight text = await _newsRepository
+                    .getNewsSummary(articles, lang: locale.languageCode);
                 await _briefingPersistence.saveSummary(
                   checksum: checksum,
-                  text: text,
+                  insight: text,
                 );
                 briefing = ActionableInsight(
-                  conclusion: text,
+                  conclusion: text.conclusion,
                   level: ActionableInsightLevel.neutral,
                   probability: 0.0,
                   category: InsightCategory.general,

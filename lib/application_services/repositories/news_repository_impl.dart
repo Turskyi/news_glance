@@ -5,7 +5,9 @@ import 'package:news_glance/domain_models/actionable_insight.dart';
 import 'package:news_glance/domain_models/bad_request_exception.dart';
 import 'package:news_glance/domain_models/news_article.dart';
 import 'package:news_glance/domain_services/news_repository.dart';
+import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/actionable_insight_level.dart';
 import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/actionable_insight_response.dart';
+import 'package:news_glance/infrastructure/web_services/models/actionable_insight_response/insight_category.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_request/article_request.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_request/conclusion_request.dart';
 import 'package:news_glance/infrastructure/web_services/models/conclusion_response/conclusion_response.dart';
@@ -136,7 +138,7 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
-  Future<String> getNewsConclusion(
+  Future<ActionableInsight> getNewsConclusion(
     Iterable<NewsArticle> articles, {
     String? lang,
   }) async {
@@ -144,7 +146,13 @@ class NewsRepositoryImpl implements NewsRepository {
       final ConclusionResponse response = await _restClient.getNewsConclusion(
         _buildConclusionRequest(articles, lang: lang),
       );
-      return response.conclusion;
+      return ActionableInsight(
+        conclusion: response.conclusion,
+        level: ActionableInsightLevel.neutral,
+        probability: 0.0,
+        category: InsightCategory.general,
+        model: response.model,
+      );
     } on DioException catch (e) {
       if (e.response?.statusCode == 400) {
         final Object? errorData = e.response?.data;
@@ -171,7 +179,7 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
-  Future<String> getNewsSummary(
+  Future<ActionableInsight> getNewsSummary(
     Iterable<NewsArticle> articles, {
     String? lang,
   }) async {
@@ -179,7 +187,13 @@ class NewsRepositoryImpl implements NewsRepository {
       final SummaryResponse response = await _restClient.getNewsSummary(
         _buildConclusionRequest(articles, lang: lang),
       );
-      return response.summary;
+      return ActionableInsight(
+        conclusion: response.summary,
+        level: ActionableInsightLevel.neutral,
+        probability: 0.0,
+        category: InsightCategory.general,
+        model: response.model,
+      );
     } on DioException catch (e) {
       if (e.response?.statusCode == 400) {
         final Object? errorData = e.response?.data;
